@@ -198,14 +198,23 @@
     box-shadow: 0 0 8px rgba(0,212,255,0.4);
   }
 
-  .btn-text {
+  .btn-primary {
+    width: 342px;
+    height: 56px;
+    border-radius: 9999px;
+    border: 1px solid rgba(255,255,255,0.25);
+    background: linear-gradient(135deg, rgba(0,212,255,0.5), rgba(123,97,255,0.4));
+    -webkit-backdrop-filter: blur(16px);
+    backdrop-filter: blur(16px);
+    box-shadow: 0 0 20px rgba(0,212,255,0.25), inset 0 1px 0 rgba(255,255,255,0.2);
+    color: #fff;
     font-size: 17px;
     font-weight: 600;
-    color: #00D4FF;
-    background: none;
-    border: none;
     cursor: pointer;
-    padding: 12px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    letter-spacing: -0.2px;
   }
 </style>
 </head>
@@ -303,7 +312,7 @@
       <div class="dot"></div>
     </div>
 
-    <button class="btn-text">Continue</button>
+    <button class="btn-primary">Continue</button>
   </div>
 
   <div class="home-indicator"></div>
