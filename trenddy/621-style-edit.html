@@ -2,221 +2,260 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=390, initial-scale=1.0">
-<title>621 — Style Edit</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>621 — Style Edit Popup</title>
 <style>
-  * { margin: 0; padding: 0; box-sizing: border-box; -webkit-font-smoothing: antialiased; }
-  body { background: #000; display: flex; justify-content: center; align-items: center; min-height: 100vh; font-family: 'Inter', sans-serif; }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: #000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+
   .phone-frame {
-    width: 390px; height: 844px; border-radius: 44px; overflow: hidden;
-    box-shadow: 0 0 0 2px #1a1a2e, 0 20px 80px rgba(0,0,0,0.8), 0 0 120px rgba(108,92,231,0.08);
     position: relative;
+    width: 390px;
+    height: 844px;
+    border-radius: 44px;
+    overflow: hidden;
+    background:
+      radial-gradient(ellipse 120% 80% at 20% 10%, rgba(0,122,255,0.30) 0%, transparent 50%),
+      radial-gradient(ellipse 100% 100% at 80% 20%, rgba(123,97,255,0.25) 0%, transparent 45%),
+      radial-gradient(ellipse 80% 120% at 50% 90%, rgba(0,212,255,0.20) 0%, transparent 50%),
+      radial-gradient(ellipse 60% 60% at 10% 80%, rgba(255,107,157,0.15) 0%, transparent 45%),
+      linear-gradient(180deg, #0A0E1A 0%, #0D1220 50%, #0A0F1C 100%);
   }
 
-  /* Background — blurred Explore hint */
-  .bg-scene {
-    position: absolute; inset: 0;
-    background: linear-gradient(170deg, #0a2a2e 0%, #0d3d3a 25%, #0c2530 50%, #0A0A0F 100%);
-  }
-  .bg-scene__shape1 {
-    position: absolute; width: 200px; height: 200px; border-radius: 50%;
-    background: radial-gradient(circle, rgba(0,206,201,0.08) 0%, transparent 70%);
-    top: 100px; left: -30px;
-  }
-  .bg-scene__shape2 {
-    position: absolute; width: 160px; height: 160px; border-radius: 50%;
-    background: radial-gradient(circle, rgba(108,92,231,0.06) 0%, transparent 70%);
-    top: 250px; right: -20px;
-  }
-
-  /* Dim Overlay */
-  .dim-overlay {
-    position: absolute; inset: 0; background: rgba(0,0,0,0.6);
-    backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
-  }
-
-  /* Status Bar */
+  /* Status bar */
   .status-bar {
-    height: 47px; width: 100%; display: flex; justify-content: space-between; align-items: center;
-    padding: 14px 24px 0; position: absolute; top: 0; left: 0; right: 0; z-index: 10;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 14px 28px 0;
+    height: 54px;
+    color: #fff;
+    font-size: 15px;
+    font-weight: 600;
   }
-  .status-bar__time { font: 600 15px/18px 'Inter', sans-serif; color: #fff; }
-  .status-bar__icons { display: flex; gap: 5px; align-items: center; }
-  .status-bar__icons svg { width: 16px; height: 16px; fill: #fff; }
+  .status-icons { display: flex; gap: 6px; align-items: center; }
 
-  /* Popup */
+  /* Dim overlay */
+  .dim-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0,0,0,0.5);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10;
+  }
+
+  /* Popup — glass-thick */
   .popup {
-    position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
-    width: 358px; background: #141420; border-radius: 24px;
-    padding: 24px 20px; display: flex; flex-direction: column; gap: 20px;
-    z-index: 20; box-shadow: 0 24px 64px rgba(0,0,0,0.5), 0 0 1px rgba(255,255,255,0.05);
-    border: 1px solid rgba(255,255,255,0.04);
+    width: 358px;
+    background: rgba(255,255,255,0.14);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255,255,255,0.20);
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.20), 0 12px 40px rgba(0,0,0,0.3);
+    border-radius: 28px;
+    padding: 24px 20px;
+    color: #fff;
   }
 
-  /* Header Row */
+  /* Header */
   .popup-header {
-    display: flex; justify-content: space-between; align-items: center;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
   }
-  .popup-title { font: 700 24px/32px 'DM Sans', sans-serif; color: #F0EDE8; }
-  .popup-header__right { display: flex; align-items: center; gap: 12px; }
+  .popup-header h2 { font-size: 20px; font-weight: 700; }
+  .header-right { display: flex; align-items: center; gap: 12px; }
+
   .credit-badge {
-    display: flex; align-items: center; gap: 6px; padding: 6px 12px;
-    background: #1E1E30; border-radius: 9999px; border: 1px solid #2A2A44;
+    display: flex; align-items: center; gap: 5px;
+    background: rgba(255,255,255,0.06);
+    backdrop-filter: blur(40px); -webkit-backdrop-filter: blur(40px);
+    border: 1px solid rgba(255,255,255,0.10);
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.10);
+    border-radius: 9999px;
+    padding: 6px 12px;
+    font-size: 13px; font-weight: 600;
   }
-  .credit-badge__icon { width: 16px; height: 16px; }
-  .credit-badge__count { font: 600 13px/18px 'Inter', sans-serif; color: #fff; }
-  .btn-close {
-    width: 32px; height: 32px; border-radius: 9999px; background: rgba(42,42,64,0.6);
-    display: flex; align-items: center; justify-content: center; cursor: pointer; border: none;
+  .credit-badge .token-icon {
+    width: 16px; height: 16px;
+    background: linear-gradient(135deg, #00D4FF, #7B61FF);
+    border-radius: 50%;
+    flex-shrink: 0;
   }
-  .btn-close svg { width: 16px; height: 16px; stroke: #F0EDE8; fill: none; stroke-width: 2; }
 
-  /* Prompt Section */
-  .section-label-row {
-    display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;
+  .close-btn {
+    width: 40px; height: 40px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.06);
+    backdrop-filter: blur(40px); -webkit-backdrop-filter: blur(40px);
+    border: 1px solid rgba(255,255,255,0.10);
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.10);
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer;
   }
-  .section-label { font: 600 15px/22px 'DM Sans', sans-serif; color: #F0EDE8; }
-  .prompt-gallery-btn {
-    font: 500 13px/18px 'Inter', sans-serif; color: #CCFF00; cursor: pointer;
-    background: none; border: none; padding: 0;
+  .close-btn svg { width: 18px; height: 18px; color: rgba(255,255,255,0.65); }
+
+  /* Section label row */
+  .label-row {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 8px;
   }
+  .label-row .label { font-size: 15px; font-weight: 700; color: #fff; }
+  .prompt-gallery-link {
+    font-size: 13px; font-weight: 600; color: #00D4FF;
+    background: none; border: none; cursor: pointer;
+    font-family: inherit;
+  }
+
+  /* Text input — glass-regular */
+  .text-input-wrap { position: relative; margin-bottom: 16px; }
   .text-input {
-    width: 100%; min-height: 80px; background: #1E1E30; border-radius: 12px;
-    border: 1px solid #2A2A40; padding: 12px 16px; position: relative;
-    display: flex; flex-direction: column; justify-content: space-between;
+    width: 100%; min-height: 80px;
+    background: rgba(255,255,255,0.10);
+    backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px);
+    border: 1px solid rgba(255,255,255,0.15);
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.15), 0 8px 32px rgba(0,0,0,0.25);
+    border-radius: 16px;
+    padding: 12px 16px 24px;
+    font-size: 15px; color: #fff;
+    font-family: inherit; resize: none; outline: none;
   }
-  .text-input__placeholder {
-    font: 400 15px/22px 'Inter', sans-serif; color: #5A5A6A;
-  }
-  .text-input__counter {
-    align-self: flex-end; font: 400 11px/16px 'Inter', sans-serif; color: #5A5A6A;
-    margin-top: 8px;
+  .text-input::placeholder { color: rgba(255,255,255,0.4); }
+  .char-count {
+    position: absolute; bottom: 8px; right: 12px;
+    font-size: 11px; color: rgba(255,255,255,0.4);
   }
 
-  /* Input Image Section */
-  .upload-zone {
-    width: 100%; height: 100px; background: #1E1E30; border-radius: 12px;
-    border: 1.5px dashed #2A2A44; display: flex; flex-direction: column;
-    align-items: center; justify-content: center; gap: 8px; cursor: pointer;
-    transition: border-color 0.2s;
-  }
-  .upload-zone:hover { border-color: #5A5A6A; }
-  .upload-zone__icon svg { width: 28px; height: 28px; stroke: #5A5A6A; fill: none; stroke-width: 1.5; }
-  .upload-zone__text { font: 400 13px/18px 'Inter', sans-serif; color: #5A5A6A; }
+  /* Input Image */
+  .section-title { font-size: 15px; font-weight: 700; color: #fff; margin-bottom: 8px; }
 
-  /* Visual Style Row */
+  .upload-area {
+    background: rgba(255,255,255,0.06);
+    backdrop-filter: blur(40px); -webkit-backdrop-filter: blur(40px);
+    border: 1px dashed rgba(255,255,255,0.15);
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.10);
+    border-radius: 16px;
+    height: 100px;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    gap: 6px; cursor: pointer; margin-bottom: 16px;
+  }
+  .upload-area svg { width: 32px; height: 32px; color: rgba(255,255,255,0.4); }
+  .upload-area span { font-size: 13px; color: rgba(255,255,255,0.4); }
+
+  /* Divider */
+  .divider { height: 1px; background: rgba(255,255,255,0.08); margin-bottom: 14px; }
+
+  /* Visual Style row */
   .style-row {
-    display: flex; justify-content: space-between; align-items: center;
-    padding: 12px 0; border-top: 0.5px solid #2A2A40; cursor: pointer;
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 20px; cursor: pointer;
   }
-  .style-row__left { display: flex; align-items: center; gap: 8px; }
-  .style-row__left svg { width: 20px; height: 20px; stroke: #8A8A9A; fill: none; stroke-width: 1.5; }
-  .style-row__label { font: 400 15px/22px 'Inter', sans-serif; color: #F0EDE8; }
-  .style-row__right { display: flex; align-items: center; gap: 4px; }
-  .style-row__value { font: 400 15px/22px 'Inter', sans-serif; color: #8A8A9A; }
-  .style-row__chevron svg { width: 16px; height: 16px; stroke: #8A8A9A; fill: none; stroke-width: 2; }
+  .style-row-left { display: flex; align-items: center; gap: 8px; }
+  .style-row-left svg { width: 20px; height: 20px; color: rgba(255,255,255,0.65); }
+  .style-row-left span { font-size: 15px; font-weight: 600; }
+  .style-row-right { display: flex; align-items: center; gap: 4px; }
+  .style-row-right span { font-size: 14px; color: rgba(255,255,255,0.65); }
+  .style-row-right svg { width: 16px; height: 16px; color: rgba(255,255,255,0.4); }
 
-  /* Generate Button */
-  .btn-generate {
-    width: 100%; height: 56px; border-radius: 9999px; border: none; cursor: pointer;
-    background: #CCFF00; display: flex; align-items: center; justify-content: center; gap: 8px;
-    font: 600 16px/20px 'DM Sans', sans-serif; color: #0A0A0F;
-    box-shadow: 0 4px 24px rgba(204,255,0,0.2);
+  /* Primary button */
+  .primary-btn {
+    width: 100%; height: 56px;
+    background: linear-gradient(135deg, rgba(0,212,255,0.5), rgba(123,97,255,0.4));
+    backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255,255,255,0.25);
+    box-shadow: 0 0 20px rgba(0,212,255,0.25), inset 0 1px 0 rgba(255,255,255,0.2);
+    border-radius: 9999px;
+    color: #fff; font-size: 17px; font-weight: 600;
+    font-family: inherit; cursor: pointer;
   }
-  .btn-generate svg { width: 20px; height: 20px; fill: none; stroke: #0A0A0F; stroke-width: 2; }
+
+  /* Home indicator */
+  .home-indicator {
+    position: absolute; bottom: 8px; left: 50%; transform: translateX(-50%);
+    width: 134px; height: 5px;
+    background: rgba(255,255,255,0.3); border-radius: 100px;
+    z-index: 20;
+  }
 </style>
 </head>
 <body>
-<div class="phone-frame">
-  <!-- Background Scene -->
-  <div class="bg-scene">
-    <div class="bg-scene__shape1"></div>
-    <div class="bg-scene__shape2"></div>
-  </div>
-
-  <!-- Dim Overlay -->
-  <div class="dim-overlay"></div>
-
-  <!-- Status Bar -->
-  <div class="status-bar">
-    <span class="status-bar__time">9:41</span>
-    <div class="status-bar__icons">
-      <svg viewBox="0 0 17 12"><path d="M1 8.5h1.5v3H1zM4 6h1.5v5.5H4zM7 3.5h1.5V12H7zM10 1h1.5v10.5H10z" rx=".5"/></svg>
-      <svg viewBox="0 0 16 12"><path d="M8 3.3C5.5 3.3 3.3 4.3 1.8 6l1.2 1.2C4.2 5.8 6 5 8 5s3.8.8 5 2.2L14.2 6C12.7 4.3 10.5 3.3 8 3.3zM8 7c-1.4 0-2.6.6-3.5 1.5L5.7 9.7c.6-.6 1.4-1 2.3-1s1.7.4 2.3 1l1.2-1.2C10.6 7.6 9.4 7 8 7zm0 4.3L9.7 9.7c-.4-.5-1-.8-1.7-.8s-1.3.3-1.7.8L8 11.3z"/></svg>
-      <svg viewBox="0 0 25 12"><rect x="0" y="1" width="21" height="10" rx="2" stroke="#fff" stroke-width="1" fill="none"/><rect x="22" y="4" width="2" height="4" rx="0.5" fill="#fff" opacity="0.4"/><rect x="1.5" y="2.5" width="16" height="7" rx="1" fill="#CCFF00"/></svg>
+  <div class="phone-frame">
+    <div class="status-bar">
+      <span>9:41</span>
+      <div class="status-icons">
+        <svg width="17" height="12" fill="none"><rect x="0" y="1" width="3" height="10" rx="1" fill="rgba(255,255,255,0.35)"/><rect x="4.5" y="3" width="3" height="8" rx="1" fill="rgba(255,255,255,0.35)"/><rect x="9" y="5" width="3" height="6" rx="1" fill="#fff"/><rect x="13.5" y="7" width="3" height="4" rx="1" fill="#fff"/></svg>
+        <svg width="16" height="12" fill="none"><path d="M8 2C5.2 2 2.7 3.1 1 5l1.4 1.4C3.8 4.8 5.8 4 8 4s4.2.8 5.6 2.4L15 5C13.3 3.1 10.8 2 8 2z" fill="#fff"/><path d="M8 6C6.3 6 4.8 6.7 3.8 7.8L5.2 9.2C5.9 8.5 6.9 8 8 8s2.1.5 2.8 1.2l1.4-1.4C11.2 6.7 9.7 6 8 6z" fill="#fff"/><circle cx="8" cy="11" r="1.5" fill="#fff"/></svg>
+        <svg width="25" height="12" fill="none"><rect x="0" y="1" width="22" height="10" rx="2" stroke="rgba(255,255,255,0.35)" stroke-width="1"/><rect x="23" y="3.5" width="2" height="5" rx="1" fill="rgba(255,255,255,0.35)"/><rect x="1.5" y="2.5" width="14" height="7" rx="1" fill="#fff"/></svg>
+      </div>
     </div>
-  </div>
 
-  <!-- Popup Container -->
-  <div class="popup">
-    <!-- Header -->
-    <div class="popup-header">
-      <span class="popup-title">Create</span>
-      <div class="popup-header__right">
-        <div class="credit-badge">
-          <svg class="credit-badge__icon" viewBox="0 0 16 16" fill="none">
-            <path d="M8 1l1.5 3.5L13 6l-2.5 2.5L11 13 8 11l-3 2 .5-4.5L3 6l3.5-1.5L8 1z" fill="#CCFF00" stroke="#CCFF00" stroke-width="0.5"/>
-          </svg>
-          <span class="credit-badge__count">100</span>
+    <!-- Dim overlay + popup -->
+    <div class="dim-overlay">
+      <div class="popup">
+        <!-- Header -->
+        <div class="popup-header">
+          <h2>Create</h2>
+          <div class="header-right">
+            <div class="credit-badge">
+              <div class="token-icon"></div>
+              <span>25</span>
+            </div>
+            <div class="close-btn">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg>
+            </div>
+          </div>
         </div>
-        <button class="btn-close">
-          <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-        </button>
-      </div>
-    </div>
 
-    <!-- Prompt Section -->
-    <div class="prompt-section">
-      <div class="section-label-row">
-        <span class="section-label">Describe your video</span>
-        <button class="prompt-gallery-btn">Prompt Gallery</button>
-      </div>
-      <div class="text-input">
-        <span class="text-input__placeholder">Describe your video...</span>
-        <span class="text-input__counter">0/100</span>
-      </div>
-    </div>
-
-    <!-- Input Image Section -->
-    <div class="image-section">
-      <span class="section-label" style="margin-bottom: 8px; display: block;">Input Image</span>
-      <div class="upload-zone">
-        <div class="upload-zone__icon">
-          <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
-            <circle cx="12" cy="13" r="4"/>
-          </svg>
+        <!-- Prompt -->
+        <div class="label-row">
+          <span class="label">Describe your video</span>
+          <button class="prompt-gallery-link">Prompt Gallery</button>
         </div>
-        <span class="upload-zone__text">Tap to upload or select image</span>
+        <div class="text-input-wrap">
+          <textarea class="text-input" placeholder="Describe your video..."></textarea>
+          <span class="char-count">0/100</span>
+        </div>
+
+        <!-- Input Image -->
+        <div class="section-title">Input Image</div>
+        <div class="upload-area">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/><circle cx="12" cy="13" r="4"/></svg>
+          <span>Tap to upload</span>
+        </div>
+
+        <!-- Divider + Visual Style -->
+        <div class="divider"></div>
+        <div class="style-row">
+          <div class="style-row-left">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+            <span>Visual Style</span>
+          </div>
+          <div class="style-row-right">
+            <span>No Style</span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="9 18 15 12 9 6"/></svg>
+          </div>
+        </div>
+
+        <!-- Generate -->
+        <button class="primary-btn">Generate Video</button>
       </div>
     </div>
 
-    <!-- Visual Style Row -->
-    <div class="style-row">
-      <div class="style-row__left">
-        <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/>
-        </svg>
-        <span class="style-row__label">Visual Style</span>
-      </div>
-      <div class="style-row__right">
-        <span class="style-row__value">No Style</span>
-        <span class="style-row__chevron">
-          <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
-        </span>
-      </div>
-    </div>
-
-    <!-- Generate Button -->
-    <button class="btn-generate">
-      <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M12 2l2.4 5.4L20 9.6l-4 4.2L17 20l-5-3-5 3 1-6.2-4-4.2 5.6-2.2L12 2z"/>
-      </svg>
-      Generate Video
-    </button>
+    <div class="home-indicator"></div>
   </div>
-</div>
 </body>
 </html>

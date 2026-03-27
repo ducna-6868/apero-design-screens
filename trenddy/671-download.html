@@ -4,140 +4,137 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=390, initial-scale=1.0">
 <title>671 — Download</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; -webkit-font-smoothing: antialiased; }
-  body { background: #000; display: flex; justify-content: center; align-items: center; min-height: 100vh; font-family: 'Inter', sans-serif; }
+  body {
+    background: #000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', sans-serif;
+  }
   .phone {
-    width: 390px; height: 844px; background: #0A0A0F; border-radius: 44px; overflow: hidden;
-    box-shadow: 0 0 0 1px rgba(255,255,255,0.06), 0 24px 80px rgba(0,0,0,0.8), 0 8px 32px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.04);
+    width: 390px; height: 844px; border-radius: 44px; overflow: hidden;
     position: relative; display: flex; flex-direction: column;
+    background:
+      radial-gradient(ellipse 120% 80% at 20% 10%, rgba(0,122,255,0.30) 0%, transparent 50%),
+      radial-gradient(ellipse 100% 100% at 80% 20%, rgba(123,97,255,0.25) 0%, transparent 45%),
+      radial-gradient(ellipse 80% 120% at 50% 90%, rgba(0,212,255,0.20) 0%, transparent 50%),
+      radial-gradient(ellipse 60% 60% at 10% 80%, rgba(255,107,157,0.15) 0%, transparent 45%),
+      linear-gradient(180deg, #0A0E1A 0%, #0D1220 50%, #0A0F1C 100%);
   }
 
   /* Status Bar */
   .status-bar {
-    height: 47px; width: 100%; display: flex; justify-content: space-between; align-items: center;
-    padding: 14px 24px 0; flex-shrink: 0;
+    height: 54px; width: 100%; display: flex; justify-content: space-between;
+    align-items: center; padding: 14px 28px 0; flex-shrink: 0;
   }
-  .status-bar__time { font: 600 15px/18px 'Inter', sans-serif; color: #F0EDE8; }
-  .status-bar__icons { display: flex; gap: 5px; align-items: center; }
-  .status-bar__icons svg { width: 16px; height: 16px; fill: #F0EDE8; }
+  .status-bar .time { font-size: 15px; font-weight: 600; color: #fff; letter-spacing: -0.3px; }
+  .status-bar .icons { display: flex; gap: 6px; align-items: center; }
+  .status-bar .icons svg { width: 18px; height: 12px; fill: #fff; }
 
-  /* Nav Bar */
-  .nav-bar {
-    height: 44px; display: flex; align-items: center; justify-content: center;
-    padding: 0 20px; position: relative; flex-shrink: 0;
-  }
-  .nav-bar__back {
-    position: absolute; left: 20px; top: 50%; transform: translateY(-50%);
-    width: 32px; height: 32px; border-radius: 9999px; background: rgba(42,42,64,0.6);
-    display: flex; align-items: center; justify-content: center; cursor: pointer; border: none;
-  }
-  .nav-bar__back svg { width: 18px; height: 18px; stroke: #F0EDE8; fill: none; stroke-width: 2; }
-  .nav-bar__title { font: 600 17px/22px 'DM Sans', sans-serif; color: #F0EDE8; }
-
-  /* Content */
+  /* Centered Content */
   .content {
     flex: 1; display: flex; flex-direction: column; align-items: center;
-    padding: 16px 24px 0; overflow: hidden;
+    justify-content: center; padding: 0 24px; overflow: hidden;
   }
 
-  /* Preview (smaller) */
-  .result-preview {
-    width: 200px; height: 260px; border-radius: 16px; overflow: hidden;
-    position: relative; background: #141420; margin-bottom: 24px;
+  /* Video Thumbnail */
+  .thumbnail {
+    width: 180px; height: 240px; border-radius: 16px; overflow: hidden;
+    background: rgba(255,255,255,0.06);
+    backdrop-filter: blur(40px); -webkit-backdrop-filter: blur(40px);
+    border: 1px solid rgba(255,255,255,0.10);
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.10);
+    margin-bottom: 20px; position: relative;
   }
-  .result-preview__gradient {
-    position: absolute; inset: 0;
-    background: linear-gradient(150deg, #6C5CE7 0%, #a855f7 25%, #06b6d4 50%, #CCFF00 75%, #1E1E30 100%);
-    opacity: 0.6;
+  .thumbnail__gradient {
+    width: 100%; height: 100%;
+    background:
+      linear-gradient(150deg, rgba(0,212,255,0.15) 0%, rgba(123,97,255,0.20) 35%, rgba(255,107,157,0.12) 70%, rgba(0,212,255,0.08) 100%),
+      radial-gradient(circle at 30% 35%, rgba(123,97,255,0.10) 0%, transparent 50%);
   }
-  .result-preview__overlay {
-    position: absolute; inset: 0;
-    background: linear-gradient(180deg, transparent 60%, rgba(10,10,15,0.6) 100%);
+
+  /* Download Progress (hidden in success state, shown for reference) */
+  .download-progress {
+    width: 280px; margin-bottom: 24px;
+    display: none; /* hidden - showing success state */
+    flex-direction: column; align-items: center;
   }
-  .result-preview__play {
-    position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
-    width: 44px; height: 44px; border-radius: 50%;
-    background: rgba(255,255,255,0.15);
-    backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+  .progress-track {
+    width: 100%; height: 6px; border-radius: 9999px;
+    background: rgba(255,255,255,0.06);
+    backdrop-filter: blur(40px); -webkit-backdrop-filter: blur(40px);
+    border: 1px solid rgba(255,255,255,0.10);
+    overflow: hidden; margin-bottom: 16px;
+  }
+  .progress-fill {
+    width: 68%; height: 100%; border-radius: 9999px;
+    background: linear-gradient(90deg, #00D4FF, #7B61FF);
+    animation: progress-grow 2s ease-in-out infinite;
+  }
+  @keyframes progress-grow {
+    0% { width: 30%; }
+    50% { width: 80%; }
+    100% { width: 30%; }
+  }
+  .download-title { font-size: 17px; font-weight: 600; color: #fff; margin-bottom: 6px; }
+  .download-meta { font-size: 13px; color: rgba(255,255,255,0.65); }
+
+  /* Success State */
+  .success-state {
+    display: flex; flex-direction: column; align-items: center;
+  }
+  .success-circle {
+    width: 80px; height: 80px; border-radius: 50%;
+    background: rgba(52,211,153,0.15);
+    border: 1px solid rgba(52,211,153,0.3);
     display: flex; align-items: center; justify-content: center;
-    border: 1px solid rgba(255,255,255,0.2);
+    margin-bottom: 20px;
+    animation: success-pop 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) both;
   }
-  .result-preview__play svg { width: 20px; height: 20px; fill: #F0EDE8; margin-left: 2px; }
-
-  /* File Info */
-  .file-info {
-    width: 100%; margin-bottom: 20px;
+  @keyframes success-pop {
+    0% { transform: scale(0); opacity: 0; }
+    100% { transform: scale(1); opacity: 1; }
   }
-  .file-info__name {
-    font: 500 15px/22px 'Inter', sans-serif; color: #F0EDE8;
-    margin-bottom: 4px;
+  .success-circle svg { width: 40px; height: 40px; stroke: #34D399; fill: none; stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; }
+  .success-title {
+    font-size: 20px; font-weight: 600; color: #fff; margin-bottom: 8px; text-align: center;
   }
-  .file-info__meta {
-    font: 400 13px/18px 'Inter', sans-serif; color: #8A8A9A;
-    margin-bottom: 16px;
+  .success-subtitle {
+    font-size: 15px; color: rgba(255,255,255,0.65); text-align: center;
   }
 
-  /* Quality Selector */
-  .quality-selector {
-    display: flex; gap: 8px; margin-bottom: 4px;
+  /* Bottom Area */
+  .bottom-area {
+    padding: 0 24px; flex-shrink: 0; margin-top: auto;
+    padding-bottom: 0;
   }
-  .quality-chip {
-    padding: 8px 20px; border-radius: 9999px;
-    background: #141420; border: 1.5px solid #2A2A44;
-    font: 500 14px/20px 'Inter', sans-serif; color: #8A8A9A;
-    cursor: pointer; transition: all 0.15s;
+  .btn-share {
+    width: 100%; height: 56px; border-radius: 9999px;
+    background: linear-gradient(135deg, rgba(0,212,255,0.5), rgba(123,97,255,0.4));
+    backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255,255,255,0.25);
+    box-shadow: 0 0 20px rgba(0,212,255,0.25), inset 0 1px 0 rgba(255,255,255,0.2);
+    color: #fff; font-size: 17px; font-weight: 600; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    font-family: inherit; letter-spacing: -0.2px;
   }
-  .quality-chip:hover { border-color: #5A5A6A; color: #F0EDE8; }
-  .quality-chip--active {
-    border-color: #CCFF00; color: #F0EDE8;
-    background: rgba(204,255,0,0.06);
+  .btn-home {
+    width: 100%; height: 44px; background: none; border: none;
+    color: rgba(255,255,255,0.65); font-size: 13px; font-family: inherit;
+    cursor: pointer; display: flex; align-items: center; justify-content: center;
   }
-
-  /* Progress Bar Section */
-  .progress-section {
-    width: 100%; margin: 24px 0;
-  }
-  .progress-bar {
-    width: 100%; height: 6px; background: #2A2A40; border-radius: 9999px;
-    overflow: hidden; margin-bottom: 8px;
-  }
-  .progress-bar__fill {
-    width: 67%; height: 100%; background: #CCFF00; border-radius: 9999px;
-    transition: width 0.3s ease;
-  }
-  .progress-bar__label {
-    font: 400 12px/16px 'Inter', sans-serif; color: #F0EDE8;
-  }
-
-  /* Spacer */
-  .spacer { flex: 1; }
-
-  /* Download Button */
-  .btn-download {
-    width: 342px; height: 56px; border-radius: 9999px; border: none; cursor: pointer;
-    background: #CCFF00; display: flex; align-items: center; justify-content: center; gap: 8px;
-    font: 600 16px/20px 'DM Sans', sans-serif; color: #0A0A0F;
-    box-shadow: 0 4px 24px rgba(204,255,0,0.2);
-  }
-  .btn-download svg { width: 20px; height: 20px; fill: none; stroke: #0A0A0F; stroke-width: 2; }
-
-  /* Save to Photos */
-  .btn-save {
-    background: none; border: none; cursor: pointer;
-    font: 400 15px/22px 'Inter', sans-serif; color: #8A8A9A;
-    padding: 12px 0;
-  }
-  .btn-save:hover { color: #F0EDE8; }
 
   /* Home Indicator */
   .home-indicator {
-    height: 34px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+    height: 34px; width: 100%; display: flex; justify-content: center;
+    align-items: flex-end; padding-bottom: 8px; flex-shrink: 0;
   }
-  .home-indicator__bar {
-    width: 134px; height: 5px; background: rgba(255,255,255,0.3); border-radius: 9999px;
+  .home-indicator__pill {
+    width: 134px; height: 5px; border-radius: 9999px;
+    background: rgba(255,255,255,0.25);
   }
 </style>
 </head>
@@ -145,74 +142,48 @@
 <div class="phone">
   <!-- Status Bar -->
   <div class="status-bar">
-    <span class="status-bar__time">9:41</span>
-    <div class="status-bar__icons">
-      <svg viewBox="0 0 17 12"><path d="M1 8.5h1.5v3H1zM4 6h1.5v5.5H4zM7 3.5h1.5V12H7zM10 1h1.5v10.5H10z" rx=".5"/></svg>
-      <svg viewBox="0 0 16 12"><path d="M8 3.3C5.5 3.3 3.3 4.3 1.8 6l1.2 1.2C4.2 5.8 6 5 8 5s3.8.8 5 2.2L14.2 6C12.7 4.3 10.5 3.3 8 3.3zM8 7c-1.4 0-2.6.6-3.5 1.5L5.7 9.7c.6-.6 1.4-1 2.3-1s1.7.4 2.3 1l1.2-1.2C10.6 7.6 9.4 7 8 7zm0 4.3L9.7 9.7c-.4-.5-1-.8-1.7-.8s-1.3.3-1.7.8L8 11.3z"/></svg>
-      <svg viewBox="0 0 25 12"><rect x="0" y="1" width="21" height="10" rx="2" stroke="#F0EDE8" stroke-width="1" fill="none"/><rect x="22" y="4" width="2" height="4" rx="0.5" fill="#F0EDE8" opacity="0.4"/><rect x="1.5" y="2.5" width="16" height="7" rx="1" fill="#CCFF00"/></svg>
+    <span class="time">9:41</span>
+    <div class="icons">
+      <svg viewBox="0 0 18 12"><rect x="0" y="3" width="3" height="9" rx="0.5" fill="#fff" opacity="0.4"/><rect x="4.5" y="2" width="3" height="10" rx="0.5" fill="#fff" opacity="0.6"/><rect x="9" y="1" width="3" height="11" rx="0.5" fill="#fff" opacity="0.8"/><rect x="13.5" y="0" width="3" height="12" rx="0.5" fill="#fff"/></svg>
+      <svg viewBox="0 0 16 12"><path d="M8 2.4C5.4 2.4 3 3.5 1.4 5.3l1 1C3.8 4.7 5.8 3.8 8 3.8s4.2.9 5.6 2.5l1-1C13 3.5 10.6 2.4 8 2.4zM8 6c-1.5 0-2.8.6-3.8 1.6l1 1c.8-.8 1.8-1.2 2.8-1.2s2 .4 2.8 1.2l1-1C10.8 6.6 9.5 6 8 6zm0 3.6c-.6 0-1.2.3-1.6.8L8 12l1.6-1.6c-.4-.5-1-.8-1.6-.8z" fill="#fff"/></svg>
+      <svg viewBox="0 0 27 13"><rect x="0" y="0.5" width="22" height="11.5" rx="3.5" stroke="rgba(255,255,255,0.35)" stroke-width="1" fill="none"/><rect x="23" y="3.5" width="2.5" height="5" rx="1" fill="rgba(255,255,255,0.4)"/><rect x="1.5" y="2" width="16" height="8" rx="2" fill="#fff"/></svg>
     </div>
-  </div>
-
-  <!-- Nav Bar -->
-  <div class="nav-bar">
-    <button class="nav-bar__back">
-      <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
-    </button>
-    <span class="nav-bar__title">Download</span>
   </div>
 
   <!-- Content -->
   <div class="content">
-    <!-- Preview -->
-    <div class="result-preview">
-      <div class="result-preview__gradient"></div>
-      <div class="result-preview__overlay"></div>
-      <div class="result-preview__play">
-        <svg viewBox="0 0 24 24"><polygon points="6,3 20,12 6,21"/></svg>
-      </div>
+    <!-- Video Thumbnail -->
+    <div class="thumbnail">
+      <div class="thumbnail__gradient"></div>
     </div>
 
-    <!-- File Info -->
-    <div class="file-info">
-      <p class="file-info__name">video_cyberpunk_001.mp4</p>
-      <p class="file-info__meta">1080x1920 &middot; 5.2 MB</p>
-
-      <!-- Quality Selector -->
-      <div class="quality-selector">
-        <button class="quality-chip">4K</button>
-        <button class="quality-chip quality-chip--active">1080p</button>
-        <button class="quality-chip">720p</button>
+    <!-- Download Progress (hidden, showing success instead) -->
+    <div class="download-progress">
+      <div class="progress-track">
+        <div class="progress-fill"></div>
       </div>
+      <div class="download-title">Saving to Photos...</div>
+      <div class="download-meta">HD 1080p &bull; 0:15</div>
     </div>
 
-    <!-- Download Progress -->
-    <div class="progress-section">
-      <div class="progress-bar">
-        <div class="progress-bar__fill"></div>
+    <!-- Success State (shown by default) -->
+    <div class="success-state">
+      <div class="success-circle">
+        <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
       </div>
-      <span class="progress-bar__label">Downloading... 67%</span>
+      <div class="success-title">Saved to Photos!</div>
+      <div class="success-subtitle">Your video is ready to share</div>
     </div>
+  </div>
 
-    <div class="spacer"></div>
-
-    <!-- Download Button -->
-    <button class="btn-download">
-      <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
-        <polyline points="7 10 12 15 17 10"/>
-        <line x1="12" y1="15" x2="12" y2="3"/>
-      </svg>
-      Downloading...
-    </button>
-
-    <!-- Save to Photos -->
-    <button class="btn-save">Save to Photos</button>
+  <!-- Bottom Area -->
+  <div class="bottom-area">
+    <button class="btn-share">Share Now</button>
+    <button class="btn-home">Back to Home</button>
   </div>
 
   <!-- Home Indicator -->
-  <div class="home-indicator">
-    <div class="home-indicator__bar"></div>
-  </div>
+  <div class="home-indicator"><div class="home-indicator__pill"></div></div>
 </div>
 </body>
 </html>

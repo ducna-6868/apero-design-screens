@@ -3,112 +3,74 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Trenddy — 160 Onboarding 6 CTA</title>
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<title>Trenddy — 160 ONB6 CTA Final</title>
 <style>
-  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
   body {
     background: #000;
     display: flex;
     justify-content: center;
     align-items: center;
     min-height: 100vh;
-    font-family: 'Inter', sans-serif;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', sans-serif;
   }
-  .phone {
+  .phone-frame {
     width: 390px;
     height: 844px;
-    background: #0A0A0F;
     border-radius: 44px;
     overflow: hidden;
     position: relative;
-    box-shadow:
-      0 0 0 1px rgba(255,255,255,0.06),
-      0 24px 80px rgba(0,0,0,0.8),
-      0 8px 32px rgba(0,0,0,0.6),
-      inset 0 1px 0 rgba(255,255,255,0.04);
-    display: flex;
-    flex-direction: column;
+    background:
+      radial-gradient(ellipse 120% 80% at 20% 10%, rgba(0,122,255,0.30) 0%, transparent 50%),
+      radial-gradient(ellipse 100% 100% at 80% 20%, rgba(123,97,255,0.25) 0%, transparent 45%),
+      radial-gradient(ellipse 80% 120% at 50% 90%, rgba(0,212,255,0.20) 0%, transparent 50%),
+      radial-gradient(ellipse 60% 60% at 10% 80%, rgba(255,107,157,0.15) 0%, transparent 45%),
+      linear-gradient(180deg, #0A0E1A 0%, #0D1220 50%, #0A0F1C 100%);
   }
 
-  /* Status bar */
   .status-bar {
     height: 47px;
-    width: 100%;
     display: flex;
     justify-content: space-between;
     align-items: center;
     padding: 14px 24px 0;
     position: absolute;
-    top: 0;
-    left: 0;
+    top: 0; left: 0; right: 0;
     z-index: 10;
   }
-  .status-bar__time {
-    font-family: 'Inter', sans-serif;
-    font-weight: 600;
-    font-size: 15px;
-    color: #F0EDE8;
-  }
-  .status-bar__icons {
-    display: flex;
-    gap: 5px;
-    align-items: center;
-  }
-  .status-bar__icons svg { width: 16px; height: 16px; color: #F0EDE8; }
+  .status-bar .time { font-size: 15px; font-weight: 600; color: #fff; letter-spacing: -0.3px; }
+  .status-bar .icons { display: flex; align-items: center; gap: 6px; }
 
-  /* Media area — top 50% */
+  .home-indicator {
+    position: absolute;
+    bottom: 8px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 134px;
+    height: 5px;
+    border-radius: 100px;
+    background: rgba(255,255,255,0.3);
+    z-index: 10;
+  }
+
+  /* Top Half — Media Placeholder */
   .media-area {
-    width: 390px;
+    width: 100%;
     height: 422px;
     position: relative;
     overflow: hidden;
-    flex-shrink: 0;
-  }
-  .media-area__bg {
-    position: absolute;
-    inset: 0;
     background:
-      radial-gradient(ellipse 80% 70% at 50% 40%, rgba(108,92,231,0.2) 0%, transparent 60%),
-      radial-gradient(ellipse 50% 50% at 30% 70%, rgba(0,206,201,0.1) 0%, transparent 55%),
-      radial-gradient(ellipse 40% 40% at 70% 30%, rgba(204,255,0,0.08) 0%, transparent 50%),
-      linear-gradient(180deg, #1E1E30 0%, #141420 40%, #0A0A0F 100%);
+      linear-gradient(160deg, rgba(0,212,255,0.12) 0%, rgba(123,97,255,0.12) 50%, rgba(255,107,157,0.08) 100%),
+      linear-gradient(180deg, rgba(255,255,255,0.02) 0%, transparent 100%);
   }
-  /* Stylized video preview frame */
-  .media-area__frame {
-    position: absolute;
-    top: 55px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 240px;
-    height: 320px;
-    border-radius: 20px;
-    overflow: hidden;
-    border: 1px solid rgba(255,255,255,0.06);
-    box-shadow: 0 16px 48px rgba(0,0,0,0.5);
-  }
-  .media-area__frame-bg {
-    position: absolute;
-    inset: 0;
-    background:
-      linear-gradient(135deg, rgba(108,92,231,0.2) 0%, rgba(20,20,32,0.9) 40%, rgba(204,255,0,0.08) 100%);
-  }
-  /* Film grain overlay */
-  .media-area__frame::after {
+  .media-area::after {
     content: '';
     position: absolute;
     inset: 0;
-    background: repeating-linear-gradient(
-      0deg,
-      transparent,
-      transparent 2px,
-      rgba(255,255,255,0.01) 2px,
-      rgba(255,255,255,0.01) 4px
-    );
-    pointer-events: none;
+    background: rgba(0,0,0,0.15);
   }
 
-  /* Play button */
+  /* Centered Play Button */
   .play-btn {
     position: absolute;
     top: 50%;
@@ -117,222 +79,180 @@
     width: 64px;
     height: 64px;
     border-radius: 50%;
-    background: #CCFF00;
+    background: rgba(255,255,255,0.12);
+    -webkit-backdrop-filter: blur(16px);
+    backdrop-filter: blur(16px);
+    border: 1px solid rgba(255,255,255,0.20);
+    box-shadow: 0 0 30px rgba(0,212,255,0.3), inset 0 1px 0 rgba(255,255,255,0.15);
     display: flex;
     align-items: center;
     justify-content: center;
-    box-shadow:
-      0 4px 24px rgba(204,255,0,0.35),
-      0 0 40px rgba(204,255,0,0.1);
-    z-index: 3;
+    z-index: 5;
     cursor: pointer;
-    border: none;
-    transition: transform 0.2s, box-shadow 0.2s;
-  }
-  .play-btn:hover {
-    transform: translate(-50%, -50%) scale(1.06);
-    box-shadow:
-      0 8px 32px rgba(204,255,0,0.45),
-      0 0 60px rgba(204,255,0,0.15);
   }
   .play-btn svg {
-    width: 26px;
-    height: 26px;
-    color: #0A0A0F;
+    width: 28px;
+    height: 28px;
+    fill: #fff;
     margin-left: 3px;
+    filter: drop-shadow(0 0 8px rgba(0,212,255,0.4));
   }
-  /* Pulse ring behind play button */
+  /* Cyan glow ring */
   .play-btn::before {
     content: '';
     position: absolute;
-    width: 64px;
-    height: 64px;
+    inset: -8px;
     border-radius: 50%;
-    border: 2px solid rgba(204,255,0,0.3);
-    animation: ring-pulse 2s ease-out infinite;
+    background: radial-gradient(circle, rgba(0,212,255,0.15) 0%, transparent 70%);
+    animation: pulse-glow 2s ease-in-out infinite;
   }
-  @keyframes ring-pulse {
-    0% { transform: scale(1); opacity: 0.6; }
-    100% { transform: scale(1.6); opacity: 0; }
+  @keyframes pulse-glow {
+    0%, 100% { transform: scale(1); opacity: 0.6; }
+    50% { transform: scale(1.15); opacity: 1; }
   }
 
-  /* Fade */
-  .media-area__fade {
+  /* Bottom Half */
+  .bottom-panel {
     position: absolute;
     bottom: 0;
-    left: 0;
-    right: 0;
-    height: 120px;
-    background: linear-gradient(0deg, #0A0A0F 0%, transparent 100%);
-    z-index: 2;
-  }
-
-  /* Content area */
-  .content {
-    flex: 1;
+    left: 0; right: 0;
+    height: 422px;
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 24px 24px 0;
+    padding: 28px 24px 0;
   }
 
-  /* Overline */
   .overline {
-    font-family: 'Inter', sans-serif;
-    font-weight: 600;
-    font-size: 11px;
-    line-height: 16px;
-    color: #CCFF00;
+    font-size: 12px;
+    font-weight: 700;
+    color: #00D4FF;
+    letter-spacing: 2.5px;
     text-transform: uppercase;
-    letter-spacing: 2px;
-    margin-bottom: 14px;
+    margin-bottom: 16px;
   }
 
-  /* Page indicator */
-  .page-indicator {
+  .page-dots {
     display: flex;
     gap: 8px;
     margin-bottom: 24px;
   }
-  .dot {
+  .page-dots .dot {
     width: 8px;
     height: 8px;
-    border-radius: 9999px;
+    border-radius: 50%;
     background: rgba(255,255,255,0.2);
   }
-  .dot--active {
-    background: #CCFF00;
-    box-shadow: 0 0 8px rgba(204,255,0,0.4);
+  .page-dots .dot.active {
+    background: #00D4FF;
+    box-shadow: 0 0 8px rgba(0,212,255,0.4);
   }
 
-  /* Title */
   .title {
     text-align: center;
     margin-bottom: 12px;
   }
-  .title__white {
-    font-family: 'DM Sans', sans-serif;
-    font-weight: 700;
-    font-size: 32px;
-    line-height: 40px;
-    color: #F0EDE8;
-    display: block;
-    letter-spacing: -0.5px;
-  }
-  .title__lime {
-    font-family: 'DM Sans', sans-serif;
-    font-weight: 700;
-    font-size: 32px;
-    line-height: 40px;
-    color: #CCFF00;
-    display: block;
-    letter-spacing: -0.5px;
-  }
+  .title .line1 { font-size: 28px; font-weight: 700; color: #fff; display: block; letter-spacing: -0.5px; }
+  .title .line2 { font-size: 28px; font-weight: 700; color: #00D4FF; display: block; letter-spacing: -0.5px; }
 
-  /* Caption */
-  .caption {
-    font-family: 'Inter', sans-serif;
-    font-weight: 400;
+  .subtitle {
     font-size: 15px;
-    line-height: 22px;
-    color: #8A8A9A;
+    color: rgba(255,255,255,0.65);
     text-align: center;
-    margin-bottom: 32px;
+    line-height: 1.5;
+    margin-bottom: auto;
   }
 
-  .spacer { flex: 1; }
+  /* Primary Button — Full Width at Bottom */
+  .btn-area {
+    position: absolute;
+    bottom: 48px;
+    left: 24px;
+    right: 24px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
 
-  /* Primary button */
   .btn-primary {
-    width: 100%;
+    width: 342px;
     height: 56px;
-    background: #CCFF00;
-    border: none;
     border-radius: 9999px;
+    border: 1px solid rgba(255,255,255,0.25);
+    background: linear-gradient(135deg, rgba(0,212,255,0.5), rgba(123,97,255,0.4));
+    -webkit-backdrop-filter: blur(16px);
+    backdrop-filter: blur(16px);
+    box-shadow: 0 0 20px rgba(0,212,255,0.25), inset 0 1px 0 rgba(255,255,255,0.2);
+    color: #fff;
+    font-size: 17px;
+    font-weight: 600;
+    cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
-    cursor: pointer;
-    margin-bottom: 16px;
-    transition: background 0.2s;
-  }
-  .btn-primary:hover { background: #E0FF4D; }
-  .btn-primary span {
-    font-family: 'DM Sans', sans-serif;
-    font-weight: 600;
-    font-size: 17px;
-    color: #0A0A0F;
-  }
-
-  /* Home indicator */
-  .home-indicator {
-    height: 34px;
-    display: flex;
-    justify-content: center;
-    align-items: flex-end;
-    padding-bottom: 8px;
-  }
-  .home-indicator__pill {
-    width: 134px;
-    height: 5px;
-    border-radius: 9999px;
-    background: rgba(255,255,255,0.3);
+    letter-spacing: -0.2px;
   }
 </style>
 </head>
 <body>
-<div class="phone">
+<div class="phone-frame">
   <!-- Status Bar -->
   <div class="status-bar">
-    <div class="status-bar__time">9:41</div>
-    <div class="status-bar__icons">
-      <svg width="16" height="16" viewBox="0 0 18 12" fill="none"><path d="M1 8.5C2.5 5 5.5 2.5 9 2.5s6.5 2.5 8 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><path d="M4 10C5 8 7 6.5 9 6.5s4 1.5 5 3.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><circle cx="9" cy="11" r="1.5" fill="currentColor"/></svg>
-      <svg width="16" height="16" viewBox="0 0 16 12" fill="none"><rect x="0.5" y="1" width="3" height="10" rx="1" fill="currentColor" opacity="0.3"/><rect x="4.5" y="3" width="3" height="8" rx="1" fill="currentColor" opacity="0.5"/><rect x="8.5" y="0.5" width="3" height="11" rx="1" fill="currentColor" opacity="0.7"/><rect x="12.5" y="0" width="3" height="11.5" rx="1" fill="currentColor"/></svg>
-      <svg width="27" height="12" viewBox="0 0 27 12" fill="none"><rect x="0.5" y="0.5" width="22" height="11" rx="2.5" stroke="currentColor" stroke-opacity="0.35"/><rect x="2" y="2" width="18" height="8" rx="1.5" fill="currentColor"/><path d="M25 4.5v3a2 2 0 000-3z" fill="currentColor" opacity="0.4"/></svg>
+    <span class="time">9:41</span>
+    <div class="icons">
+      <svg width="17" height="12" viewBox="0 0 17 12" fill="none">
+        <rect x="0" y="7" width="3" height="5" rx="1" fill="white"/>
+        <rect x="4.5" y="5" width="3" height="7" rx="1" fill="white"/>
+        <rect x="9" y="2" width="3" height="10" rx="1" fill="white"/>
+        <rect x="13.5" y="0" width="3" height="12" rx="1" fill="white"/>
+      </svg>
+      <svg width="16" height="12" viewBox="0 0 16 12" fill="none">
+        <path d="M8 3.6C9.8 3.6 11.4 4.3 12.6 5.4L14 4C12.4 2.5 10.3 1.6 8 1.6C5.7 1.6 3.6 2.5 2 4L3.4 5.4C4.6 4.3 6.2 3.6 8 3.6Z" fill="white"/>
+        <path d="M8 7.2C9 7.2 9.9 7.6 10.6 8.2L12 6.8C10.9 5.8 9.5 5.2 8 5.2C6.5 5.2 5.1 5.8 4 6.8L5.4 8.2C6.1 7.6 7 7.2 8 7.2Z" fill="white"/>
+        <circle cx="8" cy="10.5" r="1.5" fill="white"/>
+      </svg>
+      <svg width="27" height="13" viewBox="0 0 27 13" fill="none">
+        <rect x="0.5" y="0.5" width="22" height="12" rx="3.5" stroke="rgba(255,255,255,0.35)"/>
+        <rect x="2" y="2" width="19" height="9" rx="2" fill="white"/>
+        <path d="M24 4.5V8.5C24.8 8.2 25.5 7.4 25.5 6.5C25.5 5.6 24.8 4.8 24 4.5Z" fill="rgba(255,255,255,0.4)"/>
+      </svg>
     </div>
   </div>
 
-  <!-- Media area -->
+  <!-- Media Area — Top Half -->
   <div class="media-area">
-    <div class="media-area__bg"></div>
-    <div class="media-area__frame">
-      <div class="media-area__frame-bg"></div>
+    <div class="play-btn">
+      <svg viewBox="0 0 24 24"><polygon points="9,5 9,19 19,12"/></svg>
     </div>
-    <button class="play-btn">
-      <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="8,5 19,12 8,19"/></svg>
-    </button>
-    <div class="media-area__fade"></div>
   </div>
 
-  <!-- Content -->
-  <div class="content">
-    <div class="overline">CALL TO ACTION</div>
+  <!-- Bottom Panel -->
+  <div class="bottom-panel">
+    <div class="overline">YOUR MOVE</div>
 
-    <div class="page-indicator">
+    <div class="page-dots">
       <div class="dot"></div>
       <div class="dot"></div>
       <div class="dot"></div>
       <div class="dot"></div>
       <div class="dot"></div>
-      <div class="dot dot--active"></div>
+      <div class="dot active"></div>
     </div>
 
     <div class="title">
-      <span class="title__white">Your first clip is</span>
-      <span class="title__lime">10s away.</span>
+      <span class="line1">Your first clip is</span>
+      <span class="line2">10s away.</span>
     </div>
 
-    <div class="caption">Cancel anytime.</div>
-
-    <div class="spacer"></div>
-
-    <button class="btn-primary"><span>Create my first video &rarr;</span></button>
+    <div class="subtitle">Cancel anytime.</div>
   </div>
 
-  <!-- Home indicator -->
-  <div class="home-indicator">
-    <div class="home-indicator__pill"></div>
+  <!-- CTA Button -->
+  <div class="btn-area">
+    <button class="btn-primary">Create my first video &rarr;</button>
   </div>
+
+  <div class="home-indicator"></div>
 </div>
 </body>
 </html>

@@ -3,8 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Trenddy — 205 Paywall (In-App)</title>
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<title>205 — In-App Paywall (Pre-Generate)</title>
 <style>
   *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
   body {
@@ -13,464 +12,379 @@
     justify-content: center;
     align-items: center;
     min-height: 100vh;
-    font-family: 'Inter', sans-serif;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', sans-serif;
+    -webkit-font-smoothing: antialiased;
   }
-  .phone {
+
+  .phone-frame {
+    position: relative;
     width: 390px;
     height: 844px;
-    background: #0A0A0F;
     border-radius: 44px;
     overflow: hidden;
-    position: relative;
-    box-shadow:
-      0 0 0 1px rgba(255,255,255,0.06),
-      0 24px 80px rgba(0,0,0,0.8),
-      0 8px 32px rgba(0,0,0,0.6),
-      inset 0 1px 0 rgba(255,255,255,0.04);
-    display: flex;
-    flex-direction: column;
+    background:
+      radial-gradient(ellipse 120% 80% at 20% 10%, rgba(0,122,255,0.30) 0%, transparent 50%),
+      radial-gradient(ellipse 100% 100% at 80% 20%, rgba(123,97,255,0.25) 0%, transparent 45%),
+      radial-gradient(ellipse 80% 120% at 50% 90%, rgba(0,212,255,0.20) 0%, transparent 50%),
+      radial-gradient(ellipse 60% 60% at 10% 80%, rgba(255,107,157,0.15) 0%, transparent 45%),
+      linear-gradient(180deg, #0A0E1A 0%, #0D1220 50%, #0A0F1C 100%);
   }
 
-  /* Status bar */
+  /* Status Bar */
   .status-bar {
     height: 47px;
-    width: 100%;
     display: flex;
-    justify-content: center;
     align-items: center;
-    padding: 14px 24px 0;
-    position: absolute;
-    top: 0;
-    left: 0;
-    z-index: 10;
-  }
-  .status-bar__time {
-    font-family: 'Inter', sans-serif;
-    font-weight: 600;
-    font-size: 15px;
+    justify-content: space-between;
+    padding: 0 28px;
     color: #fff;
+    font-size: 15px;
+    font-weight: 600;
   }
+  .status-bar-time { font-size: 15px; font-weight: 600; }
+  .status-bar-icons { display: flex; gap: 6px; align-items: center; }
+  .status-bar-icons svg { width: 18px; height: 12px; fill: #fff; }
 
-  /* Close */
-  .btn-close {
+  /* Close Button */
+  .close-btn {
     position: absolute;
     top: 55px;
     right: 16px;
-    z-index: 20;
     width: 32px;
     height: 32px;
-    border-radius: 9999px;
+    border-radius: 50%;
     background: rgba(255,255,255,0.1);
     backdrop-filter: blur(8px);
-    border: none;
-    cursor: pointer;
+    -webkit-backdrop-filter: blur(8px);
+    border: 1px solid rgba(255,255,255,0.1);
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: background 0.2s;
+    cursor: pointer;
+    z-index: 10;
   }
-  .btn-close:hover { background: rgba(255,255,255,0.18); }
-  .btn-close svg { width: 14px; height: 14px; color: #fff; }
+  .close-btn svg { width: 14px; height: 14px; stroke: #fff; stroke-width: 2; }
 
-  /* Hero — video/creation themed */
-  .hero {
-    width: 100%;
-    height: 240px;
-    position: relative;
-    overflow: hidden;
-    flex-shrink: 0;
+  /* Scroll container */
+  .scroll-content {
+    height: calc(844px - 47px);
+    overflow-y: auto;
+    scrollbar-width: none;
   }
-  .hero__bg {
+  .scroll-content::-webkit-scrollbar { display: none; }
+
+  /* Hero */
+  .hero {
+    position: relative;
+    height: 240px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+  .hero-gradient {
     position: absolute;
     inset: 0;
     background:
-      radial-gradient(ellipse 70% 55% at 25% 45%, rgba(204,255,0,0.18) 0%, transparent 55%),
-      radial-gradient(ellipse 60% 50% at 75% 35%, rgba(108,92,231,0.22) 0%, transparent 50%),
-      radial-gradient(ellipse 50% 60% at 55% 75%, rgba(0,206,201,0.15) 0%, transparent 50%),
-      linear-gradient(180deg, #1E1E30 0%, #0A0A0F 100%);
+      radial-gradient(ellipse 90% 70% at 50% 35%, rgba(0,212,255,0.22) 0%, transparent 55%),
+      radial-gradient(ellipse 60% 50% at 25% 50%, rgba(123,97,255,0.20) 0%, transparent 50%),
+      radial-gradient(ellipse 50% 45% at 75% 55%, rgba(255,107,157,0.12) 0%, transparent 45%);
   }
-  .hero__fade {
+  .hero-fade {
     position: absolute;
     bottom: 0;
     left: 0;
     right: 0;
     height: 80px;
-    background: linear-gradient(to top, #0A0A0F 0%, transparent 100%);
+    background: linear-gradient(to top, #0A0E1A, transparent);
+    pointer-events: none;
   }
 
-  /* Floating video frame shapes */
-  .frame {
+  /* Sparkles */
+  .sparkle {
     position: absolute;
-    border-radius: 8px;
-    border: 1.5px solid rgba(204,255,0,0.2);
-    background: rgba(204,255,0,0.03);
-    opacity: 0;
-    animation: frame-appear 5s ease-in-out infinite;
+    animation: sparkle-float 4s ease-in-out infinite;
   }
-  .frame--1 { width: 64px; height: 80px; top: 55px; left: 40px; animation-delay: 0s; border-color: rgba(204,255,0,0.2); }
-  .frame--2 { width: 80px; height: 100px; top: 70px; left: 50%; transform: translateX(-50%); animation-delay: 0.8s; border-color: rgba(108,92,231,0.25); background: rgba(108,92,231,0.04); }
-  .frame--3 { width: 56px; height: 70px; top: 60px; right: 45px; animation-delay: 1.6s; border-color: rgba(0,206,201,0.2); background: rgba(0,206,201,0.03); }
+  .sparkle-dot {
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background: rgba(0,212,255,0.7);
+    box-shadow: 0 0 6px rgba(0,212,255,0.5);
+  }
+  .sparkle-dot.purple {
+    background: rgba(123,97,255,0.7);
+    box-shadow: 0 0 6px rgba(123,97,255,0.5);
+  }
+  .sparkle-star svg { width: 16px; height: 16px; }
+  .sparkle-star.small svg { width: 10px; height: 10px; }
 
-  /* Play icon inside center frame */
-  .play-icon {
-    position: absolute;
-    top: 100px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 32px;
-    height: 32px;
-    z-index: 3;
-    opacity: 0;
-    animation: frame-appear 5s ease-in-out infinite 0.8s;
+  @keyframes sparkle-float {
+    0%, 100% { opacity: 0.3; transform: translateY(0) scale(1); }
+    50% { opacity: 1; transform: translateY(-8px) scale(1.2); }
   }
 
-  @keyframes frame-appear {
-    0%, 100% { opacity: 0; transform: translateY(6px) scale(0.95); }
-    30%, 70% { opacity: 0.7; transform: translateY(0) scale(1); }
-  }
+  .s1 { top: 35px; left: 60px; animation-delay: 0.1s; }
+  .s2 { top: 65px; left: 160px; animation-delay: 0.9s; }
+  .s3 { top: 50px; right: 65px; animation-delay: 1.5s; }
+  .s4 { top: 110px; left: 100px; animation-delay: 0.4s; }
+  .s5 { top: 95px; right: 55px; animation-delay: 2.1s; }
+  .s6 { top: 140px; left: 190px; animation-delay: 0.7s; }
+  .s7 { top: 45px; right: 130px; animation-delay: 1.2s; }
+  .s8 { top: 160px; left: 50px; animation-delay: 1.7s; }
 
-  /* Content area */
-  .content {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    padding: 0 24px;
-    overflow: hidden;
-  }
-
+  /* Titles */
   .title {
-    font-family: 'DM Sans', sans-serif;
+    font-size: 24px;
     font-weight: 700;
-    font-size: 28px;
-    line-height: 36px;
-    color: #F0EDE8;
+    color: #FFFFFF;
     text-align: center;
-    margin-bottom: 8px;
+    padding: 0 24px;
   }
   .subtitle {
-    font-family: 'Inter', sans-serif;
-    font-weight: 400;
     font-size: 15px;
-    line-height: 22px;
-    color: #8A8A9A;
+    color: rgba(255,255,255,0.65);
     text-align: center;
-    margin-bottom: 20px;
+    padding: 8px 32px 0;
+    line-height: 1.45;
   }
 
-  /* Benefits list */
-  .benefits {
-    display: flex;
-    flex-direction: column;
-    gap: 14px;
-    margin-bottom: 24px;
-    padding: 0 4px;
-  }
-  .benefit {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-  }
-  .benefit__icon {
-    width: 22px;
-    height: 22px;
-    border-radius: 9999px;
-    background: rgba(204,255,0,0.1);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
-  }
-  .benefit__icon svg {
-    width: 12px;
-    height: 12px;
-    color: #CCFF00;
-  }
-  .benefit__text {
-    font-family: 'Inter', sans-serif;
-    font-weight: 400;
-    font-size: 14px;
-    line-height: 20px;
-    color: #F0EDE8;
-  }
-
-  /* Plan cards */
+  /* Plan Cards */
   .plans {
+    padding: 28px 24px 0;
     display: flex;
     flex-direction: column;
     gap: 12px;
-    width: 100%;
-    margin-bottom: 20px;
   }
   .plan-card {
-    width: 100%;
-    background: #141420;
-    border: 2px solid #2A2A44;
+    position: relative;
+    background: rgba(255,255,255,0.10);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    border: 1px solid rgba(255,255,255,0.15);
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.15), 0 8px 32px rgba(0,0,0,0.25);
     border-radius: 16px;
     padding: 16px 20px;
     display: flex;
-    justify-content: space-between;
     align-items: center;
+    gap: 14px;
     cursor: pointer;
-    transition: border-color 0.25s, box-shadow 0.25s;
-    position: relative;
+    transition: all 0.3s ease;
   }
-  .plan-card--selected {
-    border-color: #CCFF00;
-    box-shadow: 0 0 20px rgba(204,255,0,0.08), inset 0 0 0 1px rgba(204,255,0,0.05);
+  .plan-card.selected {
+    border-color: rgba(0,212,255,0.8);
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.15), 0 8px 32px rgba(0,0,0,0.25), 0 0 20px rgba(0,212,255,0.15);
   }
-  .plan-card__info {
-    display: flex;
-    flex-direction: column;
-    gap: 2px;
-  }
-  .plan-card__name {
-    font-family: 'DM Sans', sans-serif;
-    font-weight: 600;
-    font-size: 16px;
-    line-height: 22px;
-    color: #F0EDE8;
-  }
-  .plan-card__price {
-    font-family: 'Inter', sans-serif;
-    font-weight: 400;
-    font-size: 13px;
-    line-height: 18px;
-    color: #8A8A9A;
-  }
-  .plan-card__meta {
-    font-family: 'Inter', sans-serif;
-    font-weight: 400;
-    font-size: 11px;
-    line-height: 16px;
-    color: #5A5A6A;
-    margin-top: 2px;
-  }
-  .plan-card__radio {
+
+  .plan-radio {
     width: 22px;
     height: 22px;
-    border-radius: 9999px;
-    border: 2px solid #2A2A44;
+    min-width: 22px;
+    border-radius: 50%;
+    border: 2px solid rgba(255,255,255,0.3);
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: border-color 0.25s, background 0.25s;
-    flex-shrink: 0;
+    transition: all 0.3s ease;
   }
-  .plan-card--selected .plan-card__radio {
-    border-color: #CCFF00;
-    background: #CCFF00;
+  .plan-card.selected .plan-radio {
+    border-color: #00D4FF;
+    background: #00D4FF;
   }
-  .plan-card__radio-dot {
+  .plan-radio-dot {
     width: 8px;
     height: 8px;
-    border-radius: 9999px;
-    background: #0A0A0F;
+    border-radius: 50%;
+    background: #0A0E1A;
     opacity: 0;
-    transition: opacity 0.25s;
+    transition: opacity 0.3s ease;
   }
-  .plan-card--selected .plan-card__radio-dot { opacity: 1; }
+  .plan-card.selected .plan-radio-dot { opacity: 1; }
 
-  .plan-card__badge {
+  .plan-info { flex: 1; }
+  .plan-duration {
+    font-size: 16px;
+    font-weight: 600;
+    color: #FFFFFF;
+  }
+  .plan-price {
+    font-size: 14px;
+    color: rgba(255,255,255,0.65);
+    margin-top: 2px;
+  }
+  .plan-per {
+    font-size: 12px;
+    color: rgba(255,255,255,0.4);
+    margin-top: 1px;
+  }
+
+  .plan-badge {
     position: absolute;
     top: -10px;
     right: 16px;
-    background: #CCFF00;
+    padding: 4px 12px;
     border-radius: 9999px;
-    padding: 3px 10px;
-    font-family: 'Inter', sans-serif;
+    font-size: 11px;
     font-weight: 700;
-    font-size: 10px;
-    line-height: 16px;
-    color: #0A0A0F;
+    letter-spacing: 0.5px;
     text-transform: uppercase;
-    letter-spacing: 0.8px;
   }
-
-  .spacer { flex: 1; }
+  .badge-value {
+    background: rgba(255,255,255,0.14);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255,255,255,0.20);
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.20), 0 12px 40px rgba(0,0,0,0.3), 0 0 12px rgba(0,212,255,0.3);
+    color: #00D4FF;
+  }
+  .badge-popular {
+    background: transparent;
+    border: 1px solid rgba(255,255,255,0.25);
+    color: rgba(255,255,255,0.8);
+  }
 
   /* CTA */
-  .btn-primary {
+  .cta-area {
+    padding: 28px 24px 0;
+  }
+  .cta-btn {
     width: 100%;
     height: 56px;
-    background: #CCFF00;
-    border: none;
     border-radius: 9999px;
-    font-family: 'DM Sans', sans-serif;
-    font-weight: 700;
+    background: linear-gradient(135deg, rgba(0,212,255,0.5), rgba(123,97,255,0.4));
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255,255,255,0.25);
+    box-shadow: 0 0 20px rgba(0,212,255,0.25), inset 0 1px 0 rgba(255,255,255,0.2);
+    color: #fff;
+    font-weight: 600;
     font-size: 16px;
-    color: #0A0A0F;
     cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: background 0.2s;
-    flex-shrink: 0;
+    font-family: inherit;
+    letter-spacing: 0.2px;
   }
-  .btn-primary:hover { background: #E0FF4D; }
 
-  /* Text links */
-  .links {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 2px;
-    flex-shrink: 0;
-    padding-top: 8px;
-  }
-  .link-account {
-    font-family: 'Inter', sans-serif;
-    font-weight: 500;
-    font-size: 14px;
-    line-height: 20px;
-    color: #8A8A9A;
-    padding: 10px 0;
-    cursor: pointer;
-    transition: color 0.2s;
-  }
-  .link-account:hover { color: #F0EDE8; }
   .restore-link {
-    font-family: 'Inter', sans-serif;
-    font-weight: 400;
+    display: block;
+    text-align: center;
+    margin-top: 14px;
     font-size: 13px;
-    line-height: 18px;
-    color: #5A5A6A;
-    padding: 6px 0;
+    color: rgba(255,255,255,0.4);
     cursor: pointer;
-    transition: color 0.2s;
-  }
-  .restore-link:hover { color: #8A8A9A; }
-
-  /* Home indicator */
-  .home-indicator {
-    height: 34px;
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: flex-end;
     padding-bottom: 8px;
-    flex-shrink: 0;
   }
-  .home-indicator__pill {
+
+  /* Home Indicator */
+  .home-indicator {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 34px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .home-indicator-pill {
     width: 134px;
     height: 5px;
     border-radius: 9999px;
-    background: rgba(255,255,255,0.3);
+    background: rgba(255,255,255,0.35);
   }
 </style>
 </head>
 <body>
-<div class="phone">
+
+<div class="phone-frame">
   <!-- Status Bar -->
   <div class="status-bar">
-    <span class="status-bar__time">9:41</span>
+    <span class="status-bar-time">9:41</span>
+    <div class="status-bar-icons">
+      <svg viewBox="0 0 18 12"><rect x="0" y="3" width="4" height="9" rx="1" opacity="0.4"/><rect x="5" y="2" width="4" height="10" rx="1" opacity="0.6"/><rect x="10" y="1" width="4" height="11" rx="1" opacity="0.8"/><rect x="15" y="0" width="3" height="12" rx="1"/></svg>
+      <svg viewBox="0 0 16 12" fill="none" stroke="#fff" stroke-width="1.2"><path d="M1 8.5C3.5 5.5 6.5 4 8 4s4.5 1.5 7 4.5"/><circle cx="8" cy="11" r="1" fill="#fff" stroke="none"/></svg>
+      <svg viewBox="0 0 28 14"><rect x="0.5" y="0.5" width="23" height="13" rx="3" stroke="#fff" stroke-width="1" fill="none" opacity="0.4"/><rect x="24.5" y="4" width="2" height="6" rx="1" fill="#fff" opacity="0.4"/><rect x="2" y="2" width="18" height="10" rx="2" fill="#fff"/></svg>
+    </div>
   </div>
 
-  <!-- Close -->
-  <button class="btn-close">
-    <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
-      <line x1="1" y1="1" x2="13" y2="13"/><line x1="13" y1="1" x2="1" y2="13"/>
-    </svg>
-  </button>
-
-  <!-- Hero -->
-  <div class="hero">
-    <div class="hero__bg"></div>
-    <div class="frame frame--1"></div>
-    <div class="frame frame--2"></div>
-    <div class="frame frame--3"></div>
-    <!-- Play triangle in center frame -->
-    <svg class="play-icon" viewBox="0 0 32 32" fill="none">
-      <circle cx="16" cy="16" r="15" stroke="rgba(204,255,0,0.3)" stroke-width="1.5"/>
-      <path d="M13 11L22 16L13 21Z" fill="rgba(204,255,0,0.5)"/>
-    </svg>
-    <div class="hero__fade"></div>
+  <!-- Close Button -->
+  <div class="close-btn">
+    <svg viewBox="0 0 14 14" fill="none"><line x1="1" y1="1" x2="13" y2="13"/><line x1="13" y1="1" x2="1" y2="13"/></svg>
   </div>
 
-  <!-- Content -->
-  <div class="content">
-    <h1 class="title">Go unlimited</h1>
-    <p class="subtitle">Unlock AI video generation with zero limits.</p>
-
-    <!-- Benefits -->
-    <div class="benefits">
-      <div class="benefit">
-        <div class="benefit__icon">
-          <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <polyline points="2,6 5,9 10,3"/>
-          </svg>
-        </div>
-        <span class="benefit__text">Unlimited video generation</span>
+  <!-- Scrollable Content -->
+  <div class="scroll-content">
+    <!-- Hero -->
+    <div class="hero">
+      <div class="hero-gradient"></div>
+      <div class="sparkle sparkle-dot s1"></div>
+      <div class="sparkle sparkle-dot purple s2"></div>
+      <div class="sparkle sparkle-dot s3"></div>
+      <div class="sparkle sparkle-dot purple s4"></div>
+      <div class="sparkle sparkle-dot s5"></div>
+      <div class="sparkle sparkle-star s6">
+        <svg viewBox="0 0 24 24" fill="none"><path d="M12 2L13.5 9.5L21 12L13.5 14.5L12 22L10.5 14.5L3 12L10.5 9.5Z" fill="rgba(0,212,255,0.6)"/></svg>
       </div>
-      <div class="benefit">
-        <div class="benefit__icon">
-          <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <polyline points="2,6 5,9 10,3"/>
-          </svg>
-        </div>
-        <span class="benefit__text">All visual styles unlocked</span>
+      <div class="sparkle sparkle-star small s7">
+        <svg viewBox="0 0 24 24" fill="none"><path d="M12 2L13.5 9.5L21 12L13.5 14.5L12 22L10.5 14.5L3 12L10.5 9.5Z" fill="rgba(123,97,255,0.6)"/></svg>
       </div>
-      <div class="benefit">
-        <div class="benefit__icon">
-          <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <polyline points="2,6 5,9 10,3"/>
-          </svg>
-        </div>
-        <span class="benefit__text">Priority processing — 10s results</span>
+      <div class="sparkle sparkle-star s8">
+        <svg viewBox="0 0 24 24" fill="none"><path d="M12 2L13.5 9.5L21 12L13.5 14.5L12 22L10.5 14.5L3 12L10.5 9.5Z" fill="rgba(0,212,255,0.5)"/></svg>
       </div>
-      <div class="benefit">
-        <div class="benefit__icon">
-          <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <polyline points="2,6 5,9 10,3"/>
-          </svg>
-        </div>
-        <span class="benefit__text">No watermarks</span>
-      </div>
+      <div class="hero-fade"></div>
     </div>
 
-    <!-- Plans -->
+    <!-- Title -->
+    <div class="title">Unlock Premium Features</div>
+    <div class="subtitle">Subscribe to generate unlimited AI videos, access all styles, and more.</div>
+
+    <!-- Plan Cards -->
     <div class="plans">
-      <!-- Weekly -->
       <div class="plan-card" onclick="selectPlan(this)">
-        <div class="plan-card__info">
-          <span class="plan-card__name">Weekly</span>
-          <span class="plan-card__price">$4.99/week</span>
+        <div class="plan-radio"><div class="plan-radio-dot"></div></div>
+        <div class="plan-info">
+          <div class="plan-duration">Weekly</div>
+          <div class="plan-price">$4.99/week</div>
         </div>
-        <div class="plan-card__radio"><div class="plan-card__radio-dot"></div></div>
       </div>
-
-      <!-- Yearly (pre-selected) -->
-      <div class="plan-card plan-card--selected" onclick="selectPlan(this)">
-        <span class="plan-card__badge">Best value</span>
-        <div class="plan-card__info">
-          <span class="plan-card__name">Yearly</span>
-          <span class="plan-card__price">$49.99/year</span>
-          <span class="plan-card__meta">That's just $0.96/week</span>
+      <div class="plan-card" onclick="selectPlan(this)">
+        <div class="plan-badge badge-popular">Most popular</div>
+        <div class="plan-radio"><div class="plan-radio-dot"></div></div>
+        <div class="plan-info">
+          <div class="plan-duration">Monthly</div>
+          <div class="plan-price">$12.99/month</div>
+          <div class="plan-per">$3.25/week</div>
         </div>
-        <div class="plan-card__radio"><div class="plan-card__radio-dot"></div></div>
+      </div>
+      <div class="plan-card selected" onclick="selectPlan(this)">
+        <div class="plan-badge badge-value">Best value</div>
+        <div class="plan-radio"><div class="plan-radio-dot"></div></div>
+        <div class="plan-info">
+          <div class="plan-duration">Yearly</div>
+          <div class="plan-price">$49.99/year</div>
+          <div class="plan-per">$0.96/week</div>
+        </div>
       </div>
     </div>
 
-    <div class="spacer"></div>
-
-    <button class="btn-primary">Subscribe</button>
-
-    <div class="links">
-      <span class="link-account">Create an account</span>
-      <span class="restore-link">Restore purchase</span>
+    <!-- CTA -->
+    <div class="cta-area">
+      <button class="cta-btn">Subscribe</button>
+      <div class="restore-link">Restore purchase</div>
     </div>
   </div>
 
   <!-- Home Indicator -->
   <div class="home-indicator">
-    <div class="home-indicator__pill"></div>
+    <div class="home-indicator-pill"></div>
   </div>
 </div>
 
 <script>
 function selectPlan(card) {
-  document.querySelectorAll('.plan-card').forEach(c => c.classList.remove('plan-card--selected'));
-  card.classList.add('plan-card--selected');
+  document.querySelectorAll('.plan-card').forEach(c => c.classList.remove('selected'));
+  card.classList.add('selected');
 }
 </script>
+
 </body>
 </html>

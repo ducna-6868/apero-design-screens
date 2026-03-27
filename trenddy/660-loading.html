@@ -4,110 +4,168 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=390, initial-scale=1.0">
 <title>660 — Result Loading</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; -webkit-font-smoothing: antialiased; }
-  body { background: #000; display: flex; justify-content: center; align-items: center; min-height: 100vh; font-family: 'Inter', sans-serif; }
+  body {
+    background: #000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', sans-serif;
+  }
   .phone {
-    width: 390px; height: 844px; background: #0A0A0F; border-radius: 44px; overflow: hidden;
-    box-shadow: 0 0 0 1px rgba(255,255,255,0.06), 0 24px 80px rgba(0,0,0,0.8), 0 8px 32px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.04);
+    width: 390px; height: 844px; border-radius: 44px; overflow: hidden;
     position: relative; display: flex; flex-direction: column;
+    background:
+      radial-gradient(ellipse 120% 80% at 20% 10%, rgba(0,122,255,0.30) 0%, transparent 50%),
+      radial-gradient(ellipse 100% 100% at 80% 20%, rgba(123,97,255,0.25) 0%, transparent 45%),
+      radial-gradient(ellipse 80% 120% at 50% 90%, rgba(0,212,255,0.20) 0%, transparent 50%),
+      radial-gradient(ellipse 60% 60% at 10% 80%, rgba(255,107,157,0.15) 0%, transparent 45%),
+      linear-gradient(180deg, #0A0E1A 0%, #0D1220 50%, #0A0F1C 100%);
   }
 
   /* Status Bar */
   .status-bar {
-    height: 47px; width: 100%; display: flex; justify-content: space-between; align-items: center;
-    padding: 14px 24px 0; flex-shrink: 0;
+    height: 54px; width: 100%; display: flex; justify-content: space-between;
+    align-items: center; padding: 14px 28px 0; flex-shrink: 0;
   }
-  .status-bar__time { font: 600 15px/18px 'Inter', sans-serif; color: #F0EDE8; }
-  .status-bar__icons { display: flex; gap: 5px; align-items: center; }
-  .status-bar__icons svg { width: 16px; height: 16px; fill: #F0EDE8; }
+  .status-bar .time { font-size: 15px; font-weight: 600; color: #fff; letter-spacing: -0.3px; }
+  .status-bar .icons { display: flex; gap: 6px; align-items: center; }
+  .status-bar .icons svg { width: 18px; height: 12px; fill: #fff; }
 
-  /* Nav Bar */
-  .nav-bar {
-    height: 44px; display: flex; align-items: center; justify-content: center;
-    padding: 0 20px; position: relative; flex-shrink: 0;
-  }
-  .nav-bar__title { font: 600 17px/22px 'DM Sans', sans-serif; color: #F0EDE8; }
-
-  /* Content */
+  /* Centered Content */
   .content {
     flex: 1; display: flex; flex-direction: column; align-items: center;
     justify-content: center; padding: 0 24px; overflow: hidden;
   }
 
-  /* Progress Ring */
+  /* Progress Ring Container */
   .progress-ring {
-    width: 120px; height: 120px; position: relative;
-    margin-bottom: 32px;
-  }
-  .progress-ring__svg {
-    width: 120px; height: 120px;
-    animation: ring-rotate 3s linear infinite;
-  }
-  .progress-ring__bg {
-    fill: none; stroke: #2A2A40; stroke-width: 4;
-  }
-  .progress-ring__fill {
-    fill: none; stroke: #CCFF00; stroke-width: 4;
-    stroke-linecap: round;
-    stroke-dasharray: 339.292;
-    stroke-dashoffset: 180;
-    animation: ring-pulse 2s ease-in-out infinite;
-  }
-  .progress-ring__text {
-    position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
-    font: 700 28px/34px 'DM Sans', sans-serif; color: #F0EDE8;
+    width: 120px; height: 120px; position: relative; margin-bottom: 24px;
   }
 
-  @keyframes ring-rotate {
+  /* Outer rotating ring */
+  .progress-ring__outer {
+    width: 120px; height: 120px;
+    border-radius: 50%;
+    background: conic-gradient(#00D4FF, #7B61FF, #FF6B9D, transparent);
+    animation: ring-spin 2s linear infinite;
+    display: flex; align-items: center; justify-content: center;
+    -webkit-mask: radial-gradient(farthest-side, transparent calc(100% - 4px), #000 calc(100% - 4px));
+    mask: radial-gradient(farthest-side, transparent calc(100% - 4px), #000 calc(100% - 4px));
+  }
+  @keyframes ring-spin {
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
   }
-  @keyframes ring-pulse {
-    0% { stroke-dashoffset: 200; opacity: 1; }
-    50% { stroke-dashoffset: 140; opacity: 0.85; }
-    100% { stroke-dashoffset: 200; opacity: 1; }
+
+  /* Inner glass circle with percentage */
+  .progress-ring__inner {
+    position: absolute;
+    top: 50%; left: 50%; transform: translate(-50%, -50%);
+    width: 104px; height: 104px; border-radius: 50%;
+    background: rgba(255,255,255,0.10);
+    backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px);
+    border: 1px solid rgba(255,255,255,0.15);
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.15), 0 8px 32px rgba(0,0,0,0.25);
+    display: flex; align-items: center; justify-content: center;
+  }
+  .progress-ring__percent {
+    font-size: 32px; font-weight: 700; color: #fff; letter-spacing: -0.5px;
   }
 
-  /* Glow effect */
+  /* Glow behind ring */
   .progress-ring::before {
-    content: ''; position: absolute; inset: -8px;
-    border-radius: 50%;
-    background: radial-gradient(circle, rgba(204,255,0,0.08) 0%, transparent 70%);
+    content: ''; position: absolute; inset: -16px; border-radius: 50%;
+    background: radial-gradient(circle, rgba(0,212,255,0.10) 0%, rgba(123,97,255,0.06) 50%, transparent 70%);
     animation: glow-pulse 2s ease-in-out infinite;
   }
   @keyframes glow-pulse {
     0%, 100% { opacity: 0.5; transform: scale(1); }
-    50% { opacity: 1; transform: scale(1.05); }
+    50% { opacity: 1; transform: scale(1.08); }
   }
 
-  /* Text below progress */
-  .loading-text {
-    font: 400 15px/22px 'Inter', sans-serif; color: #8A8A9A;
-    text-align: center; margin-bottom: 8px;
-  }
-  .loading-subtext {
-    font: 400 12px/16px 'Inter', sans-serif; color: #5A5A6A;
+  /* Text below */
+  .loading-title {
+    font-size: 20px; font-weight: 600; color: #fff; margin-bottom: 8px;
     text-align: center;
   }
-
-  /* Cancel Button */
-  .btn-cancel {
-    position: absolute; bottom: 54px; left: 50%; transform: translateX(-50%);
-    background: none; border: none; cursor: pointer;
-    font: 400 15px/22px 'Inter', sans-serif; color: #8A8A9A;
-    padding: 8px 16px;
+  .loading-subtitle {
+    font-size: 15px; color: rgba(255,255,255,0.65); text-align: center; margin-bottom: 4px;
   }
-  .btn-cancel:hover { color: #F0EDE8; }
+  .loading-dots::after {
+    content: '...';
+    animation: dots 1.5s steps(4, end) infinite;
+  }
+  @keyframes dots {
+    0% { content: ''; }
+    25% { content: '.'; }
+    50% { content: '..'; }
+    75% { content: '...'; }
+    100% { content: ''; }
+  }
+
+  /* Progress Stages */
+  .stages {
+    display: flex; gap: 16px; margin-top: 28px; margin-bottom: 16px;
+  }
+  .stage-pill {
+    padding: 6px 16px; border-radius: 9999px; font-size: 13px; font-weight: 500;
+    background: rgba(255,255,255,0.06);
+    backdrop-filter: blur(40px); -webkit-backdrop-filter: blur(40px);
+    border: 1px solid rgba(255,255,255,0.10);
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.10);
+    color: rgba(255,255,255,0.4);
+  }
+  .stage-pill--completed {
+    color: #00D4FF;
+    border-color: rgba(0,212,255,0.3);
+    background: rgba(0,212,255,0.08);
+  }
+  .stage-pill--active {
+    color: #fff;
+    border-color: rgba(123,97,255,0.4);
+    background: rgba(123,97,255,0.12);
+    animation: stage-pulse 1.5s ease-in-out infinite;
+  }
+  @keyframes stage-pulse {
+    0%, 100% { box-shadow: inset 0 1px 0 rgba(255,255,255,0.10), 0 0 8px rgba(123,97,255,0.2); }
+    50% { box-shadow: inset 0 1px 0 rgba(255,255,255,0.10), 0 0 16px rgba(123,97,255,0.4); }
+  }
+
+  /* Estimated Time */
+  .estimate {
+    font-size: 13px; color: rgba(255,255,255,0.4); text-align: center;
+  }
+
+  /* Tip Card */
+  .tip-card {
+    position: absolute; bottom: 48px; left: 50%; transform: translateX(-50%);
+    width: 342px; border-radius: 22px; padding: 16px 20px;
+    background: rgba(255,255,255,0.06);
+    backdrop-filter: blur(40px); -webkit-backdrop-filter: blur(40px);
+    border: 1px solid rgba(255,255,255,0.10);
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.10);
+    display: flex; gap: 12px; align-items: flex-start;
+  }
+  .tip-icon {
+    width: 20px; height: 20px; flex-shrink: 0; margin-top: 1px;
+  }
+  .tip-icon svg { width: 20px; height: 20px; fill: #00D4FF; }
+  .tip-text {
+    font-size: 13px; line-height: 1.5; color: rgba(255,255,255,0.65);
+  }
+  .tip-text strong { color: #00D4FF; font-weight: 600; }
 
   /* Home Indicator */
   .home-indicator {
-    height: 34px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+    height: 34px; width: 100%; display: flex; justify-content: center;
+    align-items: flex-end; padding-bottom: 8px; flex-shrink: 0;
   }
-  .home-indicator__bar {
-    width: 134px; height: 5px; background: rgba(255,255,255,0.3); border-radius: 9999px;
+  .home-indicator__pill {
+    width: 134px; height: 5px; border-radius: 9999px;
+    background: rgba(255,255,255,0.25);
   }
 </style>
 </head>
@@ -115,41 +173,49 @@
 <div class="phone">
   <!-- Status Bar -->
   <div class="status-bar">
-    <span class="status-bar__time">9:41</span>
-    <div class="status-bar__icons">
-      <svg viewBox="0 0 17 12"><path d="M1 8.5h1.5v3H1zM4 6h1.5v5.5H4zM7 3.5h1.5V12H7zM10 1h1.5v10.5H10z" rx=".5"/></svg>
-      <svg viewBox="0 0 16 12"><path d="M8 3.3C5.5 3.3 3.3 4.3 1.8 6l1.2 1.2C4.2 5.8 6 5 8 5s3.8.8 5 2.2L14.2 6C12.7 4.3 10.5 3.3 8 3.3zM8 7c-1.4 0-2.6.6-3.5 1.5L5.7 9.7c.6-.6 1.4-1 2.3-1s1.7.4 2.3 1l1.2-1.2C10.6 7.6 9.4 7 8 7zm0 4.3L9.7 9.7c-.4-.5-1-.8-1.7-.8s-1.3.3-1.7.8L8 11.3z"/></svg>
-      <svg viewBox="0 0 25 12"><rect x="0" y="1" width="21" height="10" rx="2" stroke="#F0EDE8" stroke-width="1" fill="none"/><rect x="22" y="4" width="2" height="4" rx="0.5" fill="#F0EDE8" opacity="0.4"/><rect x="1.5" y="2.5" width="16" height="7" rx="1" fill="#CCFF00"/></svg>
+    <span class="time">9:41</span>
+    <div class="icons">
+      <svg viewBox="0 0 18 12"><rect x="0" y="3" width="3" height="9" rx="0.5" fill="#fff" opacity="0.4"/><rect x="4.5" y="2" width="3" height="10" rx="0.5" fill="#fff" opacity="0.6"/><rect x="9" y="1" width="3" height="11" rx="0.5" fill="#fff" opacity="0.8"/><rect x="13.5" y="0" width="3" height="12" rx="0.5" fill="#fff"/></svg>
+      <svg viewBox="0 0 16 12"><path d="M8 2.4C5.4 2.4 3 3.5 1.4 5.3l1 1C3.8 4.7 5.8 3.8 8 3.8s4.2.9 5.6 2.5l1-1C13 3.5 10.6 2.4 8 2.4zM8 6c-1.5 0-2.8.6-3.8 1.6l1 1c.8-.8 1.8-1.2 2.8-1.2s2 .4 2.8 1.2l1-1C10.8 6.6 9.5 6 8 6zm0 3.6c-.6 0-1.2.3-1.6.8L8 12l1.6-1.6c-.4-.5-1-.8-1.6-.8z" fill="#fff"/></svg>
+      <svg viewBox="0 0 27 13"><rect x="0" y="0.5" width="22" height="11.5" rx="3.5" stroke="rgba(255,255,255,0.35)" stroke-width="1" fill="none"/><rect x="23" y="3.5" width="2.5" height="5" rx="1" fill="rgba(255,255,255,0.4)"/><rect x="1.5" y="2" width="16" height="8" rx="2" fill="#fff"/></svg>
     </div>
   </div>
 
-  <!-- Nav Bar (no back button — generation in progress) -->
-  <div class="nav-bar">
-    <span class="nav-bar__title">Creating...</span>
-  </div>
-
-  <!-- Content -->
+  <!-- Centered Content -->
   <div class="content">
-    <!-- Circular Progress -->
+    <!-- Progress Ring -->
     <div class="progress-ring">
-      <svg class="progress-ring__svg" viewBox="0 0 120 120">
-        <circle class="progress-ring__bg" cx="60" cy="60" r="54"/>
-        <circle class="progress-ring__fill" cx="60" cy="60" r="54"/>
-      </svg>
-      <span class="progress-ring__text">47%</span>
+      <div class="progress-ring__outer"></div>
+      <div class="progress-ring__inner">
+        <span class="progress-ring__percent">42%</span>
+      </div>
     </div>
 
-    <p class="loading-text">Generating your video...</p>
-    <p class="loading-subtext">This usually takes about 30 seconds</p>
+    <!-- Loading Text -->
+    <div class="loading-title">Creating your video<span class="loading-dots"></span></div>
+    <div class="loading-subtitle">Applying Cyberpunk style</div>
+
+    <!-- Progress Stages -->
+    <div class="stages">
+      <div class="stage-pill stage-pill--completed">Analyzing</div>
+      <div class="stage-pill stage-pill--active">Styling</div>
+      <div class="stage-pill">Rendering</div>
+    </div>
+
+    <!-- Estimated Time -->
+    <div class="estimate">~15 seconds remaining</div>
   </div>
 
-  <!-- Cancel Button -->
-  <button class="btn-cancel">Cancel</button>
+  <!-- Tip Card -->
+  <div class="tip-card">
+    <div class="tip-icon">
+      <svg viewBox="0 0 20 20"><path d="M10 1a5 5 0 0 1 5 5c0 2.05-1.23 3.81-3 4.58V13a1 1 0 0 1-1 1H9a1 1 0 0 1-1-1v-2.42C6.23 9.81 5 8.05 5 6a5 5 0 0 1 5-5zm-1.5 15h3v1a1.5 1.5 0 0 1-3 0v-1z"/></svg>
+    </div>
+    <div class="tip-text"><strong>Pro tip:</strong> Higher quality takes a bit longer but produces sharper results</div>
+  </div>
 
   <!-- Home Indicator -->
-  <div class="home-indicator">
-    <div class="home-indicator__bar"></div>
-  </div>
+  <div class="home-indicator"><div class="home-indicator__pill"></div></div>
 </div>
 </body>
 </html>

@@ -2,197 +2,355 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=390, initial-scale=1.0">
-<title>401 — Home</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Trenddy — Home</title>
 <style>
-  * { margin: 0; padding: 0; box-sizing: border-box; -webkit-font-smoothing: antialiased; }
-  body { background: #000; display: flex; justify-content: center; align-items: center; min-height: 100vh; font-family: 'Inter', sans-serif; }
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: #000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+
   .phone-frame {
-    width: 390px; height: 844px; background: #0A0A0F; border-radius: 44px; overflow: hidden;
-    box-shadow: 0 0 0 2px #1a1a2e, 0 20px 80px rgba(0,0,0,0.8), 0 0 120px rgba(108,92,231,0.08);
-    position: relative; display: flex; flex-direction: column;
+    width: 390px;
+    height: 844px;
+    border-radius: 44px;
+    overflow: hidden;
+    position: relative;
+    background:
+      radial-gradient(ellipse 120% 80% at 20% 10%, rgba(0,122,255,0.30) 0%, transparent 50%),
+      radial-gradient(ellipse 100% 100% at 80% 20%, rgba(123,97,255,0.25) 0%, transparent 45%),
+      radial-gradient(ellipse 80% 120% at 50% 90%, rgba(0,212,255,0.20) 0%, transparent 50%),
+      radial-gradient(ellipse 60% 60% at 10% 80%, rgba(255,107,157,0.15) 0%, transparent 45%),
+      linear-gradient(180deg, #0A0E1A 0%, #0D1220 50%, #0A0F1C 100%);
   }
 
   /* Status Bar */
   .status-bar {
-    height: 47px; width: 100%; display: flex; justify-content: space-between; align-items: center;
-    padding: 14px 24px 0; flex-shrink: 0; position: relative; z-index: 10;
+    height: 47px;
+    padding: 14px 24px 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
+    z-index: 10;
   }
-  .status-bar__time { font: 600 15px/18px 'Inter', sans-serif; color: #fff; }
-  .status-bar__icons { display: flex; gap: 5px; align-items: center; }
-  .status-bar__icons svg { width: 16px; height: 16px; fill: #fff; }
+  .status-bar .time {
+    font-size: 15px;
+    font-weight: 600;
+    color: #fff;
+    letter-spacing: 0.5px;
+  }
+  .status-bar .icons {
+    display: flex;
+    gap: 6px;
+    align-items: center;
+  }
+  .status-bar .icons svg { width: 16px; height: 16px; fill: #fff; }
 
-  /* Scrollable Content */
-  .content { flex: 1; overflow-y: auto; overflow-x: hidden; padding-bottom: 8px; }
+  /* Scrollable content */
+  .content {
+    height: calc(844px - 47px - 83px);
+    overflow-y: auto;
+    padding: 0 20px 20px;
+  }
   .content::-webkit-scrollbar { display: none; }
 
-  /* Top Bar */
+  /* Top bar */
   .top-bar {
-    display: flex; justify-content: space-between; align-items: center;
-    padding: 12px 20px 4px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 0 16px;
   }
-  .greeting { font: 600 20px/28px 'DM Sans', sans-serif; color: #F0EDE8; }
-  .bell-btn {
-    width: 40px; height: 40px; border-radius: 9999px; background: #141420;
-    display: flex; align-items: center; justify-content: center; position: relative; border: 1px solid #2A2A44;
+  .greeting {
+    font-size: 20px;
+    font-weight: 600;
+    color: #fff;
   }
-  .bell-btn svg { width: 20px; height: 20px; fill: none; stroke: #8A8A9A; stroke-width: 1.8; }
-  .bell-dot {
-    position: absolute; top: 8px; right: 9px; width: 8px; height: 8px;
-    background: #FF6B6B; border-radius: 50%; border: 2px solid #141420;
+  .notification-bell {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.06);
+    backdrop-filter: blur(40px);
+    -webkit-backdrop-filter: blur(40px);
+    border: 1px solid rgba(255,255,255,0.10);
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.10);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    cursor: pointer;
+  }
+  .notification-bell svg {
+    width: 20px;
+    height: 20px;
+    stroke: rgba(255,255,255,0.8);
+    fill: none;
+    stroke-width: 1.8;
+  }
+  .notification-bell .badge {
+    position: absolute;
+    top: 8px;
+    right: 9px;
+    width: 8px;
+    height: 8px;
+    background: #FF6B6B;
+    border-radius: 50%;
+    border: 1.5px solid rgba(10,14,26,0.8);
   }
 
   /* Hero Banner */
   .hero-banner {
-    margin: 16px 20px; height: 180px; border-radius: 16px; overflow: hidden;
-    position: relative; cursor: pointer;
+    height: 180px;
+    border-radius: 22px;
+    background: rgba(255,255,255,0.14);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255,255,255,0.20);
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.20);
+    position: relative;
+    overflow: hidden;
+    margin-bottom: 24px;
   }
-  .hero-banner__bg {
-    position: absolute; inset: 0;
-    background: linear-gradient(135deg, #6C5CE7 0%, #3d2f8a 30%, #1a3a4a 60%, #1a4a2a 80%, #7ab800 100%);
+  .hero-banner .hero-bg {
+    position: absolute;
+    inset: 0;
+    background:
+      linear-gradient(135deg, rgba(123,97,255,0.4) 0%, rgba(0,212,255,0.3) 50%, rgba(255,107,157,0.2) 100%);
+    z-index: 0;
   }
-  .hero-banner__shapes {
-    position: absolute; inset: 0; overflow: hidden;
-  }
-  .hero-banner__shapes::before {
-    content: ''; position: absolute; width: 200px; height: 200px; border-radius: 50%;
-    background: radial-gradient(circle, rgba(204,255,0,0.15) 0%, transparent 70%);
-    top: -40px; right: -30px;
-  }
-  .hero-banner__shapes::after {
-    content: ''; position: absolute; width: 160px; height: 160px; border-radius: 50%;
-    background: radial-gradient(circle, rgba(108,92,231,0.2) 0%, transparent 70%);
-    bottom: -50px; left: -20px;
-  }
-  .hero-pattern {
-    position: absolute; inset: 0; opacity: 0.06;
-    background: repeating-linear-gradient(45deg, #fff 0px, #fff 1px, transparent 1px, transparent 12px);
-  }
-  .hero-banner__overlay {
-    position: absolute; bottom: 0; left: 0; right: 0; height: 60%;
-    background: linear-gradient(transparent, rgba(0,0,0,0.6));
-  }
-  .hero-banner__content {
-    position: absolute; bottom: 0; left: 0; right: 0; padding: 16px 20px;
-    display: flex; flex-direction: column; gap: 6px;
+  .hero-banner .hero-content {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 16px 20px;
+    background: linear-gradient(180deg, transparent 0%, rgba(0,0,0,0.5) 100%);
+    z-index: 1;
   }
   .hero-badge {
-    align-self: flex-start; padding: 4px 10px; border-radius: 9999px;
-    background: rgba(204,255,0,0.15); border: 1px solid rgba(204,255,0,0.3);
-    font: 500 11px/16px 'Inter', sans-serif; color: #CCFF00; text-transform: uppercase;
-    letter-spacing: 1px;
+    display: inline-block;
+    padding: 4px 10px;
+    border-radius: 9999px;
+    background: rgba(255,255,255,0.06);
+    backdrop-filter: blur(40px);
+    -webkit-backdrop-filter: blur(40px);
+    border: 1px solid rgba(255,255,255,0.10);
+    color: #00D4FF;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    margin-bottom: 6px;
   }
-  .hero-title { font: 700 22px/28px 'DM Sans', sans-serif; color: #fff; }
+  .hero-title {
+    font-size: 22px;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 8px;
+  }
   .hero-btn {
-    align-self: flex-start; padding: 6px 16px; border-radius: 9999px;
-    background: #CCFF00; border: none; cursor: pointer;
-    font: 600 13px/18px 'DM Sans', sans-serif; color: #0A0A0F; margin-top: 2px;
+    display: inline-block;
+    padding: 6px 16px;
+    border-radius: 9999px;
+    background: rgba(255,255,255,0.06);
+    backdrop-filter: blur(40px);
+    -webkit-backdrop-filter: blur(40px);
+    border: 1px solid #00D4FF;
+    color: #00D4FF;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    text-decoration: none;
   }
 
-  /* Section */
+  /* Section Headers */
   .section-header {
-    display: flex; justify-content: space-between; align-items: center;
-    padding: 20px 20px 12px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
   }
-  .section-title { font: 600 17px/24px 'DM Sans', sans-serif; color: #F0EDE8; }
-  .section-see-all { font: 400 13px/18px 'Inter', sans-serif; color: #CCFF00; cursor: pointer; }
+  .section-title {
+    font-size: 17px;
+    font-weight: 600;
+    color: #fff;
+  }
+  .section-link {
+    font-size: 14px;
+    color: #00D4FF;
+    text-decoration: none;
+    font-weight: 500;
+  }
 
   /* Category Chips */
   .chips-row {
-    display: flex; gap: 8px; padding: 0 20px 4px; overflow-x: auto;
+    display: flex;
+    gap: 8px;
+    overflow-x: auto;
+    padding-bottom: 20px;
+    margin-bottom: 4px;
   }
   .chips-row::-webkit-scrollbar { display: none; }
   .chip {
-    flex-shrink: 0; padding: 8px 18px; border-radius: 9999px;
-    background: #1E1E30; border: 1.5px solid #2A2A44;
-    font: 500 13px/18px 'Inter', sans-serif; color: #8A8A9A; cursor: pointer;
-    white-space: nowrap; transition: all 0.2s;
+    flex-shrink: 0;
+    padding: 8px 16px;
+    border-radius: 9999px;
+    background: rgba(255,255,255,0.06);
+    backdrop-filter: blur(40px);
+    -webkit-backdrop-filter: blur(40px);
+    border: 1px solid rgba(255,255,255,0.10);
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.10);
+    color: rgba(255,255,255,0.65);
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    white-space: nowrap;
   }
-  .chip--active {
-    background: rgba(204,255,0,0.08); border-color: #CCFF00; color: #CCFF00;
+  .chip.active {
+    background: rgba(0,212,255,0.15);
+    border-color: rgba(0,212,255,0.4);
+    color: #00D4FF;
   }
 
-  /* Template Grid */
-  .template-grid {
-    display: grid; grid-template-columns: 1fr 1fr; gap: 12px;
-    padding: 12px 20px 20px;
+  /* Template Cards Grid */
+  .cards-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
   }
   .template-card {
-    border-radius: 16px; overflow: hidden; position: relative;
-    height: 200px; cursor: pointer;
+    height: 200px;
+    border-radius: 22px;
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
   }
-  .template-card__bg { position: absolute; inset: 0; }
-  .card-bg-1 {
-    background: linear-gradient(160deg, #6C5CE7 0%, #3d2580 40%, #1E1E30 100%);
+  .template-card .card-bg {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
   }
-  .card-bg-2 {
-    background: linear-gradient(160deg, #00CEC9 0%, #0a6a68 40%, #1E1E30 100%);
+  .card-bg.purple { background: linear-gradient(160deg, #4a1a8a 0%, #2d1060 40%, #1a0a40 100%); }
+  .card-bg.teal { background: linear-gradient(160deg, #0a4a4a 0%, #0d3a50 40%, #0a1a2a 100%); }
+  .card-bg.pink { background: linear-gradient(160deg, #6a1a4a 0%, #4a1040 40%, #2a0a30 100%); }
+  .card-bg.gold { background: linear-gradient(160deg, #6a4a0a 0%, #4a3010 40%, #2a1a0a 100%); }
+
+  .template-card .card-glass {
+    position: absolute;
+    inset: 0;
+    background: rgba(255,255,255,0.06);
+    backdrop-filter: blur(40px);
+    -webkit-backdrop-filter: blur(40px);
+    border: 1px solid rgba(255,255,255,0.10);
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.10);
+    z-index: 1;
   }
-  .card-bg-3 {
-    background: linear-gradient(160deg, #e84393 0%, #842560 40%, #1E1E30 100%);
+  .template-card .card-overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 14px;
+    background: linear-gradient(180deg, transparent 0%, rgba(0,0,0,0.6) 100%);
+    z-index: 2;
   }
-  .card-bg-4 {
-    background: linear-gradient(160deg, #fdcb6e 0%, #8a6e20 40%, #1E1E30 100%);
+  .card-tag {
+    display: inline-block;
+    padding: 3px 8px;
+    border-radius: 9999px;
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    margin-bottom: 6px;
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
   }
-  .template-card__shapes {
-    position: absolute; inset: 0; overflow: hidden;
+  .card-tag.new {
+    background: rgba(0,212,255,0.2);
+    border: 1px solid rgba(0,212,255,0.3);
+    color: #00D4FF;
   }
-  .template-card__shapes::before {
-    content: ''; position: absolute; width: 100px; height: 100px; border-radius: 50%;
-    background: radial-gradient(circle, rgba(255,255,255,0.08) 0%, transparent 70%);
-    top: -20px; right: -15px;
+  .card-tag.hot {
+    background: rgba(255,107,157,0.2);
+    border: 1px solid rgba(255,107,157,0.3);
+    color: #FF6B9D;
   }
-  .template-card__shapes::after {
-    content: ''; position: absolute; width: 60px; height: 60px;
-    background: rgba(255,255,255,0.04); border-radius: 12px;
-    bottom: 50px; left: 12px; transform: rotate(15deg);
+  .card-tag.trending {
+    background: rgba(123,97,255,0.2);
+    border: 1px solid rgba(123,97,255,0.3);
+    color: #7B61FF;
   }
-  .template-card__overlay {
-    position: absolute; bottom: 0; left: 0; right: 0; height: 55%;
-    background: linear-gradient(transparent, rgba(0,0,0,0.75));
+  .card-title {
+    font-size: 15px;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 2px;
   }
-  .template-card__tag {
-    position: absolute; top: 10px; left: 10px; padding: 3px 8px; border-radius: 6px;
-    font: 600 10px/14px 'Inter', sans-serif; text-transform: uppercase; letter-spacing: 0.5px;
+  .card-subtitle {
+    font-size: 12px;
+    color: rgba(255,255,255,0.65);
   }
-  .tag-new { background: rgba(204,255,0,0.2); color: #CCFF00; }
-  .tag-hot { background: rgba(255,107,107,0.2); color: #FF6B6B; }
-  .tag-trending { background: rgba(108,92,231,0.2); color: #6C5CE7; }
-  .template-card__label {
-    position: absolute; bottom: 0; left: 0; right: 0; padding: 12px 14px;
-    display: flex; flex-direction: column; gap: 2px;
-  }
-  .template-card__title { font: 600 14px/20px 'DM Sans', sans-serif; color: #fff; }
-  .template-card__subtitle { font: 400 11px/16px 'Inter', sans-serif; color: #8A8A9A; }
 
   /* Tab Bar */
   .tab-bar {
-    height: 83px; width: 100%; background: #141420; flex-shrink: 0;
-    display: flex; justify-content: space-around; align-items: flex-start;
-    padding-top: 10px; border-top: 0.5px solid #2A2A40; position: relative; z-index: 10;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 83px;
+    background: rgba(0,0,0,0.30);
+    backdrop-filter: blur(40px);
+    -webkit-backdrop-filter: blur(40px);
+    border-top: 1px solid rgba(255,255,255,0.08);
+    display: flex;
+    justify-content: space-around;
+    align-items: flex-start;
+    padding-top: 8px;
+    z-index: 20;
   }
   .tab-item {
-    display: flex; flex-direction: column; align-items: center; gap: 4px;
-    cursor: pointer; min-width: 64px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    cursor: pointer;
+    text-decoration: none;
   }
-  .tab-item svg { width: 24px; height: 24px; }
-  .tab-item__label { font: 400 10px/14px 'Inter', sans-serif; }
-  .tab-item--active svg { stroke: #CCFF00; }
-  .tab-item--active .tab-item__label { color: #CCFF00; }
-  .tab-item--inactive svg { stroke: rgba(255,255,255,0.5); }
-  .tab-item--inactive .tab-item__label { color: rgba(255,255,255,0.5); }
+  .tab-item svg {
+    width: 24px;
+    height: 24px;
+    stroke-width: 1.8;
+    fill: none;
+  }
+  .tab-item.active svg { stroke: #00D4FF; }
+  .tab-item:not(.active) svg { stroke: rgba(255,255,255,0.5); }
+  .tab-label {
+    font-size: 10px;
+    font-weight: 500;
+  }
+  .tab-item.active .tab-label { color: #00D4FF; }
+  .tab-item:not(.active) .tab-label { color: rgba(255,255,255,0.5); }
 
   /* Home Indicator */
   .home-indicator {
-    height: 34px; width: 100%; display: flex; justify-content: center;
-    align-items: flex-end; padding-bottom: 8px; flex-shrink: 0;
-    background: #141420;
-  }
-  .home-indicator__pill {
-    width: 134px; height: 5px; border-radius: 9999px;
+    position: absolute;
+    bottom: 8px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 134px;
+    height: 5px;
+    border-radius: 3px;
     background: rgba(255,255,255,0.3);
+    z-index: 30;
   }
 </style>
 </head>
@@ -200,11 +358,10 @@
 <div class="phone-frame">
   <!-- Status Bar -->
   <div class="status-bar">
-    <span class="status-bar__time">9:41</span>
-    <div class="status-bar__icons">
-      <svg viewBox="0 0 17 12"><path d="M1 8.5h1.5v3H1zM4 6h1.5v5.5H4zM7 3.5h1.5V12H7zM10 1h1.5v10.5H10z" rx=".5"/></svg>
-      <svg viewBox="0 0 16 12"><path d="M8 3.3C5.5 3.3 3.3 4.3 1.8 6l1.2 1.2C4.2 5.8 6 5 8 5s3.8.8 5 2.2L14.2 6C12.7 4.3 10.5 3.3 8 3.3zM8 7c-1.4 0-2.6.6-3.5 1.5L5.7 9.7c.6-.6 1.4-1 2.3-1s1.7.4 2.3 1l1.2-1.2C10.6 7.6 9.4 7 8 7zm0 4.3L9.7 9.7c-.4-.5-1-.8-1.7-.8s-1.3.3-1.7.8L8 11.3z"/></svg>
-      <svg viewBox="0 0 25 12"><rect x="0" y="1" width="21" height="10" rx="2" stroke="#fff" stroke-width="1" fill="none"/><rect x="22" y="4" width="2" height="4" rx="0.5" fill="#fff" opacity="0.4"/><rect x="1.5" y="2.5" width="16" height="7" rx="1" fill="#CCFF00"/></svg>
+    <span class="time">9:41</span>
+    <div class="icons">
+      <svg viewBox="0 0 16 16"><path d="M1 10.5l3-3 3 3 5-5 3 3" stroke="#fff" stroke-width="1.5" fill="none"/></svg>
+      <svg viewBox="0 0 16 16"><rect x="1" y="4" width="10" height="8" rx="1" stroke="#fff" stroke-width="1.2" fill="none"/><rect x="12" y="6" width="2" height="4" rx="0.5" fill="#fff"/></svg>
     </div>
   </div>
 
@@ -212,23 +369,23 @@
   <div class="content">
     <!-- Top Bar -->
     <div class="top-bar">
-      <span class="greeting">Good evening 👋</span>
-      <div class="bell-btn">
-        <svg viewBox="0 0 24 24"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
-        <div class="bell-dot"></div>
+      <span class="greeting">Good evening</span>
+      <div class="notification-bell">
+        <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
+          <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
+        </svg>
+        <div class="badge"></div>
       </div>
     </div>
 
     <!-- Hero Banner -->
     <div class="hero-banner">
-      <div class="hero-banner__bg"></div>
-      <div class="hero-banner__shapes"></div>
-      <div class="hero-pattern"></div>
-      <div class="hero-banner__overlay"></div>
-      <div class="hero-banner__content">
-        <span class="hero-badge">Trending Now</span>
-        <span class="hero-title">ASMR Style</span>
-        <button class="hero-btn">Try it</button>
+      <div class="hero-bg"></div>
+      <div class="hero-content">
+        <div class="hero-badge">Trending Now</div>
+        <div class="hero-title">ASMR Style</div>
+        <a href="#" class="hero-btn">Try it</a>
       </div>
     </div>
 
@@ -237,63 +394,58 @@
       <span class="section-title">Popular Categories</span>
     </div>
     <div class="chips-row">
-      <span class="chip chip--active">All</span>
-      <span class="chip">Sports</span>
-      <span class="chip">Dance</span>
-      <span class="chip">Lifestyle</span>
-      <span class="chip">AI Art</span>
-      <span class="chip">Anime</span>
+      <div class="chip active">All</div>
+      <div class="chip">Sports</div>
+      <div class="chip">Dance</div>
+      <div class="chip">Lifestyle</div>
+      <div class="chip">AI Art</div>
+      <div class="chip">Anime</div>
     </div>
 
     <!-- For You -->
     <div class="section-header">
       <span class="section-title">For You</span>
-      <span class="section-see-all">See all ›</span>
+      <a href="#" class="section-link">See all &#8250;</a>
     </div>
-
-    <div class="template-grid">
-      <!-- Card 1 -->
+    <div class="cards-grid">
+      <!-- Card 1: Cyberpunk Glow -->
       <div class="template-card">
-        <div class="template-card__bg card-bg-1"></div>
-        <div class="template-card__shapes"></div>
-        <div class="template-card__overlay"></div>
-        <span class="template-card__tag tag-new">NEW</span>
-        <div class="template-card__label">
-          <span class="template-card__title">Cyberpunk Glow</span>
-          <span class="template-card__subtitle">Neon urban vibes</span>
+        <div class="card-bg purple"></div>
+        <div class="card-glass"></div>
+        <div class="card-overlay">
+          <div class="card-tag new">NEW</div>
+          <div class="card-title">Cyberpunk Glow</div>
+          <div class="card-subtitle">Neon urban vibes</div>
         </div>
       </div>
-      <!-- Card 2 -->
+      <!-- Card 2: Ocean Vibes -->
       <div class="template-card">
-        <div class="template-card__bg card-bg-2"></div>
-        <div class="template-card__shapes"></div>
-        <div class="template-card__overlay"></div>
-        <span class="template-card__tag tag-hot">HOT</span>
-        <div class="template-card__label">
-          <span class="template-card__title">Ocean Vibes</span>
-          <span class="template-card__subtitle">Calm wave motion</span>
+        <div class="card-bg teal"></div>
+        <div class="card-glass"></div>
+        <div class="card-overlay">
+          <div class="card-tag hot">HOT</div>
+          <div class="card-title">Ocean Vibes</div>
+          <div class="card-subtitle">Calm wave motion</div>
         </div>
       </div>
-      <!-- Card 3 -->
+      <!-- Card 3: K-Pop Dance -->
       <div class="template-card">
-        <div class="template-card__bg card-bg-3"></div>
-        <div class="template-card__shapes"></div>
-        <div class="template-card__overlay"></div>
-        <span class="template-card__tag tag-trending">TRENDING</span>
-        <div class="template-card__label">
-          <span class="template-card__title">K-Pop Dance</span>
-          <span class="template-card__subtitle">Viral choreo moves</span>
+        <div class="card-bg pink"></div>
+        <div class="card-glass"></div>
+        <div class="card-overlay">
+          <div class="card-tag trending">TRENDING</div>
+          <div class="card-title">K-Pop Dance</div>
+          <div class="card-subtitle">Viral choreo moves</div>
         </div>
       </div>
-      <!-- Card 4 -->
+      <!-- Card 4: Golden Hour -->
       <div class="template-card">
-        <div class="template-card__bg card-bg-4"></div>
-        <div class="template-card__shapes"></div>
-        <div class="template-card__overlay"></div>
-        <span class="template-card__tag tag-new">NEW</span>
-        <div class="template-card__label">
-          <span class="template-card__title">Golden Hour</span>
-          <span class="template-card__subtitle">Warm cinematic glow</span>
+        <div class="card-bg gold"></div>
+        <div class="card-glass"></div>
+        <div class="card-overlay">
+          <div class="card-tag new">NEW</div>
+          <div class="card-title">Golden Hour</div>
+          <div class="card-subtitle">Warm cinematic glow</div>
         </div>
       </div>
     </div>
@@ -301,37 +453,39 @@
 
   <!-- Tab Bar -->
   <div class="tab-bar">
-    <div class="tab-item tab-item--active">
-      <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/>
+    <a class="tab-item active" href="401-home.html">
+      <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M3 9.5L12 3l9 6.5V20a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9.5z"/>
+        <polyline points="9 21 9 14 15 14 15 21"/>
       </svg>
-      <span class="tab-item__label">Home</span>
-    </div>
-    <div class="tab-item tab-item--inactive">
-      <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/>
-        <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+      <span class="tab-label">Home</span>
+    </a>
+    <a class="tab-item" href="620-explore.html">
+      <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="10"/>
+        <line x1="2" y1="12" x2="22" y2="12"/>
+        <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10A15.3 15.3 0 0 1 12 2z"/>
       </svg>
-      <span class="tab-item__label">Explore</span>
-    </div>
-    <div class="tab-item tab-item--inactive">
-      <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <circle cx="12" cy="12" r="10"/><polygon points="10 8 16 12 10 16 10 8"/>
+      <span class="tab-label">Explore</span>
+    </a>
+    <a class="tab-item" href="640-my-videos.html">
+      <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="10"/>
+        <polygon points="10 8 16 12 10 16 10 8" fill="currentColor" stroke="none"/>
       </svg>
-      <span class="tab-item__label">My Videos</span>
-    </div>
-    <div class="tab-item tab-item--inactive">
-      <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>
+      <span class="tab-label">My Videos</span>
+    </a>
+    <a class="tab-item" href="310-profile.html">
+      <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+        <circle cx="12" cy="7" r="4"/>
       </svg>
-      <span class="tab-item__label">Profile</span>
-    </div>
+      <span class="tab-label">Profile</span>
+    </a>
   </div>
 
   <!-- Home Indicator -->
-  <div class="home-indicator">
-    <div class="home-indicator__pill"></div>
-  </div>
+  <div class="home-indicator"></div>
 </div>
 </body>
 </html>

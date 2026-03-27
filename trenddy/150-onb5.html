@@ -3,418 +3,320 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Trenddy — 150 Onboarding 5 Pricing</title>
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<title>Trenddy — 150 ONB5 Pricing Preview</title>
 <style>
-  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
   body {
     background: #000;
     display: flex;
     justify-content: center;
     align-items: center;
     min-height: 100vh;
-    font-family: 'Inter', sans-serif;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', sans-serif;
   }
-  .phone {
+  .phone-frame {
     width: 390px;
     height: 844px;
-    background: #0A0A0F;
     border-radius: 44px;
     overflow: hidden;
     position: relative;
-    box-shadow:
-      0 0 0 1px rgba(255,255,255,0.06),
-      0 24px 80px rgba(0,0,0,0.8),
-      0 8px 32px rgba(0,0,0,0.6),
-      inset 0 1px 0 rgba(255,255,255,0.04);
-    display: flex;
-    flex-direction: column;
+    background:
+      radial-gradient(ellipse 120% 80% at 20% 10%, rgba(0,122,255,0.30) 0%, transparent 50%),
+      radial-gradient(ellipse 100% 100% at 80% 20%, rgba(123,97,255,0.25) 0%, transparent 45%),
+      radial-gradient(ellipse 80% 120% at 50% 90%, rgba(0,212,255,0.20) 0%, transparent 50%),
+      radial-gradient(ellipse 60% 60% at 10% 80%, rgba(255,107,157,0.15) 0%, transparent 45%),
+      linear-gradient(180deg, #0A0E1A 0%, #0D1220 50%, #0A0F1C 100%);
   }
 
-  /* Status bar */
   .status-bar {
     height: 47px;
-    width: 100%;
     display: flex;
     justify-content: space-between;
     align-items: center;
     padding: 14px 24px 0;
-    flex-shrink: 0;
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    z-index: 10;
   }
-  .status-bar__time {
-    font-family: 'Inter', sans-serif;
-    font-weight: 600;
-    font-size: 15px;
-    color: #F0EDE8;
-  }
-  .status-bar__icons {
-    display: flex;
-    gap: 5px;
-    align-items: center;
-  }
-  .status-bar__icons svg { width: 16px; height: 16px; color: #F0EDE8; }
+  .status-bar .time { font-size: 15px; font-weight: 600; color: #fff; letter-spacing: -0.3px; }
+  .status-bar .icons { display: flex; align-items: center; gap: 6px; }
 
-  /* Content area */
+  .home-indicator {
+    position: absolute;
+    bottom: 8px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 134px;
+    height: 5px;
+    border-radius: 100px;
+    background: rgba(255,255,255,0.3);
+    z-index: 10;
+  }
+
+  /* Scrollable Content */
   .content {
-    flex: 1;
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 16px 24px 0;
+    padding: 64px 24px 0;
+    height: 100%;
     overflow-y: auto;
   }
 
-  /* Pricing illustration */
-  .illustration {
+  /* Subscription Illustration */
+  .sub-illustration {
     width: 280px;
-    height: 160px;
-    border-radius: 24px;
+    height: 180px;
+    border-radius: 22px;
+    background: rgba(255,255,255,0.06);
+    -webkit-backdrop-filter: blur(40px);
+    backdrop-filter: blur(40px);
+    border: 1px solid rgba(255,255,255,0.10);
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.10);
+    margin-bottom: 24px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
     position: relative;
     overflow: hidden;
-    margin-bottom: 24px;
-    flex-shrink: 0;
   }
-  .illustration__bg {
+  .sub-illustration::before {
+    content: '';
     position: absolute;
     inset: 0;
     background:
-      radial-gradient(ellipse 60% 80% at 30% 40%, rgba(204,255,0,0.18) 0%, transparent 60%),
-      radial-gradient(ellipse 50% 60% at 70% 60%, rgba(108,92,231,0.15) 0%, transparent 55%),
-      linear-gradient(135deg, #1E1E30 0%, #141420 100%);
+      linear-gradient(135deg, rgba(0,212,255,0.1) 0%, transparent 50%),
+      linear-gradient(225deg, rgba(123,97,255,0.1) 0%, transparent 50%);
   }
-  /* Abstract shapes */
-  .illustration__shape1 {
-    position: absolute;
-    width: 100px;
-    height: 100px;
-    top: 15px;
-    left: 30px;
-    background: linear-gradient(135deg, rgba(204,255,0,0.2) 0%, rgba(204,255,0,0.05) 100%);
-    border-radius: 24px;
-    transform: rotate(12deg);
-    border: 1px solid rgba(204,255,0,0.1);
+  .sub-illustration .price-display {
+    position: relative;
+    z-index: 2;
+    text-align: center;
   }
-  .illustration__shape2 {
-    position: absolute;
-    width: 70px;
-    height: 70px;
-    top: 35px;
-    right: 40px;
-    background: linear-gradient(135deg, rgba(108,92,231,0.25) 0%, rgba(108,92,231,0.05) 100%);
-    border-radius: 50%;
-    border: 1px solid rgba(108,92,231,0.1);
-  }
-  .illustration__shape3 {
-    position: absolute;
-    width: 50px;
-    height: 50px;
-    bottom: 15px;
-    left: 55%;
-    background: linear-gradient(135deg, rgba(0,206,201,0.2) 0%, transparent 100%);
-    border-radius: 16px;
-    transform: rotate(-8deg);
-  }
-  /* Dollar symbol */
-  .illustration__dollar {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    font-family: 'DM Sans', sans-serif;
-    font-weight: 700;
+  .sub-illustration .price-big {
     font-size: 48px;
-    color: rgba(204,255,0,0.15);
-    text-shadow: 0 0 40px rgba(204,255,0,0.1);
+    font-weight: 800;
+    color: #00D4FF;
+    letter-spacing: -2px;
+    line-height: 1;
+  }
+  .sub-illustration .price-period {
+    font-size: 15px;
+    color: rgba(255,255,255,0.65);
+    margin-top: 4px;
   }
 
   /* Overline */
   .overline {
-    font-family: 'Inter', sans-serif;
-    font-weight: 600;
     font-size: 11px;
-    line-height: 16px;
-    color: #CCFF00;
-    text-transform: uppercase;
-    letter-spacing: 2px;
-    margin-bottom: 14px;
-    text-align: center;
-  }
-
-  /* Price display */
-  .price-display {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 4px;
-    margin-bottom: 24px;
-  }
-  .price-display__amount {
-    font-family: 'DM Sans', sans-serif;
     font-weight: 700;
-    font-size: 48px;
-    line-height: 56px;
-    color: #CCFF00;
-    letter-spacing: -1px;
-    text-shadow: 0 0 40px rgba(204,255,0,0.15);
-  }
-  .price-display__period {
-    font-family: 'Inter', sans-serif;
-    font-weight: 400;
-    font-size: 15px;
-    line-height: 22px;
-    color: #8A8A9A;
+    color: #00D4FF;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 8px;
   }
 
-  /* Page indicator */
-  .page-indicator {
+  /* Price */
+  .price-row {
     display: flex;
-    gap: 8px;
-    margin-bottom: 24px;
+    align-items: baseline;
+    gap: 6px;
+    margin-bottom: 6px;
   }
-  .dot {
-    width: 8px;
-    height: 8px;
-    border-radius: 9999px;
-    background: rgba(255,255,255,0.2);
+  .price-amount {
+    font-size: 36px;
+    font-weight: 700;
+    color: #00D4FF;
+    letter-spacing: -1px;
   }
-  .dot--active {
-    background: #CCFF00;
-    box-shadow: 0 0 8px rgba(204,255,0,0.4);
+  .price-per {
+    font-size: 15px;
+    color: rgba(255,255,255,0.65);
   }
 
   /* Title */
   .title {
     text-align: center;
+    margin-bottom: 20px;
+  }
+  .title .line1 { font-size: 28px; font-weight: 700; color: #fff; display: block; letter-spacing: -0.5px; }
+  .title .line2 { font-size: 28px; font-weight: 700; color: #00D4FF; display: block; letter-spacing: -0.5px; }
+
+  /* Feature Checklist */
+  .checklist {
+    width: 342px;
     margin-bottom: 24px;
   }
-  .title__white {
-    font-family: 'DM Sans', sans-serif;
-    font-weight: 700;
-    font-size: 32px;
-    line-height: 40px;
-    color: #F0EDE8;
-    display: block;
-    letter-spacing: -0.5px;
-  }
-  .title__lime {
-    font-family: 'DM Sans', sans-serif;
-    font-weight: 700;
-    font-size: 32px;
-    line-height: 40px;
-    color: #CCFF00;
-    display: block;
-    letter-spacing: -0.5px;
-  }
-
-  /* Feature chips */
-  .features {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 14px;
-    width: 100%;
-    padding: 0 8px;
-    margin-bottom: 32px;
-  }
-  .feature-row {
+  .check-item {
     display: flex;
     align-items: center;
     gap: 12px;
+    padding: 10px 0;
   }
-  .feature-icon {
-    width: 24px;
-    height: 24px;
+  .check-icon {
+    width: 22px;
+    height: 22px;
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
     flex-shrink: 0;
   }
-  .feature-icon--check {
-    background: rgba(204,255,0,0.12);
+  .check-icon.positive {
+    background: rgba(0,212,255,0.15);
   }
-  .feature-icon--check svg {
-    width: 13px;
-    height: 13px;
-    color: #CCFF00;
+  .check-icon.positive svg { width: 12px; height: 12px; stroke: #00D4FF; stroke-width: 2.5; fill: none; }
+  .check-icon.negative {
+    background: rgba(255,255,255,0.06);
   }
-  .feature-icon--x {
-    background: rgba(255,107,107,0.12);
-  }
-  .feature-icon--x svg {
-    width: 11px;
-    height: 11px;
-    color: #FF6B6B;
-  }
-  .feature-text {
-    font-family: 'Inter', sans-serif;
-    font-weight: 400;
+  .check-icon.negative svg { width: 10px; height: 10px; stroke: rgba(255,255,255,0.3); stroke-width: 2.5; fill: none; }
+
+  .check-label {
     font-size: 15px;
-    line-height: 22px;
-    color: #F0EDE8;
+    color: #fff;
+    font-weight: 500;
   }
-  .feature-text--strike {
-    color: #5A5A6A;
+  .check-label.muted {
+    color: rgba(255,255,255,0.4);
     text-decoration: line-through;
   }
 
-  .spacer { flex: 1; min-height: 8px; }
+  /* Page Dots */
+  .page-dots {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 16px;
+  }
+  .page-dots .dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.2);
+  }
+  .page-dots .dot.active {
+    background: #00D4FF;
+    box-shadow: 0 0 8px rgba(0,212,255,0.4);
+  }
 
-  /* Primary button */
+  /* Buttons */
   .btn-primary {
-    width: 100%;
+    width: 342px;
     height: 56px;
-    background: #CCFF00;
-    border: none;
     border-radius: 9999px;
+    border: 1px solid rgba(255,255,255,0.25);
+    background: linear-gradient(135deg, rgba(0,212,255,0.5), rgba(123,97,255,0.4));
+    -webkit-backdrop-filter: blur(16px);
+    backdrop-filter: blur(16px);
+    box-shadow: 0 0 20px rgba(0,212,255,0.25), inset 0 1px 0 rgba(255,255,255,0.2);
+    color: #fff;
+    font-size: 17px;
+    font-weight: 600;
+    cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
-    cursor: pointer;
-    margin-bottom: 12px;
-    transition: background 0.2s;
-    flex-shrink: 0;
-  }
-  .btn-primary:hover { background: #E0FF4D; }
-  .btn-primary span {
-    font-family: 'DM Sans', sans-serif;
-    font-weight: 600;
-    font-size: 17px;
-    color: #0A0A0F;
+    margin-bottom: 8px;
+    letter-spacing: -0.2px;
   }
 
-  /* Text button */
   .btn-text {
+    font-size: 15px;
+    font-weight: 600;
+    color: rgba(255,255,255,0.65);
     background: none;
     border: none;
-    font-family: 'Inter', sans-serif;
-    font-weight: 500;
-    font-size: 15px;
-    color: #5A5A6A;
     cursor: pointer;
-    padding: 12px 0;
-    margin-bottom: 8px;
-    height: 44px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 100%;
-    flex-shrink: 0;
-  }
-  .btn-text:hover { color: #8A8A9A; }
-
-  /* Home indicator */
-  .home-indicator {
-    height: 34px;
-    display: flex;
-    justify-content: center;
-    align-items: flex-end;
-    padding-bottom: 8px;
-    flex-shrink: 0;
-  }
-  .home-indicator__pill {
-    width: 134px;
-    height: 5px;
-    border-radius: 9999px;
-    background: rgba(255,255,255,0.3);
+    padding: 12px 24px;
+    margin-bottom: 40px;
   }
 </style>
 </head>
 <body>
-<div class="phone">
+<div class="phone-frame">
   <!-- Status Bar -->
   <div class="status-bar">
-    <div class="status-bar__time">9:41</div>
-    <div class="status-bar__icons">
-      <svg width="16" height="16" viewBox="0 0 18 12" fill="none"><path d="M1 8.5C2.5 5 5.5 2.5 9 2.5s6.5 2.5 8 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><path d="M4 10C5 8 7 6.5 9 6.5s4 1.5 5 3.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><circle cx="9" cy="11" r="1.5" fill="currentColor"/></svg>
-      <svg width="16" height="16" viewBox="0 0 16 12" fill="none"><rect x="0.5" y="1" width="3" height="10" rx="1" fill="currentColor" opacity="0.3"/><rect x="4.5" y="3" width="3" height="8" rx="1" fill="currentColor" opacity="0.5"/><rect x="8.5" y="0.5" width="3" height="11" rx="1" fill="currentColor" opacity="0.7"/><rect x="12.5" y="0" width="3" height="11.5" rx="1" fill="currentColor"/></svg>
-      <svg width="27" height="12" viewBox="0 0 27 12" fill="none"><rect x="0.5" y="0.5" width="22" height="11" rx="2.5" stroke="currentColor" stroke-opacity="0.35"/><rect x="2" y="2" width="18" height="8" rx="1.5" fill="currentColor"/><path d="M25 4.5v3a2 2 0 000-3z" fill="currentColor" opacity="0.4"/></svg>
+    <span class="time">9:41</span>
+    <div class="icons">
+      <svg width="17" height="12" viewBox="0 0 17 12" fill="none">
+        <rect x="0" y="7" width="3" height="5" rx="1" fill="white"/>
+        <rect x="4.5" y="5" width="3" height="7" rx="1" fill="white"/>
+        <rect x="9" y="2" width="3" height="10" rx="1" fill="white"/>
+        <rect x="13.5" y="0" width="3" height="12" rx="1" fill="white"/>
+      </svg>
+      <svg width="16" height="12" viewBox="0 0 16 12" fill="none">
+        <path d="M8 3.6C9.8 3.6 11.4 4.3 12.6 5.4L14 4C12.4 2.5 10.3 1.6 8 1.6C5.7 1.6 3.6 2.5 2 4L3.4 5.4C4.6 4.3 6.2 3.6 8 3.6Z" fill="white"/>
+        <path d="M8 7.2C9 7.2 9.9 7.6 10.6 8.2L12 6.8C10.9 5.8 9.5 5.2 8 5.2C6.5 5.2 5.1 5.8 4 6.8L5.4 8.2C6.1 7.6 7 7.2 8 7.2Z" fill="white"/>
+        <circle cx="8" cy="10.5" r="1.5" fill="white"/>
+      </svg>
+      <svg width="27" height="13" viewBox="0 0 27 13" fill="none">
+        <rect x="0.5" y="0.5" width="22" height="12" rx="3.5" stroke="rgba(255,255,255,0.35)"/>
+        <rect x="2" y="2" width="19" height="9" rx="2" fill="white"/>
+        <path d="M24 4.5V8.5C24.8 8.2 25.5 7.4 25.5 6.5C25.5 5.6 24.8 4.8 24 4.5Z" fill="rgba(255,255,255,0.4)"/>
+      </svg>
     </div>
   </div>
 
   <!-- Content -->
   <div class="content">
-    <!-- Pricing illustration -->
-    <div class="illustration">
-      <div class="illustration__bg"></div>
-      <div class="illustration__shape1"></div>
-      <div class="illustration__shape2"></div>
-      <div class="illustration__shape3"></div>
-      <div class="illustration__dollar">$</div>
+    <!-- Subscription Illustration -->
+    <div class="sub-illustration">
+      <div class="price-display">
+        <div class="price-big">$4.99</div>
+        <div class="price-period">per week</div>
+      </div>
     </div>
 
-    <!-- Overline -->
     <div class="overline">ONE PLAN. EVERYTHING INCLUDED.</div>
 
-    <!-- Price display -->
-    <div class="price-display">
-      <div class="price-display__amount">$4.99</div>
-      <div class="price-display__period">per week</div>
+    <div class="price-row">
+      <span class="price-amount">$4.99</span>
+      <span class="price-per">per week</span>
     </div>
 
-    <!-- Page indicator -->
-    <div class="page-indicator">
-      <div class="dot"></div>
-      <div class="dot"></div>
-      <div class="dot"></div>
-      <div class="dot"></div>
-      <div class="dot dot--active"></div>
-      <div class="dot"></div>
-    </div>
-
-    <!-- Title -->
     <div class="title">
-      <span class="title__white">One price.</span>
-      <span class="title__lime">No surprises.</span>
+      <span class="line1">One price.</span>
+      <span class="line2">No surprises.</span>
     </div>
 
-    <!-- Feature chips -->
-    <div class="features">
-      <div class="feature-row">
-        <div class="feature-icon feature-icon--check">
-          <svg viewBox="0 0 12 12" fill="none"><path d="M2 6.5l2.5 3L10 3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        </div>
-        <span class="feature-text">Flat price</span>
+    <!-- Feature Checklist -->
+    <div class="checklist">
+      <div class="check-item">
+        <div class="check-icon positive"><svg viewBox="0 0 12 12"><polyline points="2,6 5,9 10,3"/></svg></div>
+        <span class="check-label">Flat price</span>
       </div>
-      <div class="feature-row">
-        <div class="feature-icon feature-icon--check">
-          <svg viewBox="0 0 12 12" fill="none"><path d="M2 6.5l2.5 3L10 3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        </div>
-        <span class="feature-text">No hidden limits</span>
+      <div class="check-item">
+        <div class="check-icon positive"><svg viewBox="0 0 12 12"><polyline points="2,6 5,9 10,3"/></svg></div>
+        <span class="check-label">No hidden limits</span>
       </div>
-      <div class="feature-row">
-        <div class="feature-icon feature-icon--check">
-          <svg viewBox="0 0 12 12" fill="none"><path d="M2 6.5l2.5 3L10 3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        </div>
-        <span class="feature-text">5-10 videos/wk</span>
+      <div class="check-item">
+        <div class="check-icon positive"><svg viewBox="0 0 12 12"><polyline points="2,6 5,9 10,3"/></svg></div>
+        <span class="check-label">5-10 videos/wk</span>
       </div>
-      <div class="feature-row">
-        <div class="feature-icon feature-icon--x">
-          <svg viewBox="0 0 12 12" fill="none"><path d="M2 2l8 8M10 2l-8 8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
-        </div>
-        <span class="feature-text feature-text--strike">Pay to retry</span>
+      <div class="check-item">
+        <div class="check-icon negative"><svg viewBox="0 0 12 12"><line x1="2" y1="2" x2="10" y2="10"/><line x1="10" y1="2" x2="2" y2="10"/></svg></div>
+        <span class="check-label muted">Pay to retry</span>
       </div>
-      <div class="feature-row">
-        <div class="feature-icon feature-icon--check">
-          <svg viewBox="0 0 12 12" fill="none"><path d="M2 6.5l2.5 3L10 3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        </div>
-        <span class="feature-text">Free first image</span>
+      <div class="check-item">
+        <div class="check-icon positive"><svg viewBox="0 0 12 12"><polyline points="2,6 5,9 10,3"/></svg></div>
+        <span class="check-label">Free first image</span>
       </div>
     </div>
 
-    <div class="spacer"></div>
+    <div class="page-dots">
+      <div class="dot"></div>
+      <div class="dot"></div>
+      <div class="dot"></div>
+      <div class="dot"></div>
+      <div class="dot active"></div>
+      <div class="dot"></div>
+    </div>
 
-    <!-- Primary button -->
-    <button class="btn-primary"><span>Start free trial &rarr;</span></button>
-
-    <!-- Secondary text button -->
+    <button class="btn-primary">Start free trial &rarr;</button>
     <button class="btn-text">Continue</button>
   </div>
 
-  <!-- Home indicator -->
-  <div class="home-indicator">
-    <div class="home-indicator__pill"></div>
-  </div>
+  <div class="home-indicator"></div>
 </div>
 </body>
 </html>

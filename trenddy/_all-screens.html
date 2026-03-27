@@ -4,29 +4,29 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Trenddy — All Screens</title>
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<!-- No external fonts — system-ui -->
 <style>
   *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
   :root {
-    --bg: #0A0A0F;
-    --surface: #141420;
-    --surface2: #1E1E30;
-    --surface3: #2A2A40;
-    --primary: #CCFF00;
-    --accent: #6C5CE7;
-    --accent2: #00CEC9;
-    --text: #F0EDE8;
-    --text-sec: #8A8A9A;
-    --text-ter: #5A5A6A;
-    --border: #2A2A44;
+    --bg: #0A0E1A;
+    --surface: rgba(255,255,255,0.08);
+    --surface2: rgba(255,255,255,0.12);
+    --surface3: rgba(255,255,255,0.06);
+    --primary: #00D4FF;
+    --accent: #7B61FF;
+    --accent2: #FF6B9D;
+    --text: #FFFFFF;
+    --text-sec: rgba(255,255,255,0.65);
+    --text-ter: rgba(255,255,255,0.4);
+    --border: rgba(255,255,255,0.12);
     --error: #FF6B6B;
   }
 
   body {
     background: var(--bg);
     color: var(--text);
-    font-family: 'Inter', sans-serif;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', sans-serif;
     min-height: 100vh;
   }
 
@@ -35,9 +35,9 @@
     position: sticky;
     top: 0;
     z-index: 100;
-    background: rgba(10,10,15,0.85);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
+    background: rgba(10,14,26,0.80);
+    backdrop-filter: blur(40px);
+    -webkit-backdrop-filter: blur(40px);
     border-bottom: 1px solid var(--border);
     padding: 20px 32px;
     display: flex;
@@ -55,7 +55,7 @@
 
   .header__logo {
     width: 40px; height: 40px;
-    background: var(--primary);
+    background: linear-gradient(135deg, #00D4FF, #7B61FF);
     border-radius: 10px;
     display: flex;
     align-items: center;
@@ -65,7 +65,7 @@
   .header__logo svg { width: 22px; height: 22px; }
 
   .header__title {
-    font-family: 'DM Sans', sans-serif;
+    font-family: system-ui, -apple-system, sans-serif;
     font-weight: 700;
     font-size: 22px;
     color: var(--text);
@@ -94,7 +94,7 @@
     background: var(--surface);
     border: 1px solid var(--border);
     color: var(--text-sec);
-    font-family: 'Inter', sans-serif;
+    font-family: system-ui, -apple-system, sans-serif;
     font-size: 13px;
     font-weight: 500;
     padding: 7px 16px;
@@ -110,9 +110,9 @@
   }
 
   .filter-btn.active {
-    background: var(--primary);
-    color: var(--bg);
-    border-color: var(--primary);
+    background: rgba(0,212,255,0.15);
+    color: #00D4FF;
+    border-color: rgba(0,212,255,0.4);
     font-weight: 600;
   }
 
@@ -179,7 +179,7 @@
   }
 
   .section__title {
-    font-family: 'DM Sans', sans-serif;
+    font-family: system-ui, -apple-system, sans-serif;
     font-weight: 600;
     font-size: 17px;
     color: var(--text);
@@ -235,11 +235,11 @@
   }
 
   .card__code {
-    font-family: 'DM Sans', sans-serif;
+    font-family: system-ui, -apple-system, sans-serif;
     font-weight: 700;
     font-size: 13px;
     color: var(--primary);
-    background: rgba(204,255,0,0.1);
+    background: rgba(0,212,255,0.12);
     padding: 2px 8px;
     border-radius: 6px;
   }
@@ -260,9 +260,12 @@
     bottom: 24px;
     right: 24px;
     z-index: 200;
-    background: var(--accent);
+    background: linear-gradient(135deg, rgba(0,212,255,0.5), rgba(123,97,255,0.5));
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255,255,255,0.2);
     color: #fff;
-    font-family: 'DM Sans', sans-serif;
+    font-family: system-ui, -apple-system, sans-serif;
     font-weight: 600;
     font-size: 14px;
     padding: 12px 20px;
@@ -271,7 +274,7 @@
     display: flex;
     align-items: center;
     gap: 8px;
-    box-shadow: 0 8px 24px rgba(108,92,231,0.4);
+    box-shadow: 0 0 20px rgba(0,212,255,0.3), 0 8px 24px rgba(123,97,255,0.3);
     transition: transform 0.15s ease;
   }
 
@@ -372,7 +375,7 @@
     </div>
     <div>
       <div class="header__title">Trenddy</div>
-      <div class="header__subtitle">26 screens &middot; premium-dark &middot; iPhone 13</div>
+      <div class="header__subtitle">28 screens &middot; liquid-glass &middot; iPhone 13</div>
     </div>
   </div>
 
@@ -433,39 +436,41 @@
 
 <script>
 const SCREENS = [
-  { code: '101', name: 'Splash',               file: '101-splash.html',          group: '1xx' },
-  { code: '110', name: 'ONB1 — Hero Intro',     file: '110-onb1.html',            group: '1xx' },
-  { code: '120', name: 'ONB2 — Sports Clips',   file: '120-onb2.html',            group: '1xx' },
-  { code: '130', name: 'ONB3 — Quality',        file: '130-onb3.html',            group: '1xx' },
-  { code: '140', name: 'ONB4 — Social Proof',   file: '140-onb4.html',            group: '1xx' },
-  { code: '150', name: 'ONB5 — Pricing',        file: '150-onb5.html',            group: '1xx' },
-  { code: '160', name: 'ONB6 — CTA',            file: '160-onb6.html',            group: '1xx' },
-  { code: '201', name: 'Paywall (post-ONB)',     file: '201-paywall.html',         group: '2xx' },
-  { code: '202', name: 'Final Paywall (post-201)',file:'202-final-paywall.html',   group: '2xx' },
-  { code: '205', name: 'Paywall (in-app)',      file: '205-paywall.html',         group: '2xx' },
-  { code: '206', name: 'Final Paywall (in-app)',file: '206-final-paywall.html',   group: '2xx' },
-  { code: '310', name: 'Profile',               file: '310-profile.html',         group: '3xx' },
-  { code: '401', name: 'Home',                  file: '401-home.html',            group: '3xx' },
-  { code: '620', name: 'Explore',               file: '620-explore.html',         group: '6xx' },
-  { code: '621', name: 'Style Edit',            file: '621-style-edit.html',      group: '6xx' },
-  { code: '622', name: 'Prompt Gallery',        file: '622-prompt-gallery.html',  group: '6xx' },
-  { code: '623', name: 'Visual Style',          file: '623-visual-style.html',    group: '6xx' },
-  { code: '624', name: 'Photo Source (Explore)', file:'624-photo-source.html',    group: '6xx' },
-  { code: '630', name: 'Style Preview',         file: '630-style-preview.html',   group: '6xx' },
-  { code: '635', name: 'AI Preview',            file: '635-ai-preview.html',      group: '6xx' },
-  { code: '636', name: 'Create Confirm',        file: '636-create.html',          group: '6xx' },
-  { code: '640', name: 'My Videos',             file: '640-my-videos.html',       group: '6xx' },
-  { code: '650', name: 'Photo Preview',         file: '650-photo-preview.html',   group: '6xx' },
-  { code: '660', name: 'Result Loading',        file: '660-loading.html',         group: '6xx' },
-  { code: '670', name: 'Result',                file: '670-result.html',          group: '6xx' },
-  { code: '671', name: 'Download',              file: '671-download.html',        group: '6xx' },
+  { code: '101', name: 'Splash',                 file: '101-splash.html',          group: '1xx' },
+  { code: '110', name: 'ONB1 — Hero Intro',      file: '110-onb1.html',            group: '1xx' },
+  { code: '120', name: 'ONB2 — Sports Clips',    file: '120-onb2.html',            group: '1xx' },
+  { code: '130', name: 'ONB3 — Quality',         file: '130-onb3.html',            group: '1xx' },
+  { code: '140', name: 'ONB4 — Social Proof',    file: '140-onb4.html',            group: '1xx' },
+  { code: '150', name: 'ONB5 — Pricing',         file: '150-onb5.html',            group: '1xx' },
+  { code: '160', name: 'ONB6 — CTA',             file: '160-onb6.html',            group: '1xx' },
+  { code: '201', name: 'Paywall (post-ONB)',      file: '201-paywall.html',         group: '2xx' },
+  { code: '202', name: 'Final Paywall (post-201)',file: '202-final-paywall.html',   group: '2xx' },
+  { code: '203', name: 'Paywall (post-ONB v2)',   file: '203-paywall.html',         group: '2xx' },
+  { code: '204', name: 'Final Paywall (post-203)',file: '204-final-paywall.html',   group: '2xx' },
+  { code: '205', name: 'Paywall (in-app)',        file: '205-paywall.html',         group: '2xx' },
+  { code: '206', name: 'Final Paywall (in-app)',  file: '206-final-paywall.html',   group: '2xx' },
+  { code: '310', name: 'Profile',                file: '310-profile.html',         group: '3xx' },
+  { code: '401', name: 'Home',                   file: '401-home.html',            group: '3xx' },
+  { code: '620', name: 'Explore',                file: '620-explore.html',         group: '6xx' },
+  { code: '621', name: 'Style Edit',             file: '621-style-edit.html',      group: '6xx' },
+  { code: '622', name: 'Prompt Gallery',         file: '622-prompt-gallery.html',  group: '6xx' },
+  { code: '623', name: 'Visual Style',           file: '623-visual-style.html',    group: '6xx' },
+  { code: '624', name: 'Photo Source (Explore)', file: '624-photo-source.html',    group: '6xx' },
+  { code: '630', name: 'Style Preview',          file: '630-style-preview.html',   group: '6xx' },
+  { code: '635', name: 'AI Preview',             file: '635-ai-preview.html',      group: '6xx' },
+  { code: '636', name: 'Create Confirm',         file: '636-create.html',          group: '6xx' },
+  { code: '640', name: 'My Videos',              file: '640-my-videos.html',       group: '6xx' },
+  { code: '650', name: 'Photo Preview',          file: '650-photo-preview.html',   group: '6xx' },
+  { code: '660', name: 'Result Loading',         file: '660-loading.html',         group: '6xx' },
+  { code: '670', name: 'Result',                 file: '670-result.html',          group: '6xx' },
+  { code: '671', name: 'Download',               file: '671-download.html',        group: '6xx' },
 ];
 
 const GROUPS = {
-  '1xx': { label: '1xx — Onboarding',     color: '#CCFF00' },
-  '2xx': { label: '2xx — Monetization',   color: '#FF6B6B' },
-  '3xx': { label: '3xx — Main',           color: '#00CEC9' },
-  '6xx': { label: '6xx — Explore & Create', color: '#6C5CE7' },
+  '1xx': { label: '1xx — Onboarding',       color: '#00D4FF' },
+  '2xx': { label: '2xx — Monetization',     color: '#FF6B9D' },
+  '3xx': { label: '3xx — Main',             color: '#34D399' },
+  '6xx': { label: '6xx — Explore & Create', color: '#7B61FF' },
 };
 
 let currentFilter = 'all';
