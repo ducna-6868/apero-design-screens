@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SnapContent — Explore</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    display: flex; justify-content: center; align-items: center;
+    min-height: 100vh; background: #1a1a2e; font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', sans-serif;
+  }
+  .phone {
+    width: 390px; height: 844px; background: #0A0A0C; border-radius: 40px;
+    overflow: hidden; position: relative; border: 3px solid #2C2C2E;
+    display: flex; flex-direction: column;
+  }
+
+  /* Status Bar */
+  .status-bar {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 14px 28px 8px; flex-shrink: 0;
+  }
+  .status-time { font-size: 15px; font-weight: 600; color: #FFF; }
+  .status-icons { display: flex; gap: 6px; align-items: center; }
+  .status-icons svg { width: 16px; height: 16px; fill: #FFF; }
+
+  /* Page Title */
+  .page-title {
+    font-size: 28px; font-weight: 800; color: #FFF; padding: 8px 20px 4px;
+    flex-shrink: 0;
+  }
+
+  /* Search Bar */
+  .search-bar {
+    margin: 12px 20px 8px; padding: 12px 16px; background: #1C1C1E;
+    border-radius: 12px; display: flex; align-items: center; gap: 10px;
+    flex-shrink: 0;
+  }
+  .search-bar svg { width: 18px; height: 18px; fill: #636366; flex-shrink: 0; }
+  .search-bar span { font-size: 15px; color: #636366; }
+
+  /* Scrollable Content */
+  .content {
+    flex: 1; overflow-y: auto; padding-bottom: 12px;
+  }
+  .content::-webkit-scrollbar { display: none; }
+
+  /* Section */
+  .section { margin-top: 24px; }
+  .section-header {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 0 20px; margin-bottom: 14px;
+  }
+  .section-title { font-size: 18px; font-weight: 700; color: #FFF; }
+  .section-see-all { font-size: 13px; font-weight: 600; color: #00C9A7; cursor: pointer; }
+
+  /* Horizontal Scroll */
+  .scroll-row {
+    display: flex; gap: 12px; padding: 0 20px; overflow-x: auto;
+    scroll-snap-type: x mandatory;
+  }
+  .scroll-row::-webkit-scrollbar { display: none; }
+
+  /* Template Card */
+  .template-card {
+    width: 130px; min-width: 130px; scroll-snap-align: start; cursor: pointer;
+  }
+  .template-thumb {
+    width: 130px; height: 170px; border-radius: 14px; position: relative;
+    overflow: hidden;
+  }
+  .template-thumb .overlay {
+    position: absolute; bottom: 0; left: 0; right: 0;
+    padding: 10px; background: linear-gradient(transparent, rgba(0,0,0,0.7));
+  }
+  .template-thumb .overlay span { font-size: 11px; font-weight: 600; color: #FFF; }
+
+  /* Photo gradients */
+  .tg1 { background: linear-gradient(135deg, #00C9A7 0%, #0077B6 100%); }
+  .tg2 { background: linear-gradient(135deg, #845EC2 0%, #D65DB1 100%); }
+  .tg3 { background: linear-gradient(135deg, #FF6B35 0%, #FFD700 100%); }
+  .tg4 { background: linear-gradient(135deg, #0077B6 0%, #00C9A7 100%); }
+  .tg5 { background: linear-gradient(135deg, #D65DB1 0%, #FF6B35 100%); }
+  .tg6 { background: linear-gradient(135deg, #FFD700 0%, #FF6B35 100%); }
+  .tg7 { background: linear-gradient(135deg, #845EC2 0%, #00C9A7 100%); }
+  .tg8 { background: linear-gradient(135deg, #FF6B35 0%, #D62828 100%); }
+
+  /* Decorative elements inside thumbs */
+  .thumb-deco {
+    position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+    opacity: 0.25;
+  }
+  .thumb-deco svg { width: 40px; height: 40px; fill: #FFF; }
+
+  .template-label {
+    font-size: 12px; font-weight: 600; color: #FFF; margin-top: 8px;
+    line-height: 1.3;
+  }
+  .template-category {
+    font-size: 11px; color: #8E8E93; margin-top: 2px;
+  }
+
+  /* Bottom Tab Bar */
+  .tab-bar {
+    display: flex; justify-content: space-around; align-items: center;
+    padding: 10px 0 30px; background: #161618; flex-shrink: 0;
+    border-top: 1px solid #2C2C2E;
+  }
+  .tab-item {
+    display: flex; flex-direction: column; align-items: center; gap: 4px; cursor: pointer;
+  }
+  .tab-item svg { width: 24px; height: 24px; }
+  .tab-item .tab-icon-default { fill: #636366; }
+  .tab-item.active .tab-icon-default { fill: url(#tabGrad); }
+  .tab-label { font-size: 10px; color: #636366; font-weight: 500; }
+  .tab-item.active .tab-label {
+    background: linear-gradient(135deg, #00C9A7, #845EC2);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    background-clip: text; font-weight: 600;
+  }
+
+  .home-indicator {
+    width: 134px; height: 5px; background: #636366; border-radius: 3px;
+    margin: 0 auto 8px;
+  }
+</style>
+</head>
+<body>
+
+<div class="phone">
+  <svg width="0" height="0" style="position:absolute">
+    <defs>
+      <linearGradient id="tabGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stop-color="#00C9A7"/>
+        <stop offset="100%" stop-color="#845EC2"/>
+      </linearGradient>
+    </defs>
+  </svg>
+
+  <!-- Status Bar -->
+  <div class="status-bar">
+    <span class="status-time">9:41</span>
+    <div class="status-icons">
+      <svg viewBox="0 0 24 24"><path d="M1 9l2 2c4.97-4.97 13.03-4.97 18 0l2-2C16.93 2.93 7.08 2.93 1 9zm8 8l3 3 3-3c-1.65-1.66-4.34-1.66-6 0zm-4-4l2 2c2.76-2.76 7.24-2.76 10 0l2-2C15.14 9.14 8.87 9.14 5 13z"/></svg>
+      <svg viewBox="0 0 24 24"><path d="M15.67 4H14V2h-4v2H8.33C7.6 4 7 4.6 7 5.33v15.34C7 21.4 7.6 22 8.33 22h7.34c.73 0 1.33-.6 1.33-1.33V5.33C17 4.6 16.4 4 15.67 4z"/></svg>
+    </div>
+  </div>
+
+  <!-- Title -->
+  <div class="page-title">Explore</div>
+
+  <!-- Search Bar -->
+  <div class="search-bar">
+    <svg viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
+    <span>Search templates, styles...</span>
+  </div>
+
+  <!-- Scrollable Content -->
+  <div class="content">
+    <!-- Product Photography Section -->
+    <div class="section">
+      <div class="section-header">
+        <span class="section-title">Product Photography</span>
+        <span class="section-see-all">See all &gt;</span>
+      </div>
+      <div class="scroll-row">
+        <div class="template-card">
+          <div class="template-thumb tg1">
+            <div class="thumb-deco"><svg viewBox="0 0 24 24"><path d="M12 15.2l-3.2-4L5 16h14l-3.8-5z"/></svg></div>
+            <div class="overlay"><span>Minimalist</span></div>
+          </div>
+          <div class="template-label">Minimalist Luxury</div>
+          <div class="template-category">Clean & Modern</div>
+        </div>
+        <div class="template-card">
+          <div class="template-thumb tg2">
+            <div class="thumb-deco"><svg viewBox="0 0 24 24"><path d="M12 15.2l-3.2-4L5 16h14l-3.8-5z"/></svg></div>
+            <div class="overlay"><span>Lifestyle</span></div>
+          </div>
+          <div class="template-label">Lifestyle Scene</div>
+          <div class="template-category">Natural Feel</div>
+        </div>
+        <div class="template-card">
+          <div class="template-thumb tg3">
+            <div class="thumb-deco"><svg viewBox="0 0 24 24"><path d="M12 15.2l-3.2-4L5 16h14l-3.8-5z"/></svg></div>
+            <div class="overlay"><span>Bold</span></div>
+          </div>
+          <div class="template-label">Bold Contrast</div>
+          <div class="template-category">High Impact</div>
+        </div>
+        <div class="template-card">
+          <div class="template-thumb tg4">
+            <div class="thumb-deco"><svg viewBox="0 0 24 24"><path d="M12 15.2l-3.2-4L5 16h14l-3.8-5z"/></svg></div>
+            <div class="overlay"><span>Flat Lay</span></div>
+          </div>
+          <div class="template-label">Flat Lay Studio</div>
+          <div class="template-category">Top-down</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Marketing Videos Section -->
+    <div class="section">
+      <div class="section-header">
+        <span class="section-title">Marketing Videos</span>
+        <span class="section-see-all">See all &gt;</span>
+      </div>
+      <div class="scroll-row">
+        <div class="template-card">
+          <div class="template-thumb tg5">
+            <div class="thumb-deco"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
+            <div class="overlay"><span>Story Ad</span></div>
+          </div>
+          <div class="template-label">Story Ad 9:16</div>
+          <div class="template-category">Instagram / TikTok</div>
+        </div>
+        <div class="template-card">
+          <div class="template-thumb tg6">
+            <div class="thumb-deco"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
+            <div class="overlay"><span>Product</span></div>
+          </div>
+          <div class="template-label">Product Showcase</div>
+          <div class="template-category">E-commerce</div>
+        </div>
+        <div class="template-card">
+          <div class="template-thumb tg7">
+            <div class="thumb-deco"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
+            <div class="overlay"><span>Promo</span></div>
+          </div>
+          <div class="template-label">Promo Reel</div>
+          <div class="template-category">Social Media</div>
+        </div>
+        <div class="template-card">
+          <div class="template-thumb tg8">
+            <div class="thumb-deco"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
+            <div class="overlay"><span>Cinematic</span></div>
+          </div>
+          <div class="template-label">Cinematic Intro</div>
+          <div class="template-category">Brand Story</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Social Content Section -->
+    <div class="section" style="margin-bottom: 16px;">
+      <div class="section-header">
+        <span class="section-title">Social Content</span>
+        <span class="section-see-all">See all &gt;</span>
+      </div>
+      <div class="scroll-row">
+        <div class="template-card">
+          <div class="template-thumb tg2">
+            <div class="thumb-deco"><svg viewBox="0 0 24 24"><path d="M14 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6z"/></svg></div>
+            <div class="overlay"><span>Caption</span></div>
+          </div>
+          <div class="template-label">Caption Writer</div>
+          <div class="template-category">All Platforms</div>
+        </div>
+        <div class="template-card">
+          <div class="template-thumb tg1">
+            <div class="thumb-deco"><svg viewBox="0 0 24 24"><path d="M14 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6z"/></svg></div>
+            <div class="overlay"><span>Hashtag</span></div>
+          </div>
+          <div class="template-label">Hashtag Generator</div>
+          <div class="template-category">Instagram</div>
+        </div>
+        <div class="template-card">
+          <div class="template-thumb tg6">
+            <div class="thumb-deco"><svg viewBox="0 0 24 24"><path d="M14 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6z"/></svg></div>
+            <div class="overlay"><span>Ad Copy</span></div>
+          </div>
+          <div class="template-label">Ad Copy Pro</div>
+          <div class="template-category">Facebook Ads</div>
+        </div>
+        <div class="template-card">
+          <div class="template-thumb tg8">
+            <div class="thumb-deco"><svg viewBox="0 0 24 24"><path d="M14 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6z"/></svg></div>
+            <div class="overlay"><span>Blog</span></div>
+          </div>
+          <div class="template-label">Blog Outline</div>
+          <div class="template-category">SEO Content</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bottom Tab Bar -->
+  <div class="tab-bar">
+    <div class="tab-item">
+      <svg viewBox="0 0 24 24"><path class="tab-icon-default" d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+      <span class="tab-label">Home</span>
+    </div>
+    <div class="tab-item active">
+      <svg viewBox="0 0 24 24"><path class="tab-icon-default" d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/></svg>
+      <span class="tab-label">Explore</span>
+    </div>
+    <div class="tab-item">
+      <svg viewBox="0 0 24 24"><path class="tab-icon-default" d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 14H5.17L4 17.17V4h16v12zM7 9h2v2H7zm4 0h2v2h-2zm4 0h2v2h-2z"/></svg>
+      <span class="tab-label">Library</span>
+    </div>
+    <div class="tab-item">
+      <svg viewBox="0 0 24 24"><path class="tab-icon-default" d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+      <span class="tab-label">Account</span>
+    </div>
+  </div>
+  <div class="home-indicator"></div>
+</div>
+
+</body>
+</html>

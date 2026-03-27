@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SnapContent - Onboarding Paywall</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: #1a1a2e;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    font-family: system-ui, -apple-system, sans-serif;
+  }
+
+  .phone-frame {
+    width: 390px;
+    height: 844px;
+    background: #0A0A0C;
+    border-radius: 40px;
+    box-shadow: 0 0 0 2px #2A2A2E, 0 20px 60px rgba(0,0,0,0.5);
+    overflow: hidden;
+    position: relative;
+  }
+
+  /* Animated gradient background */
+  .gradient-bg {
+    position: absolute;
+    top: -60px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 400px;
+    height: 350px;
+    background: radial-gradient(ellipse at center, rgba(0,201,167,0.35) 0%, rgba(132,94,194,0.25) 40%, transparent 70%);
+    animation: pulseGlow 4s ease-in-out infinite alternate;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  @keyframes pulseGlow {
+    0% { opacity: 0.7; transform: translateX(-50%) scale(1); }
+    100% { opacity: 1; transform: translateX(-50%) scale(1.15); }
+  }
+
+  .screen-content {
+    position: relative;
+    z-index: 1;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    padding: 56px 24px 34px;
+    overflow-y: auto;
+  }
+
+  .screen-content::-webkit-scrollbar { display: none; }
+
+  /* Close button */
+  .close-btn {
+    position: absolute;
+    top: 56px;
+    left: 24px;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.08);
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 10;
+    transition: background 0.2s;
+  }
+
+  .close-btn:hover { background: rgba(255,255,255,0.15); }
+
+  .close-btn svg {
+    width: 14px;
+    height: 14px;
+    stroke: #8E8E93;
+    stroke-width: 2.5;
+    stroke-linecap: round;
+  }
+
+  /* Header */
+  .header {
+    text-align: center;
+    margin-top: 24px;
+    margin-bottom: 28px;
+  }
+
+  .header h1 {
+    font-size: 28px;
+    font-weight: 700;
+    color: #FFFFFF;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .pro-badge {
+    display: inline-block;
+    padding: 4px 12px;
+    border-radius: 8px;
+    background: linear-gradient(135deg, #FFD700, #FFAA00);
+    font-size: 13px;
+    font-weight: 800;
+    color: #1C1C1E;
+    letter-spacing: 1px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .pro-badge::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 60%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+    animation: shimmer 2.5s ease-in-out infinite;
+  }
+
+  @keyframes shimmer {
+    0% { left: -100%; }
+    100% { left: 200%; }
+  }
+
+  /* Benefits */
+  .benefits {
+    list-style: none;
+    margin-bottom: 28px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    padding: 0 4px;
+  }
+
+  .benefits li {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    font-size: 15.5px;
+    color: #FFFFFF;
+    font-weight: 500;
+  }
+
+  .check-icon {
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    background: rgba(0,201,167,0.15);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .check-icon span {
+    color: #00C9A7;
+    font-size: 14px;
+    font-weight: 700;
+  }
+
+  /* Package cards */
+  .packages {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-bottom: 24px;
+  }
+
+  .package-card {
+    display: flex;
+    align-items: center;
+    padding: 16px 18px;
+    border-radius: 16px;
+    background: #1C1C1E;
+    border: 2px solid transparent;
+    cursor: pointer;
+    transition: border-color 0.25s, background 0.25s;
+    position: relative;
+  }
+
+  .package-card.selected {
+    border-color: transparent;
+    background: linear-gradient(#1C1C1E, #1C1C1E) padding-box,
+                linear-gradient(135deg, #00C9A7, #845EC2) border-box;
+    border: 2px solid transparent;
+  }
+
+  .radio {
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    border: 2px solid #3A3A3C;
+    margin-right: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    transition: border-color 0.2s;
+  }
+
+  .package-card.selected .radio {
+    border-color: #00C9A7;
+  }
+
+  .radio-inner {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #00C9A7, #845EC2);
+    transform: scale(0);
+    transition: transform 0.2s;
+  }
+
+  .package-card.selected .radio-inner {
+    transform: scale(1);
+  }
+
+  .package-info {
+    flex: 1;
+  }
+
+  .package-label {
+    font-size: 16px;
+    font-weight: 600;
+    color: #FFFFFF;
+  }
+
+  .package-price {
+    font-size: 13px;
+    color: #8E8E93;
+    margin-top: 2px;
+  }
+
+  .save-badge {
+    padding: 4px 10px;
+    border-radius: 8px;
+    background: linear-gradient(135deg, #FFD700, #FFAA00);
+    font-size: 11px;
+    font-weight: 800;
+    color: #1C1C1E;
+    letter-spacing: 0.5px;
+  }
+
+  /* CTA Button */
+  .cta-btn {
+    width: 100%;
+    height: 52px;
+    border: none;
+    border-radius: 14px;
+    background: linear-gradient(135deg, #00C9A7, #845EC2);
+    color: #FFFFFF;
+    font-size: 17px;
+    font-weight: 700;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    margin-bottom: 14px;
+    transition: transform 0.15s, box-shadow 0.15s;
+  }
+
+  .cta-btn:active {
+    transform: scale(0.98);
+  }
+
+  .cta-btn::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 50%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+    animation: shimmerBtn 3s ease-in-out infinite;
+  }
+
+  @keyframes shimmerBtn {
+    0% { left: -100%; }
+    100% { left: 200%; }
+  }
+
+  .cta-btn span { position: relative; z-index: 1; }
+
+  /* Footer */
+  .footer-note {
+    text-align: center;
+    font-size: 12.5px;
+    color: #8E8E93;
+    margin-bottom: 16px;
+  }
+
+  .footer-links {
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+  }
+
+  .footer-links a {
+    font-size: 12px;
+    color: #636366;
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+
+  .footer-links a:hover { color: #8E8E93; }
+
+  .footer-links .sep {
+    color: #3A3A3C;
+    font-size: 12px;
+  }
+
+  /* Spacer */
+  .spacer { flex: 1; }
+</style>
+</head>
+<body>
+
+<div class="phone-frame">
+  <div class="gradient-bg"></div>
+
+  <button class="close-btn">
+    <svg viewBox="0 0 14 14" fill="none">
+      <line x1="1" y1="1" x2="13" y2="13"/>
+      <line x1="13" y1="1" x2="1" y2="13"/>
+    </svg>
+  </button>
+
+  <div class="screen-content">
+    <!-- Header -->
+    <div class="header">
+      <h1>SnapContent <span class="pro-badge">PRO</span></h1>
+    </div>
+
+    <!-- Benefits -->
+    <ul class="benefits">
+      <li>
+        <div class="check-icon"><span>&#10003;</span></div>
+        Unlimited AI image generations
+      </li>
+      <li>
+        <div class="check-icon"><span>&#10003;</span></div>
+        Professional AI video creation
+      </li>
+      <li>
+        <div class="check-icon"><span>&#10003;</span></div>
+        AI-powered marketing copy
+      </li>
+      <li>
+        <div class="check-icon"><span>&#10003;</span></div>
+        HD exports without watermark
+      </li>
+      <li>
+        <div class="check-icon"><span>&#10003;</span></div>
+        Priority processing speed
+      </li>
+    </ul>
+
+    <div class="spacer"></div>
+
+    <!-- Packages -->
+    <div class="packages">
+      <div class="package-card" onclick="selectPackage(this)">
+        <div class="radio"><div class="radio-inner"></div></div>
+        <div class="package-info">
+          <div class="package-label">Weekly</div>
+          <div class="package-price">$9.99/week</div>
+        </div>
+      </div>
+      <div class="package-card selected" onclick="selectPackage(this)">
+        <div class="radio"><div class="radio-inner"></div></div>
+        <div class="package-info">
+          <div class="package-label">Yearly</div>
+          <div class="package-price">$49.99/year</div>
+        </div>
+        <div class="save-badge">SAVE 90%</div>
+      </div>
+    </div>
+
+    <!-- CTA -->
+    <button class="cta-btn"><span>Continue</span></button>
+
+    <!-- Footer -->
+    <p class="footer-note">No commitment, cancel anytime</p>
+    <div class="footer-links">
+      <a href="#">Restore</a>
+      <span class="sep">|</span>
+      <a href="#">Terms of Service</a>
+      <span class="sep">|</span>
+      <a href="#">Privacy Policy</a>
+    </div>
+  </div>
+</div>
+
+<script>
+  function selectPackage(card) {
+    document.querySelectorAll('.package-card').forEach(c => c.classList.remove('selected'));
+    card.classList.add('selected');
+  }
+</script>
+</body>
+</html>

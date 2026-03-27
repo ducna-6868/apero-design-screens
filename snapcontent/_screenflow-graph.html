@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SnapContent — Screen Flow Graph</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: #F5F5F7;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+    padding: 40px;
+    min-height: 100vh;
+    color: #1D1D1F;
+  }
+
+  .page-title {
+    font-size: 32px;
+    font-weight: 800;
+    margin-bottom: 8px;
+    color: #1D1D1F;
+  }
+  .page-subtitle {
+    font-size: 14px;
+    color: #86868B;
+    margin-bottom: 40px;
+  }
+
+  /* Legend */
+  .legend {
+    display: flex;
+    gap: 20px;
+    margin-bottom: 36px;
+    flex-wrap: wrap;
+  }
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    color: #636366;
+  }
+  .legend-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 4px;
+  }
+  .legend-dot.teal { background: #00C9A7; }
+  .legend-dot.orange { background: #FFB347; }
+  .legend-dot.purple { background: #845EC2; }
+  .legend-dot.blue { background: #4A90D9; }
+  .legend-dot.pink { background: #D65DB1; }
+
+  /* Flow Container */
+  .flow-container {
+    display: flex;
+    flex-direction: column;
+    gap: 48px;
+  }
+
+  /* Flow Row */
+  .flow-row {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    flex-wrap: nowrap;
+  }
+  .flow-row-label {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.2px;
+    color: #86868B;
+    width: 100px;
+    flex-shrink: 0;
+  }
+  .flow-row-content {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    flex-wrap: wrap;
+  }
+
+  /* Screen Card */
+  .screen-card {
+    width: 120px;
+    height: 60px;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    font-weight: 600;
+    cursor: default;
+    transition: transform 0.15s, box-shadow 0.15s;
+    position: relative;
+    flex-shrink: 0;
+    border: 1.5px solid;
+  }
+  .screen-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+  }
+  .screen-code {
+    font-size: 10px;
+    font-weight: 800;
+    opacity: 0.7;
+    margin-bottom: 2px;
+  }
+  .screen-name {
+    font-size: 11px;
+    font-weight: 600;
+    text-align: center;
+    line-height: 1.2;
+  }
+
+  /* Color Groups */
+  .screen-card.teal {
+    background: rgba(0, 201, 167, 0.08);
+    border-color: rgba(0, 201, 167, 0.3);
+    color: #00A88B;
+  }
+  .screen-card.orange {
+    background: rgba(255, 179, 71, 0.08);
+    border-color: rgba(255, 179, 71, 0.3);
+    color: #D9880B;
+  }
+  .screen-card.purple {
+    background: rgba(132, 94, 194, 0.08);
+    border-color: rgba(132, 94, 194, 0.3);
+    color: #7048B5;
+  }
+  .screen-card.blue {
+    background: rgba(74, 144, 217, 0.08);
+    border-color: rgba(74, 144, 217, 0.3);
+    color: #3578BE;
+  }
+  .screen-card.pink {
+    background: rgba(214, 93, 177, 0.08);
+    border-color: rgba(214, 93, 177, 0.3);
+    color: #C0409B;
+  }
+
+  /* Arrow */
+  .arrow {
+    width: 32px;
+    height: 2px;
+    background: #C7C7CC;
+    position: relative;
+    flex-shrink: 0;
+  }
+  .arrow::after {
+    content: '';
+    position: absolute;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 0;
+    height: 0;
+    border-left: 6px solid #C7C7CC;
+    border-top: 4px solid transparent;
+    border-bottom: 4px solid transparent;
+  }
+
+  /* Branch Arrow (vertical fork) */
+  .branch-connector {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    margin: 0 8px;
+    flex-shrink: 0;
+  }
+  .branch-line-v {
+    width: 2px;
+    height: 20px;
+    background: #C7C7CC;
+  }
+
+  /* Section Divider */
+  .section-divider {
+    height: 1px;
+    background: #E5E5EA;
+    margin: 4px 0;
+  }
+
+  /* Section Label */
+  .section-label {
+    font-size: 14px;
+    font-weight: 700;
+    color: #1D1D1F;
+    margin-bottom: 16px;
+    padding-left: 2px;
+  }
+
+  /* Flow Section */
+  .flow-section {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  /* Branch group for tabs */
+  .branch-group {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-left: 48px;
+    padding-left: 20px;
+    border-left: 2px solid #E5E5EA;
+  }
+  .branch-row {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    position: relative;
+  }
+  .branch-row::before {
+    content: '';
+    position: absolute;
+    left: -20px;
+    top: 50%;
+    width: 20px;
+    height: 2px;
+    background: #C7C7CC;
+  }
+  .branch-row::after {
+    content: '';
+    position: absolute;
+    left: -14px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 0;
+    height: 0;
+    border-left: 5px solid #C7C7CC;
+    border-top: 3px solid transparent;
+    border-bottom: 3px solid transparent;
+  }
+
+  /* Paywall connections callout */
+  .callout-box {
+    background: rgba(255, 179, 71, 0.06);
+    border: 1px solid rgba(255, 179, 71, 0.2);
+    border-radius: 12px;
+    padding: 16px 20px;
+    margin-top: 8px;
+  }
+  .callout-title {
+    font-size: 12px;
+    font-weight: 700;
+    color: #D9880B;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    margin-bottom: 8px;
+  }
+  .callout-items {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .callout-tag {
+    font-size: 11px;
+    font-weight: 600;
+    background: rgba(255, 179, 71, 0.1);
+    color: #D9880B;
+    padding: 4px 10px;
+    border-radius: 6px;
+  }
+</style>
+</head>
+<body>
+
+<div class="page-title">SnapContent — Screen Flow</div>
+<div class="page-subtitle">Application screen map and navigation graph</div>
+
+<!-- Legend -->
+<div class="legend">
+  <div class="legend-item"><div class="legend-dot teal"></div>1xx — Onboarding</div>
+  <div class="legend-item"><div class="legend-dot orange"></div>2xx — Paywall</div>
+  <div class="legend-item"><div class="legend-dot purple"></div>3xx — Main App</div>
+  <div class="legend-item"><div class="legend-dot blue"></div>5xx — AI Image</div>
+  <div class="legend-item"><div class="legend-dot pink"></div>6xx — AI Video</div>
+</div>
+
+<div class="flow-container">
+
+  <!-- 1. Onboarding Flow -->
+  <div class="flow-section">
+    <div class="section-label">Onboarding Flow</div>
+    <div class="flow-row">
+      <div class="screen-card teal">
+        <div class="screen-code">101</div>
+        <div class="screen-name">Splash</div>
+      </div>
+      <div class="arrow"></div>
+      <div class="screen-card teal">
+        <div class="screen-code">110</div>
+        <div class="screen-name">Onboarding 1</div>
+      </div>
+      <div class="arrow"></div>
+      <div class="screen-card teal">
+        <div class="screen-code">120</div>
+        <div class="screen-name">Onboarding 2</div>
+      </div>
+      <div class="arrow"></div>
+      <div class="screen-card teal">
+        <div class="screen-code">130</div>
+        <div class="screen-name">Onboarding 3</div>
+      </div>
+      <div class="arrow"></div>
+      <div class="screen-card teal">
+        <div class="screen-code">140</div>
+        <div class="screen-name">Onboarding 4</div>
+      </div>
+      <div class="arrow"></div>
+      <div class="screen-card teal">
+        <div class="screen-code">150</div>
+        <div class="screen-name">Onboarding 5</div>
+      </div>
+      <div class="arrow"></div>
+      <div class="screen-card teal">
+        <div class="screen-code">160</div>
+        <div class="screen-name">Onboarding 6</div>
+      </div>
+      <div class="arrow"></div>
+      <div class="screen-card teal">
+        <div class="screen-code">170</div>
+        <div class="screen-name">Brand Kit</div>
+      </div>
+      <div class="arrow"></div>
+      <div class="screen-card orange">
+        <div class="screen-code">201</div>
+        <div class="screen-name">Paywall</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-divider"></div>
+
+  <!-- 2. Main App (Tabs) -->
+  <div class="flow-section">
+    <div class="section-label">Main App — Tab Navigation</div>
+    <div class="flow-row" style="margin-bottom: 12px;">
+      <div class="screen-card purple">
+        <div class="screen-code">301</div>
+        <div class="screen-name">Home</div>
+      </div>
+    </div>
+    <div class="branch-group">
+      <div class="branch-row">
+        <div class="screen-card purple">
+          <div class="screen-code">302</div>
+          <div class="screen-name">Explore</div>
+        </div>
+      </div>
+      <div class="branch-row">
+        <div class="screen-card purple">
+          <div class="screen-code">330</div>
+          <div class="screen-name">Library</div>
+        </div>
+      </div>
+      <div class="branch-row">
+        <div class="screen-card purple">
+          <div class="screen-code">310</div>
+          <div class="screen-name">Account</div>
+        </div>
+        <div class="arrow"></div>
+        <div class="screen-card purple">
+          <div class="screen-code">311</div>
+          <div class="screen-name">Settings</div>
+        </div>
+        <div class="arrow"></div>
+        <div class="screen-card purple">
+          <div class="screen-code">312</div>
+          <div class="screen-name">Language</div>
+        </div>
+      </div>
+      <div class="branch-row">
+        <div class="screen-card purple">
+          <div class="screen-code">310</div>
+          <div class="screen-name">Account</div>
+        </div>
+        <div class="arrow"></div>
+        <div class="screen-card purple">
+          <div class="screen-code">317</div>
+          <div class="screen-name">Add Brand</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-divider"></div>
+
+  <!-- 3. AI Image Flow -->
+  <div class="flow-section">
+    <div class="section-label">AI Image Generation Flow</div>
+    <div class="flow-row">
+      <div class="screen-card purple">
+        <div class="screen-code">301</div>
+        <div class="screen-name">Home</div>
+      </div>
+      <div class="arrow"></div>
+      <div class="screen-card blue">
+        <div class="screen-code">530</div>
+        <div class="screen-name">AI Image Input</div>
+      </div>
+      <div class="arrow"></div>
+      <div class="screen-card blue">
+        <div class="screen-code">550</div>
+        <div class="screen-name">Style Select</div>
+      </div>
+      <div class="arrow"></div>
+      <div class="screen-card blue">
+        <div class="screen-code">560</div>
+        <div class="screen-name">Generating</div>
+      </div>
+      <div class="arrow"></div>
+      <div class="screen-card blue">
+        <div class="screen-code">570</div>
+        <div class="screen-name">Result</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-divider"></div>
+
+  <!-- 4. AI Video Flow -->
+  <div class="flow-section">
+    <div class="section-label">AI Video Generation Flow</div>
+    <div class="flow-row">
+      <div class="screen-card purple">
+        <div class="screen-code">301</div>
+        <div class="screen-name">Home</div>
+      </div>
+      <div class="arrow"></div>
+      <div class="screen-card pink">
+        <div class="screen-code">660</div>
+        <div class="screen-name">AI Video Input</div>
+      </div>
+      <div class="arrow"></div>
+      <div class="screen-card pink">
+        <div class="screen-code">670</div>
+        <div class="screen-name">Video Result</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-divider"></div>
+
+  <!-- 5. Paywall Connections -->
+  <div class="flow-section">
+    <div class="section-label">Paywall Entry Points</div>
+    <div class="callout-box">
+      <div class="callout-title">Screens that trigger Paywall</div>
+      <div class="callout-items">
+        <div class="callout-tag">201 — From Onboarding</div>
+        <div class="callout-tag">203 — From Home</div>
+        <div class="callout-tag">222 — From Generate</div>
+        <div class="callout-tag">204 — Return User</div>
+        <div class="callout-tag">290 — Subscription Plans</div>
+      </div>
+    </div>
+    <div class="flow-row" style="margin-top: 12px;">
+      <div class="screen-card orange">
+        <div class="screen-code">201</div>
+        <div class="screen-name">Paywall (Onboard)</div>
+      </div>
+      <div class="arrow" style="width:20px;"></div>
+      <div class="screen-card orange">
+        <div class="screen-code">203</div>
+        <div class="screen-name">Paywall (Home)</div>
+      </div>
+      <div class="arrow" style="width:20px;"></div>
+      <div class="screen-card orange">
+        <div class="screen-code">222</div>
+        <div class="screen-name">Paywall (Gen)</div>
+      </div>
+      <div class="arrow" style="width:20px;"></div>
+      <div class="screen-card orange">
+        <div class="screen-code">204</div>
+        <div class="screen-name">Paywall (Return)</div>
+      </div>
+      <div class="arrow" style="width:20px;"></div>
+      <div class="screen-card orange">
+        <div class="screen-code">290</div>
+        <div class="screen-name">Plans</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+</body>
+</html>

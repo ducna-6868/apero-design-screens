@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SnapContent - Video Result</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: #1a1a2e;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    font-family: system-ui, -apple-system, sans-serif;
+  }
+  .phone-frame {
+    width: 390px;
+    height: 844px;
+    background: #0A0A0C;
+    border-radius: 40px;
+    box-shadow: 0 0 0 2px #2A2A2E, 0 20px 60px rgba(0,0,0,0.5);
+    overflow: hidden;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+  }
+  .status-bar {
+    height: 54px;
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    padding: 0 24px 8px;
+    flex-shrink: 0;
+  }
+  .status-bar .time { font-size: 15px; font-weight: 600; color: #FFFFFF; }
+  .status-bar .icons { display: flex; gap: 6px; align-items: center; }
+
+  .header {
+    display: flex;
+    align-items: center;
+    padding: 12px 20px;
+    gap: 16px;
+    flex-shrink: 0;
+  }
+  .back-arrow {
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+  }
+  .back-arrow svg { width: 20px; height: 20px; }
+  .header-title {
+    font-size: 18px;
+    font-weight: 600;
+    color: #FFFFFF;
+    flex: 1;
+  }
+  .share-icon {
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+  }
+
+  .content {
+    flex: 1;
+    overflow-y: auto;
+    padding: 0 20px;
+  }
+
+  .video-player {
+    width: 100%;
+    height: 380px;
+    background: linear-gradient(135deg, #1C1C1E, #2A2A2E);
+    border-radius: 16px;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .video-player::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(0,201,167,0.15), rgba(132,94,194,0.15));
+  }
+  .play-button {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.2);
+    backdrop-filter: blur(10px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2;
+    cursor: pointer;
+    border: 2px solid rgba(255,255,255,0.3);
+  }
+  .play-button svg { width: 28px; height: 28px; margin-left: 4px; }
+  .duration-badge {
+    position: absolute;
+    bottom: 16px;
+    right: 16px;
+    background: rgba(0,0,0,0.7);
+    border-radius: 8px;
+    padding: 4px 10px;
+    font-size: 13px;
+    font-weight: 500;
+    color: #FFFFFF;
+    z-index: 2;
+  }
+
+  .timeline-section {
+    margin-top: 20px;
+  }
+  .timeline-bar {
+    width: 100%;
+    height: 40px;
+    background: #1C1C1E;
+    border-radius: 10px;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    padding: 0 4px;
+  }
+  .timeline-frames {
+    display: flex;
+    gap: 2px;
+    width: 100%;
+    height: 28px;
+  }
+  .timeline-frame {
+    flex: 1;
+    border-radius: 4px;
+    height: 100%;
+  }
+  .timeline-frame:nth-child(1) { background: linear-gradient(135deg, #667eea, #764ba2); }
+  .timeline-frame:nth-child(2) { background: linear-gradient(135deg, #764ba2, #845EC2); }
+  .timeline-frame:nth-child(3) { background: linear-gradient(135deg, #845EC2, #00C9A7); }
+  .timeline-frame:nth-child(4) { background: linear-gradient(135deg, #00C9A7, #4facfe); }
+  .timeline-frame:nth-child(5) { background: linear-gradient(135deg, #4facfe, #43e97b); }
+  .timeline-frame:nth-child(6) { background: linear-gradient(135deg, #43e97b, #667eea); }
+  .timeline-frame:nth-child(7) { background: linear-gradient(135deg, #667eea, #f093fb); }
+  .timeline-frame:nth-child(8) { background: linear-gradient(135deg, #f093fb, #845EC2); }
+
+  .scrubber {
+    position: absolute;
+    top: 4px;
+    bottom: 4px;
+    left: 30%;
+    width: 3px;
+    background: #FFFFFF;
+    border-radius: 2px;
+    z-index: 2;
+    box-shadow: 0 0 6px rgba(255,255,255,0.4);
+  }
+  .scrubber::before {
+    content: '';
+    position: absolute;
+    top: -4px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 10px;
+    height: 10px;
+    background: #FFFFFF;
+    border-radius: 50%;
+  }
+  .scrubber::after {
+    content: '';
+    position: absolute;
+    bottom: -4px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 10px;
+    height: 10px;
+    background: #FFFFFF;
+    border-radius: 50%;
+  }
+
+  .time-row {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 8px;
+  }
+  .time-current, .time-total {
+    font-size: 12px;
+    color: #636366;
+  }
+
+  .btn-row {
+    display: flex;
+    gap: 12px;
+    margin-top: 24px;
+  }
+  .download-btn {
+    flex: 1;
+    height: 52px;
+    background: linear-gradient(135deg, #00C9A7, #845EC2);
+    border: none;
+    border-radius: 26px;
+    color: #FFFFFF;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: inherit;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+  }
+  .download-btn svg { width: 20px; height: 20px; }
+  .share-btn {
+    width: 52px;
+    height: 52px;
+    background: #1C1C1E;
+    border: 1px solid #2A2A2E;
+    border-radius: 26px;
+    color: #FFFFFF;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  .share-btn svg { width: 20px; height: 20px; }
+
+  .save-info {
+    margin-top: 20px;
+    background: #161618;
+    border-radius: 12px;
+    padding: 14px 16px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .save-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    background: linear-gradient(135deg, #00C9A7, #845EC2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  .save-icon svg { width: 18px; height: 18px; }
+  .save-text {
+    font-size: 13px;
+    color: #8E8E93;
+    line-height: 1.4;
+  }
+  .save-text strong {
+    color: #FFFFFF;
+    font-weight: 500;
+  }
+</style>
+</head>
+<body>
+<div class="phone-frame">
+  <div class="status-bar">
+    <span class="time">9:41</span>
+    <div class="icons">
+      <svg width="16" height="12" fill="#fff"><rect x="0" y="3" width="3" height="9" rx="0.5" opacity="0.3"/><rect x="4" y="2" width="3" height="10" rx="0.5" opacity="0.5"/><rect x="8" y="1" width="3" height="11" rx="0.5" opacity="0.7"/><rect x="12" y="0" width="3" height="12" rx="0.5"/></svg>
+      <svg width="25" height="12" viewBox="0 0 25 12" fill="#fff"><rect x="0" y="0" width="22" height="12" rx="2" stroke="#fff" stroke-width="1" fill="none"/><rect x="2" y="2" width="15" height="8" rx="1" fill="#34C759"/><rect x="23" y="4" width="2" height="4" rx="0.5"/></svg>
+    </div>
+  </div>
+
+  <div class="header">
+    <div class="back-arrow">
+      <svg viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="15 18 9 12 15 6"/>
+      </svg>
+    </div>
+    <span class="header-title">Video Result</span>
+    <div class="share-icon">
+      <svg viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/>
+        <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/>
+      </svg>
+    </div>
+  </div>
+
+  <div class="content">
+    <div class="video-player">
+      <div class="play-button">
+        <svg viewBox="0 0 24 24" fill="#FFFFFF">
+          <polygon points="5 3 19 12 5 21"/>
+        </svg>
+      </div>
+      <span class="duration-badge">0:12</span>
+    </div>
+
+    <div class="timeline-section">
+      <div class="timeline-bar">
+        <div class="timeline-frames">
+          <div class="timeline-frame"></div>
+          <div class="timeline-frame"></div>
+          <div class="timeline-frame"></div>
+          <div class="timeline-frame"></div>
+          <div class="timeline-frame"></div>
+          <div class="timeline-frame"></div>
+          <div class="timeline-frame"></div>
+          <div class="timeline-frame"></div>
+        </div>
+        <div class="scrubber"></div>
+      </div>
+      <div class="time-row">
+        <span class="time-current">0:04</span>
+        <span class="time-total">0:12</span>
+      </div>
+    </div>
+
+    <div class="btn-row">
+      <button class="download-btn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+          <polyline points="7 10 12 15 17 10"/>
+          <line x1="12" y1="15" x2="12" y2="3"/>
+        </svg>
+        Download HD
+      </button>
+      <button class="share-btn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M4 12v8a2 2 0 002 2h12a2 2 0 002-2v-8"/>
+          <polyline points="16 6 12 2 8 6"/>
+          <line x1="12" y1="2" x2="12" y2="15"/>
+        </svg>
+      </button>
+    </div>
+
+    <div class="save-info">
+      <div class="save-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/>
+        </svg>
+      </div>
+      <div class="save-text">
+        Saved to: <strong>Serum Photoshoot</strong> project
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

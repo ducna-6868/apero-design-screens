@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SnapContent - Generate Subscription</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: #1a1a2e;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    font-family: system-ui, -apple-system, sans-serif;
+  }
+
+  .phone-frame {
+    width: 390px;
+    height: 844px;
+    background: #0A0A0C;
+    border-radius: 40px;
+    box-shadow: 0 0 0 2px #2A2A2E, 0 20px 60px rgba(0,0,0,0.5);
+    overflow: hidden;
+    position: relative;
+  }
+
+  .screen-content {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    padding: 56px 24px 34px;
+    position: relative;
+  }
+
+  /* Close button — top right */
+  .close-btn {
+    position: absolute;
+    top: 56px;
+    right: 24px;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.08);
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 10;
+    transition: background 0.2s;
+  }
+
+  .close-btn:hover { background: rgba(255,255,255,0.15); }
+
+  .close-btn svg {
+    width: 14px;
+    height: 14px;
+    stroke: #8E8E93;
+    stroke-width: 2.5;
+    stroke-linecap: round;
+  }
+
+  /* Header */
+  .header {
+    margin-top: 16px;
+    margin-bottom: 8px;
+    text-align: center;
+  }
+
+  .header h1 {
+    font-size: 24px;
+    font-weight: 700;
+    color: #FFFFFF;
+  }
+
+  .header p {
+    font-size: 15px;
+    color: #8E8E93;
+    margin-top: 6px;
+    line-height: 1.4;
+  }
+
+  /* Preview area */
+  .preview-area {
+    width: 100%;
+    height: 200px;
+    border-radius: 16px;
+    background: #161618;
+    margin: 24px 0;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .preview-area::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(0,201,167,0.12) 0%, rgba(132,94,194,0.12) 100%);
+  }
+
+  .preview-split {
+    position: absolute;
+    inset: 0;
+    display: flex;
+  }
+
+  .preview-before, .preview-after {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+  }
+
+  .preview-before {
+    border-right: 1px solid rgba(255,255,255,0.06);
+  }
+
+  .preview-icon {
+    width: 56px;
+    height: 56px;
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .preview-before .preview-icon {
+    background: rgba(255,255,255,0.06);
+  }
+
+  .preview-after .preview-icon {
+    background: linear-gradient(135deg, rgba(0,201,167,0.25), rgba(132,94,194,0.25));
+  }
+
+  .preview-icon svg {
+    width: 28px;
+    height: 28px;
+  }
+
+  .preview-label {
+    font-size: 12px;
+    font-weight: 600;
+    color: #8E8E93;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .preview-after .preview-label {
+    background: linear-gradient(135deg, #00C9A7, #845EC2);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  /* Divider arrow */
+  .preview-divider {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: #0A0A0C;
+    border: 2px solid #2A2A2E;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2;
+  }
+
+  .preview-divider svg {
+    width: 16px;
+    height: 16px;
+    stroke: #00C9A7;
+    stroke-width: 2;
+    fill: none;
+  }
+
+  /* Package cards — horizontal scroll */
+  .packages-wrapper {
+    margin-bottom: 28px;
+  }
+
+  .packages-scroll {
+    display: flex;
+    gap: 12px;
+    overflow-x: auto;
+    padding: 4px 0;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .packages-scroll::-webkit-scrollbar { display: none; }
+
+  .package-card {
+    width: 110px;
+    min-width: 110px;
+    padding: 18px 12px;
+    border-radius: 16px;
+    background: #1C1C1E;
+    text-align: center;
+    cursor: pointer;
+    position: relative;
+    border: 2px solid transparent;
+    transition: border-color 0.25s, background 0.25s;
+    scroll-snap-align: start;
+  }
+
+  .package-card.selected {
+    background: linear-gradient(#1C1C1E, #1C1C1E) padding-box,
+                linear-gradient(135deg, #00C9A7, #845EC2) border-box;
+    border: 2px solid transparent;
+  }
+
+  .package-tag {
+    position: absolute;
+    top: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 3px 10px;
+    border-radius: 8px;
+    font-size: 9px;
+    font-weight: 800;
+    letter-spacing: 0.5px;
+    white-space: nowrap;
+  }
+
+  .tag-popular {
+    background: linear-gradient(135deg, #00C9A7, #845EC2);
+    color: #FFFFFF;
+  }
+
+  .tag-best {
+    background: linear-gradient(135deg, #FFD700, #FFAA00);
+    color: #1C1C1E;
+  }
+
+  .package-duration {
+    font-size: 13px;
+    font-weight: 600;
+    color: #8E8E93;
+    margin-bottom: 8px;
+    margin-top: 4px;
+  }
+
+  .package-price {
+    font-size: 22px;
+    font-weight: 800;
+    color: #FFFFFF;
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+
+  .package-period {
+    font-size: 11px;
+    color: #636366;
+  }
+
+  .package-card.selected .package-duration {
+    color: #FFFFFF;
+  }
+
+  /* CTA Button */
+  .cta-btn {
+    width: 100%;
+    height: 52px;
+    border: none;
+    border-radius: 14px;
+    background: linear-gradient(135deg, #00C9A7, #845EC2);
+    color: #FFFFFF;
+    font-size: 17px;
+    font-weight: 700;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    margin-bottom: 16px;
+    transition: transform 0.15s;
+  }
+
+  .cta-btn:active { transform: scale(0.98); }
+
+  .cta-btn::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 50%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+    animation: shimmerBtn 3s ease-in-out infinite;
+  }
+
+  @keyframes shimmerBtn {
+    0% { left: -100%; }
+    100% { left: 200%; }
+  }
+
+  .cta-btn span { position: relative; z-index: 1; }
+
+  /* Restore link */
+  .restore-link {
+    text-align: center;
+    font-size: 13px;
+    color: #636366;
+    cursor: pointer;
+    background: none;
+    border: none;
+    width: 100%;
+    transition: color 0.2s;
+  }
+
+  .restore-link:hover { color: #8E8E93; }
+
+  .spacer { flex: 1; }
+</style>
+</head>
+<body>
+
+<div class="phone-frame">
+  <div class="screen-content">
+    <!-- Close button -->
+    <button class="close-btn">
+      <svg viewBox="0 0 14 14" fill="none">
+        <line x1="1" y1="1" x2="13" y2="13"/>
+        <line x1="13" y1="1" x2="1" y2="13"/>
+      </svg>
+    </button>
+
+    <!-- Header -->
+    <div class="header">
+      <h1>Unlock AI Generation</h1>
+      <p>Subscribe to start creating amazing content</p>
+    </div>
+
+    <!-- Preview area -->
+    <div class="preview-area">
+      <div class="preview-split">
+        <div class="preview-before">
+          <div class="preview-icon">
+            <svg viewBox="0 0 28 28" fill="none">
+              <rect x="3" y="3" width="22" height="22" rx="4" stroke="#636366" stroke-width="1.5"/>
+              <circle cx="10" cy="11" r="2.5" stroke="#636366" stroke-width="1.5"/>
+              <path d="M3 20l6-5 4 3 5-6 7 8" stroke="#636366" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+          <span class="preview-label">Before</span>
+        </div>
+        <div class="preview-after">
+          <div class="preview-icon">
+            <svg viewBox="0 0 28 28" fill="none">
+              <rect x="3" y="3" width="22" height="22" rx="4" stroke="url(#grad1)" stroke-width="1.5"/>
+              <circle cx="10" cy="11" r="2.5" stroke="url(#grad1)" stroke-width="1.5"/>
+              <path d="M3 20l6-5 4 3 5-6 7 8" stroke="url(#grad1)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              <defs>
+                <linearGradient id="grad1" x1="3" y1="3" x2="25" y2="25">
+                  <stop offset="0%" stop-color="#00C9A7"/>
+                  <stop offset="100%" stop-color="#845EC2"/>
+                </linearGradient>
+              </defs>
+            </svg>
+          </div>
+          <span class="preview-label">AI Enhanced</span>
+        </div>
+      </div>
+      <div class="preview-divider">
+        <svg viewBox="0 0 16 16">
+          <polyline points="6,3 11,8 6,13"/>
+        </svg>
+      </div>
+    </div>
+
+    <!-- Package options -->
+    <div class="packages-wrapper">
+      <div class="packages-scroll">
+        <div class="package-card" onclick="selectPkg(this)">
+          <div class="package-duration">Week</div>
+          <div class="package-price">$9.99</div>
+          <div class="package-period">per week</div>
+        </div>
+        <div class="package-card selected" onclick="selectPkg(this)">
+          <div class="package-tag tag-popular">POPULAR</div>
+          <div class="package-duration">Month</div>
+          <div class="package-price">$19.99</div>
+          <div class="package-period">per month</div>
+        </div>
+        <div class="package-card" onclick="selectPkg(this)">
+          <div class="package-tag tag-best">BEST VALUE</div>
+          <div class="package-duration">Year</div>
+          <div class="package-price">$49.99</div>
+          <div class="package-period">per year</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="spacer"></div>
+
+    <!-- CTA -->
+    <button class="cta-btn"><span>Continue</span></button>
+
+    <!-- Restore -->
+    <button class="restore-link">Restore Purchase</button>
+  </div>
+</div>
+
+<script>
+  function selectPkg(card) {
+    document.querySelectorAll('.package-card').forEach(c => c.classList.remove('selected'));
+    card.classList.add('selected');
+  }
+</script>
+</body>
+</html>

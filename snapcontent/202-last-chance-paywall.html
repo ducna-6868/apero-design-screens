@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SnapContent - Last Chance Paywall</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: #1a1a2e;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    font-family: system-ui, -apple-system, sans-serif;
+  }
+
+  .phone-frame {
+    width: 390px;
+    height: 844px;
+    background: #0A0A0C;
+    border-radius: 40px;
+    box-shadow: 0 0 0 2px #2A2A2E, 0 20px 60px rgba(0,0,0,0.5);
+    overflow: hidden;
+    position: relative;
+  }
+
+  /* Simulated home screen background */
+  .home-bg {
+    position: absolute;
+    inset: 0;
+    background: #0A0A0C;
+    z-index: 0;
+  }
+
+  .home-bg-content {
+    padding: 60px 24px 0;
+    opacity: 0.3;
+  }
+
+  .home-bg-content .fake-nav {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+  }
+
+  .home-bg-content .fake-bar {
+    height: 12px;
+    border-radius: 6px;
+    background: #1C1C1E;
+  }
+
+  .home-bg-content .fake-card {
+    height: 120px;
+    border-radius: 16px;
+    background: #1C1C1E;
+    margin-bottom: 12px;
+  }
+
+  /* Dark overlay */
+  .overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0,0,0,0.65);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+  }
+
+  /* Modal card */
+  .modal-card {
+    width: 100%;
+    max-width: 342px;
+    background: #1C1C1E;
+    border-radius: 24px;
+    padding: 32px;
+    text-align: center;
+    position: relative;
+    animation: slideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  @keyframes slideUp {
+    0% { opacity: 0; transform: translateY(40px) scale(0.96); }
+    100% { opacity: 1; transform: translateY(0) scale(1); }
+  }
+
+  /* Glow effect behind modal */
+  .modal-card::before {
+    content: '';
+    position: absolute;
+    top: -40px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 200px;
+    height: 200px;
+    background: radial-gradient(circle, rgba(0,201,167,0.2) 0%, rgba(132,94,194,0.15) 50%, transparent 70%);
+    pointer-events: none;
+    z-index: -1;
+  }
+
+  /* Title */
+  .modal-title {
+    font-size: 24px;
+    font-weight: 800;
+    background: linear-gradient(135deg, #00C9A7, #845EC2);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 16px;
+  }
+
+  /* Limited badge */
+  .limited-badge {
+    display: inline-block;
+    padding: 6px 16px;
+    border-radius: 20px;
+    background: linear-gradient(135deg, rgba(255,179,71,0.15), rgba(255,215,0,0.15));
+    border: 1px solid rgba(255,179,71,0.3);
+    font-size: 14px;
+    font-weight: 700;
+    color: #FFB347;
+    margin-bottom: 24px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .limited-badge::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 60%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,215,0,0.2), transparent);
+    animation: shimmerBadge 3s ease-in-out infinite;
+  }
+
+  @keyframes shimmerBadge {
+    0% { left: -100%; }
+    100% { left: 200%; }
+  }
+
+  /* Price display */
+  .price-section {
+    margin-bottom: 28px;
+  }
+
+  .price-old {
+    font-size: 16px;
+    color: #636366;
+    text-decoration: line-through;
+    margin-bottom: 4px;
+  }
+
+  .price-new {
+    font-size: 36px;
+    font-weight: 800;
+    color: #FFFFFF;
+    line-height: 1.1;
+  }
+
+  .price-period {
+    font-size: 16px;
+    font-weight: 500;
+    color: #8E8E93;
+  }
+
+  /* CTA Button */
+  .cta-btn {
+    width: 100%;
+    height: 52px;
+    border: none;
+    border-radius: 14px;
+    background: linear-gradient(135deg, #00C9A7, #845EC2);
+    color: #FFFFFF;
+    font-size: 17px;
+    font-weight: 700;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    margin-bottom: 16px;
+    transition: transform 0.15s;
+  }
+
+  .cta-btn:active { transform: scale(0.98); }
+
+  .cta-btn::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 50%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+    animation: shimmerBtn 3s ease-in-out infinite;
+  }
+
+  @keyframes shimmerBtn {
+    0% { left: -100%; }
+    100% { left: 200%; }
+  }
+
+  .cta-btn span { position: relative; z-index: 1; }
+
+  /* Pass link */
+  .pass-link {
+    font-size: 14px;
+    color: #8E8E93;
+    cursor: pointer;
+    border: none;
+    background: none;
+    margin-bottom: 20px;
+    transition: color 0.2s;
+    display: inline-block;
+  }
+
+  .pass-link:hover { color: #AEAEB2; }
+
+  /* Footer links */
+  .modal-footer {
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+    padding-top: 16px;
+    border-top: 1px solid rgba(255,255,255,0.06);
+  }
+
+  .modal-footer a {
+    font-size: 11px;
+    color: #48484A;
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+
+  .modal-footer a:hover { color: #636366; }
+
+  .modal-footer .sep {
+    color: #2C2C2E;
+    font-size: 11px;
+  }
+</style>
+</head>
+<body>
+
+<div class="phone-frame">
+  <!-- Simulated home screen behind overlay -->
+  <div class="home-bg">
+    <div class="home-bg-content">
+      <div class="fake-nav">
+        <div class="fake-bar" style="width:100px;"></div>
+        <div class="fake-bar" style="width:32px; height:32px; border-radius:50%;"></div>
+      </div>
+      <div class="fake-bar" style="width:180px; height:20px; margin-bottom:16px;"></div>
+      <div class="fake-card"></div>
+      <div class="fake-card"></div>
+      <div class="fake-bar" style="width:140px; height:16px; margin-bottom:12px;"></div>
+      <div class="fake-card" style="height:80px;"></div>
+      <div class="fake-card" style="height:80px;"></div>
+    </div>
+  </div>
+
+  <!-- Dark overlay with modal -->
+  <div class="overlay">
+    <div class="modal-card">
+      <h2 class="modal-title">Wait! Special Offer</h2>
+
+      <div class="limited-badge">Limited time: 60% OFF</div>
+
+      <div class="price-section">
+        <div class="price-old">$9.99</div>
+        <div class="price-new">$3.99<span class="price-period">/week</span></div>
+      </div>
+
+      <button class="cta-btn"><span>Grab the Deal</span></button>
+
+      <button class="pass-link">I'll pass for now</button>
+
+      <div class="modal-footer">
+        <a href="#">Terms of Service</a>
+        <span class="sep">|</span>
+        <a href="#">Privacy Policy</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

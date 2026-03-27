@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SnapContent - Onboarding 6</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: #1a1a2e;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  }
+  .phone-frame {
+    width: 390px;
+    height: 844px;
+    background: #0A0A0C;
+    border-radius: 40px;
+    box-shadow: 0 0 0 2px #2A2A2E, 0 20px 60px rgba(0,0,0,0.5);
+    overflow: hidden;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+  }
+  .status-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 28px 0;
+    height: 54px;
+    flex-shrink: 0;
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    z-index: 10;
+  }
+  .status-time { font-size: 15px; font-weight: 600; color: #FFFFFF; letter-spacing: 0.5px; }
+  .status-icons { display: flex; align-items: center; gap: 6px; }
+  .status-icons svg { fill: #FFFFFF; }
+  .screen-content { flex: 1; display: flex; flex-direction: column; }
+
+  .hero-image {
+    width: 100%;
+    height: 420px;
+    flex-shrink: 0;
+    position: relative;
+    background: linear-gradient(160deg, #845EC2 0%, #D65DB1 40%, #FF6F91 70%, #FF9671 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .hero-icon {
+    width: 120px;
+    height: 120px;
+    border-radius: 32px;
+    background: rgba(255,255,255,0.12);
+    backdrop-filter: blur(20px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 56px;
+  }
+  .hero-bottom-fade {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 80px;
+    background: linear-gradient(transparent, #0A0A0C);
+  }
+
+  .text-section { padding: 24px 24px 0; flex-shrink: 0; }
+  .text-section h1 { font-size: 26px; font-weight: 700; color: #FFFFFF; line-height: 1.25; margin-bottom: 12px; }
+  .text-section p { font-size: 15px; color: #8E8E93; line-height: 1.55; }
+
+  .bottom-section {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 0 24px 20px;
+  }
+  .continue-btn {
+    width: 100%;
+    height: 52px;
+    border: none;
+    border-radius: 16px;
+    background: linear-gradient(135deg, #00C9A7, #845EC2);
+    color: #FFFFFF;
+    font-size: 17px;
+    font-weight: 600;
+    cursor: pointer;
+    letter-spacing: 0.3px;
+    transition: transform 0.15s ease, opacity 0.15s ease;
+  }
+  .continue-btn:active { transform: scale(0.97); opacity: 0.9; }
+
+  .progress-dots { display: flex; justify-content: center; gap: 8px; padding: 20px 0 36px; }
+  .dot { width: 8px; height: 8px; border-radius: 50%; background: #2A2A2E; transition: all 0.3s ease; }
+  .dot.active { width: 24px; border-radius: 4px; background: linear-gradient(135deg, #00C9A7, #845EC2); }
+  .dot.done { background: rgba(0,201,167,0.4); }
+</style>
+</head>
+<body>
+<div class="phone-frame">
+  <div class="status-bar">
+    <span class="status-time">9:41</span>
+    <div class="status-icons">
+      <svg width="17" height="12" viewBox="0 0 17 12"><rect x="0" y="3" width="3" height="9" rx="1"/><rect x="4.5" y="2" width="3" height="10" rx="1"/><rect x="9" y="0.5" width="3" height="11.5" rx="1"/><rect x="13.5" y="0" width="3" height="12" rx="1" opacity="0.35"/></svg>
+      <svg width="16" height="12" viewBox="0 0 16 12"><path d="M8 3.6c1.8 0 3.4.7 4.6 1.9l1.1-1.1C12.1 2.8 10.1 2 8 2S3.9 2.8 2.3 4.4l1.1 1.1C4.6 4.3 6.2 3.6 8 3.6zm0 3.2c1 0 2 .4 2.7 1.1l1.1-1.1C10.6 5.6 9.4 5.2 8 5.2s-2.6.4-3.8 1.6l1.1 1.1C6 6.8 7 6.8 8 6.8zM9.4 9.4L8 11l-1.4-1.6c.4-.4.9-.6 1.4-.6s1 .2 1.4.6z"/></svg>
+      <svg width="27" height="12" viewBox="0 0 27 12"><rect x="0" y="1" width="22" height="10" rx="2" stroke="#FFFFFF" stroke-width="1" fill="none"/><rect x="23" y="4" width="2" height="4" rx="0.5" fill="#FFFFFF" opacity="0.4"/><rect x="1.5" y="2.5" width="16" height="7" rx="1" fill="#FFFFFF"/></svg>
+    </div>
+  </div>
+
+  <div class="screen-content">
+    <div class="hero-image">
+      <div class="hero-icon">&#128444;</div>
+      <div class="hero-bottom-fade"></div>
+    </div>
+
+    <div class="text-section">
+      <h1>Explore Professional Templates</h1>
+      <p>Choose from hundreds of curated styles and backgrounds</p>
+    </div>
+
+    <div class="bottom-section">
+      <button class="continue-btn">Get Started</button>
+    </div>
+
+    <div class="progress-dots">
+      <div class="dot done"></div>
+      <div class="dot done"></div>
+      <div class="dot done"></div>
+      <div class="dot done"></div>
+      <div class="dot done"></div>
+      <div class="dot active"></div>
+    </div>
+  </div>
+</div>
+</body>
+</html>
