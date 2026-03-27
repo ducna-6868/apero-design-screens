@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=390, initial-scale=1.0">
+<title>Glowtrend — Share</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+    background: #0D0D0F;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    min-height: 100vh;
+    padding: 20px 0;
+  }
+  .screen {
+    width: 390px;
+    height: 844px;
+    background: #0D0D0F;
+    border-radius: 40px;
+    border: 2px solid #242428;
+    overflow: hidden;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+  }
+
+  /* Overlay bg */
+  .overlay-bg {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.55);
+    border-radius: 40px;
+  }
+
+  /* Bottom sheet */
+  .bottom-sheet {
+    position: relative;
+    z-index: 10;
+    background: #1A1A1E;
+    border-radius: 24px 24px 0 0;
+    padding: 12px 24px 40px;
+    animation: slide-up 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  @keyframes slide-up {
+    from { transform: translateY(100%); }
+    to { transform: translateY(0); }
+  }
+
+  /* Drag handle */
+  .drag-handle {
+    width: 36px;
+    height: 4px;
+    background: #636366;
+    border-radius: 2px;
+    margin: 0 auto 20px;
+  }
+
+  /* Title */
+  .sheet-title {
+    color: #FFFFFF;
+    font-size: 20px;
+    font-weight: 700;
+    margin-bottom: 20px;
+    text-align: center;
+  }
+
+  /* Thumbnail */
+  .preview-thumb {
+    width: 60px;
+    height: 60px;
+    border-radius: 12px;
+    background: linear-gradient(135deg, #1a0a2e, #16213e, #2c1654);
+    margin: 0 auto 24px;
+    position: relative;
+    overflow: hidden;
+  }
+  .preview-thumb::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -55%);
+    width: 24px;
+    height: 30px;
+    border-radius: 50%;
+    background: rgba(60,50,80,0.6);
+  }
+
+  /* Social grid */
+  .social-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px 0;
+    margin-bottom: 24px;
+  }
+  .social-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+  }
+  .social-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    transition: transform 0.2s;
+  }
+  .social-icon:hover { transform: scale(1.1); }
+  .social-label {
+    font-size: 11px;
+    color: #8E8E93;
+    font-weight: 500;
+  }
+
+  /* Social colors */
+  .ig { background: linear-gradient(135deg, #F58529, #DD2A7B, #8134AF, #515BD4); }
+  .tt { background: #000000; border: 1px solid #333; }
+  .fb { background: #1877F2; }
+  .tw { background: #000000; border: 1px solid #333; }
+  .wa { background: #25D366; }
+  .tg { background: #0088CC; }
+  .msg { background: #34C759; }
+  .more { background: #242428; }
+
+  /* Copy link */
+  .copy-link-btn {
+    width: 100%;
+    height: 48px;
+    border: 1px solid #333;
+    border-radius: 14px;
+    background: #242428;
+    color: #FFFFFF;
+    font-size: 15px;
+    font-weight: 500;
+    cursor: pointer;
+    font-family: inherit;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin-bottom: 12px;
+    transition: background 0.2s;
+  }
+  .copy-link-btn:hover { background: #2a2a2e; }
+
+  /* Cancel */
+  .cancel-btn {
+    width: 100%;
+    height: 44px;
+    border: none;
+    border-radius: 12px;
+    background: transparent;
+    color: #636366;
+    font-size: 15px;
+    font-weight: 500;
+    cursor: pointer;
+    font-family: inherit;
+    transition: color 0.2s;
+  }
+  .cancel-btn:hover { color: #8E8E93; }
+
+  /* Status bar */
+  .status-bar {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 14px 24px 8px;
+    color: #FFFFFF;
+    font-size: 14px;
+    font-weight: 600;
+    z-index: 5;
+  }
+  .status-bar .time { font-size: 15px; font-weight: 700; }
+  .status-bar .icons { display: flex; gap: 6px; font-size: 13px; }
+
+  /* Home indicator */
+  .home-indicator {
+    width: 134px;
+    height: 5px;
+    background: #636366;
+    border-radius: 3px;
+    margin: 4px auto 8px;
+  }
+</style>
+</head>
+<body>
+<div class="screen">
+  <div class="status-bar">
+    <span class="time">9:41</span>
+    <div class="icons">
+      <span>&#9679;&#9679;&#9679;&#9679;</span>
+      <span>&#8226;</span>
+      <span>&#128267;</span>
+    </div>
+  </div>
+
+  <div class="overlay-bg"></div>
+
+  <div class="bottom-sheet">
+    <div class="drag-handle"></div>
+    <div class="sheet-title">Share your creation</div>
+
+    <div class="preview-thumb"></div>
+
+    <div class="social-grid">
+      <!-- Row 1 -->
+      <div class="social-item">
+        <div class="social-icon ig">
+          <span style="filter:brightness(10);">&#128247;</span>
+        </div>
+        <span class="social-label">Instagram</span>
+      </div>
+      <div class="social-item">
+        <div class="social-icon tt">
+          <span>&#9835;</span>
+        </div>
+        <span class="social-label">TikTok</span>
+      </div>
+      <div class="social-item">
+        <div class="social-icon fb">
+          <span style="color:#fff;font-weight:700;font-size:22px;">f</span>
+        </div>
+        <span class="social-label">Facebook</span>
+      </div>
+      <div class="social-item">
+        <div class="social-icon tw">
+          <span style="font-size:18px;font-weight:700;">&#120143;</span>
+        </div>
+        <span class="social-label">X</span>
+      </div>
+
+      <!-- Row 2 -->
+      <div class="social-item">
+        <div class="social-icon wa">
+          <span style="color:#fff;font-size:22px;">&#9742;</span>
+        </div>
+        <span class="social-label">WhatsApp</span>
+      </div>
+      <div class="social-item">
+        <div class="social-icon tg">
+          <span style="color:#fff;font-size:18px;">&#9992;</span>
+        </div>
+        <span class="social-label">Telegram</span>
+      </div>
+      <div class="social-item">
+        <div class="social-icon msg">
+          <span style="color:#fff;font-size:16px;">&#9993;</span>
+        </div>
+        <span class="social-label">Messages</span>
+      </div>
+      <div class="social-item">
+        <div class="social-icon more">
+          <span style="color:#8E8E93;font-size:20px;">&#8943;</span>
+        </div>
+        <span class="social-label">More</span>
+      </div>
+    </div>
+
+    <button class="copy-link-btn">
+      <span>&#128279;</span> Copy Link
+    </button>
+
+    <button class="cancel-btn">Cancel</button>
+
+    <div class="home-indicator"></div>
+  </div>
+</div>
+</body>
+</html>

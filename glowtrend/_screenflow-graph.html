@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Glowtrend — Screen Flow</title>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: #0a0a0c;
+    color: #fff;
+    font-family: system-ui, -apple-system, sans-serif;
+    min-height: 100vh;
+    padding: 24px;
+  }
+  h1 {
+    font-size: 24px; font-weight: 800;
+    background: linear-gradient(135deg, #FF6B9D, #C850C0);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    margin-bottom: 8px;
+  }
+  .subtitle { color: #8e8e93; font-size: 14px; margin-bottom: 24px; }
+  .legend {
+    display: flex; gap: 16px; flex-wrap: wrap; margin-bottom: 24px;
+  }
+  .legend-item {
+    display: flex; align-items: center; gap: 6px;
+    font-size: 13px; color: #8e8e93;
+  }
+  .legend-dot {
+    width: 12px; height: 12px; border-radius: 3px;
+  }
+  .mermaid-wrap {
+    background: #141416;
+    border: 1px solid #2a2a2e;
+    border-radius: 16px;
+    padding: 24px;
+    overflow-x: auto;
+  }
+  .flow-section {
+    margin-bottom: 32px;
+  }
+  .flow-title {
+    font-size: 16px; font-weight: 600; color: #FF6B9D;
+    margin-bottom: 12px;
+    padding-left: 12px;
+    border-left: 3px solid #FF6B9D;
+  }
+</style>
+</head>
+<body>
+
+<h1>Glowtrend — Screen Flow</h1>
+<p class="subtitle">22 screens · 9 flows · IIP068</p>
+
+<div class="legend">
+  <div class="legend-item"><div class="legend-dot" style="background:#FF6B9D"></div> Onboarding (1xx)</div>
+  <div class="legend-item"><div class="legend-dot" style="background:#FFD700"></div> Paywall (2xx)</div>
+  <div class="legend-item"><div class="legend-dot" style="background:#00CEC9"></div> Main (3xx)</div>
+  <div class="legend-item"><div class="legend-dot" style="background:#C850C0"></div> Features (4xx)</div>
+</div>
+
+<div class="flow-section">
+  <div class="flow-title">Flow 1 — New User Onboarding</div>
+  <div class="mermaid-wrap">
+    <pre class="mermaid">
+flowchart LR
+  101["101\nSplash"]:::onb --> 102["102\nShowcase 1"]:::onb
+  102 --> 103["103\nShowcase 2"]:::onb
+  103 --> 104["104\nShowcase 3"]:::onb
+  104 --> 105["105\nShowcase 4"]:::onb
+  105 --> 106["106\nShowcase 5"]:::onb
+  106 --> 107["107\nShowcase 6"]:::onb
+  107 --> 201["201\nONB Paywall"]:::pay
+  201 -->|pay| 301["301\nHome"]:::main
+  201 -->|exit| 202["202\nLast Chance"]:::pay
+  202 -->|pay/exit| 301
+  classDef onb fill:#FF6B9D,stroke:#FF6B9D,color:#fff
+  classDef pay fill:#FFD700,stroke:#FFD700,color:#000
+  classDef main fill:#00CEC9,stroke:#00CEC9,color:#000
+    </pre>
+  </div>
+</div>
+
+<div class="flow-section">
+  <div class="flow-title">Flow 2 — Returning User</div>
+  <div class="mermaid-wrap">
+    <pre class="mermaid">
+flowchart LR
+  101b["101\nSplash"]:::onb --> 206["206\nReturned\nPaywall"]:::pay
+  206 -->|pay/exit| 301b["301\nHome"]:::main
+  classDef onb fill:#FF6B9D,stroke:#FF6B9D,color:#fff
+  classDef pay fill:#FFD700,stroke:#FFD700,color:#000
+  classDef main fill:#00CEC9,stroke:#00CEC9,color:#000
+    </pre>
+  </div>
+</div>
+
+<div class="flow-section">
+  <div class="flow-title">Flow 3 — Image-to-Image (Single Template)</div>
+  <div class="mermaid-wrap">
+    <pre class="mermaid">
+flowchart LR
+  H["301\nHome"]:::main -->|tap template| SP["450\nSelect Photo"]:::feat
+  SP --> AN["455\nAnalyzing"]:::feat
+  AN -->|valid + sub| RL["460\nLoading"]:::feat
+  AN -->|valid + no sub| GS["203\nGenerate Sub"]:::pay
+  GS -->|pay/free| RL
+  GS -->|exit + no free| H
+  AN -->|invalid| ERR["451\nError"]:::err
+  ERR --> H
+  RL --> RES["470\nResult"]:::feat
+  classDef main fill:#00CEC9,stroke:#00CEC9,color:#000
+  classDef feat fill:#C850C0,stroke:#C850C0,color:#fff
+  classDef pay fill:#FFD700,stroke:#FFD700,color:#000
+  classDef err fill:#FF453A,stroke:#FF453A,color:#fff
+    </pre>
+  </div>
+</div>
+
+<div class="flow-section">
+  <div class="flow-title">Flow 4 — Result Actions</div>
+  <div class="mermaid-wrap">
+    <pre class="mermaid">
+flowchart LR
+  RES["470\nResult"]:::feat -->|download| SAV["472\nSave Success"]:::feat
+  RES -->|share| SHR["473\nShare"]:::feat
+  RES -->|regenerate + sub| RL["460\nLoading"]:::feat
+  RES -->|regenerate + no sub| RS["204\nRegen Sub"]:::pay
+  RS -->|pay/free| RL
+  RL --> RES
+  RES -->|back| H["301\nHome"]:::main
+  SAV --> H
+  classDef main fill:#00CEC9,stroke:#00CEC9,color:#000
+  classDef feat fill:#C850C0,stroke:#C850C0,color:#fff
+  classDef pay fill:#FFD700,stroke:#FFD700,color:#000
+    </pre>
+  </div>
+</div>
+
+<div class="flow-section">
+  <div class="flow-title">Flow 5 — Home Paywall</div>
+  <div class="mermaid-wrap">
+    <pre class="mermaid">
+flowchart LR
+  H["301\nHome"]:::main -->|tap PRO| HP["205\nHome Paywall"]:::pay
+  HP -->|pay/exit| H
+  classDef main fill:#00CEC9,stroke:#00CEC9,color:#000
+  classDef pay fill:#FFD700,stroke:#FFD700,color:#000
+    </pre>
+  </div>
+</div>
+
+<div class="flow-section">
+  <div class="flow-title">Flow 6 — Settings</div>
+  <div class="mermaid-wrap">
+    <pre class="mermaid">
+flowchart LR
+  H["301\nHome"]:::main --> SET["420\nSettings"]:::feat
+  SET -->|language| LANG["421\nLanguage"]:::feat
+  SET -->|manage sub| STORE["App Store"]:::ext
+  LANG --> SET
+  SET -->|back| H
+  classDef main fill:#00CEC9,stroke:#00CEC9,color:#000
+  classDef feat fill:#C850C0,stroke:#C850C0,color:#fff
+  classDef ext fill:#636366,stroke:#636366,color:#fff
+    </pre>
+  </div>
+</div>
+
+<div class="flow-section">
+  <div class="flow-title">Flow 7 — Profile</div>
+  <div class="mermaid-wrap">
+    <pre class="mermaid">
+flowchart LR
+  H["301\nHome"]:::main --> PRO["310\nProfile"]:::main
+  PRO -->|edit photo| SP["450\nSelect Photo"]:::feat
+  PRO -->|back| H
+  classDef main fill:#00CEC9,stroke:#00CEC9,color:#000
+  classDef feat fill:#C850C0,stroke:#C850C0,color:#fff
+    </pre>
+  </div>
+</div>
+
+<script>
+  mermaid.initialize({
+    startOnLoad: true,
+    theme: 'dark',
+    themeVariables: {
+      darkMode: true,
+      background: '#141416',
+      primaryColor: '#FF6B9D',
+      primaryTextColor: '#fff',
+      primaryBorderColor: '#FF6B9D',
+      lineColor: '#636366',
+      secondaryColor: '#C850C0',
+      tertiaryColor: '#1a1a1e',
+      fontSize: '14px',
+    },
+    flowchart: {
+      useMaxWidth: true,
+      htmlLabels: true,
+      curve: 'basis',
+    }
+  });
+</script>
+</body>
+</html>

@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Trenddy — 202 Final Paywall</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: #000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    font-family: 'Inter', sans-serif;
+  }
+  .phone {
+    width: 390px;
+    height: 844px;
+    background: #0A0A0F;
+    border-radius: 44px;
+    overflow: hidden;
+    position: relative;
+    box-shadow:
+      0 0 0 1px rgba(255,255,255,0.06),
+      0 24px 80px rgba(0,0,0,0.8),
+      0 8px 32px rgba(0,0,0,0.6),
+      inset 0 1px 0 rgba(255,255,255,0.04);
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* Status bar */
+  .status-bar {
+    height: 47px;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 14px 24px 0;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 10;
+  }
+  .status-bar__time {
+    font-family: 'Inter', sans-serif;
+    font-weight: 600;
+    font-size: 15px;
+    color: #fff;
+  }
+
+  /* Close */
+  .btn-close {
+    position: absolute;
+    top: 55px;
+    right: 16px;
+    z-index: 20;
+    width: 32px;
+    height: 32px;
+    border-radius: 9999px;
+    background: rgba(255,255,255,0.1);
+    backdrop-filter: blur(8px);
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s;
+  }
+  .btn-close:hover { background: rgba(255,255,255,0.18); }
+  .btn-close svg { width: 14px; height: 14px; color: #fff; }
+
+  /* Hero section with urgency gradient */
+  .hero {
+    width: 100%;
+    height: 320px;
+    position: relative;
+    overflow: hidden;
+    flex-shrink: 0;
+  }
+  .hero__bg {
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 90% 70% at 50% 35%, rgba(108,92,231,0.4) 0%, transparent 60%),
+      radial-gradient(ellipse 60% 50% at 30% 60%, rgba(138,43,226,0.2) 0%, transparent 50%),
+      radial-gradient(ellipse 80% 60% at 70% 70%, rgba(75,0,130,0.15) 0%, transparent 50%),
+      linear-gradient(180deg, #141420 0%, #0A0A0F 100%);
+  }
+  .hero__fade {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 100px;
+    background: linear-gradient(to top, #0A0A0F 0%, transparent 100%);
+  }
+
+  /* Floating 50% OFF badge */
+  .offer-badge {
+    position: absolute;
+    top: 120px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 5;
+    background: linear-gradient(135deg, #CCFF00 0%, #B8E600 100%);
+    border-radius: 20px;
+    padding: 14px 32px;
+    box-shadow:
+      0 0 40px rgba(204,255,0,0.3),
+      0 0 80px rgba(204,255,0,0.1),
+      0 8px 32px rgba(0,0,0,0.4);
+    animation: badge-float 3s ease-in-out infinite;
+  }
+  .offer-badge__text {
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 700;
+    font-size: 28px;
+    line-height: 34px;
+    color: #0A0A0F;
+    letter-spacing: -0.5px;
+    white-space: nowrap;
+  }
+  @keyframes badge-float {
+    0%, 100% { transform: translateX(-50%) translateY(0); }
+    50% { transform: translateX(-50%) translateY(-8px); }
+  }
+
+  /* Glow ring behind badge */
+  .glow-ring {
+    position: absolute;
+    top: 100px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 200px;
+    height: 100px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(204,255,0,0.12) 0%, transparent 70%);
+    animation: glow-pulse 3s ease-in-out infinite;
+    z-index: 1;
+  }
+  @keyframes glow-pulse {
+    0%, 100% { opacity: 0.5; transform: translateX(-50%) scale(1); }
+    50% { opacity: 1; transform: translateX(-50%) scale(1.15); }
+  }
+
+  /* Decorative particles */
+  .particle {
+    position: absolute;
+    border-radius: 9999px;
+    opacity: 0;
+    animation: particle-drift 4s ease-in-out infinite;
+  }
+  .particle--1 { width: 4px; height: 4px; background: rgba(204,255,0,0.5); top: 80px; left: 70px; animation-delay: 0s; }
+  .particle--2 { width: 3px; height: 3px; background: rgba(108,92,231,0.6); top: 160px; right: 60px; animation-delay: 1s; }
+  .particle--3 { width: 5px; height: 5px; background: rgba(204,255,0,0.3); top: 200px; left: 100px; animation-delay: 2s; }
+  .particle--4 { width: 3px; height: 3px; background: rgba(255,255,255,0.3); top: 100px; right: 90px; animation-delay: 0.5s; }
+  .particle--5 { width: 2px; height: 2px; background: rgba(204,255,0,0.6); top: 240px; left: 50%; animation-delay: 1.5s; }
+
+  @keyframes particle-drift {
+    0%, 100% { opacity: 0; transform: translateY(6px); }
+    50% { opacity: 0.8; transform: translateY(-6px); }
+  }
+
+  /* Content area */
+  .content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 0 24px;
+    overflow: hidden;
+  }
+
+  .title {
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 700;
+    font-size: 32px;
+    line-height: 40px;
+    color: #F0EDE8;
+    text-align: center;
+    margin-bottom: 8px;
+  }
+  .subtitle {
+    font-family: 'Inter', sans-serif;
+    font-weight: 400;
+    font-size: 15px;
+    line-height: 22px;
+    color: #8A8A9A;
+    text-align: center;
+    max-width: 300px;
+    margin-bottom: 32px;
+  }
+
+  /* Price comparison */
+  .price-block {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 20px;
+  }
+  .price-old {
+    font-family: 'Inter', sans-serif;
+    font-weight: 400;
+    font-size: 17px;
+    line-height: 24px;
+    color: #5A5A6A;
+    text-decoration: line-through;
+  }
+  .price-new {
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 700;
+    font-size: 40px;
+    line-height: 48px;
+    color: #CCFF00;
+    display: flex;
+    align-items: baseline;
+    gap: 4px;
+  }
+  .price-new__period {
+    font-family: 'Inter', sans-serif;
+    font-weight: 400;
+    font-size: 16px;
+    color: #8A8A9A;
+  }
+
+  /* Timer */
+  .timer {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 20px;
+    background: rgba(255,107,107,0.08);
+    border: 1px solid rgba(255,107,107,0.15);
+    border-radius: 12px;
+    margin-bottom: 32px;
+  }
+  .timer__icon {
+    width: 16px;
+    height: 16px;
+    color: #FF6B6B;
+    flex-shrink: 0;
+  }
+  .timer__text {
+    font-family: 'Inter', sans-serif;
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 20px;
+    color: #FF6B6B;
+  }
+
+  .spacer { flex: 1; }
+
+  /* CTA */
+  .btn-primary {
+    width: 100%;
+    height: 56px;
+    background: #CCFF00;
+    border: none;
+    border-radius: 9999px;
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 700;
+    font-size: 16px;
+    color: #0A0A0F;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s;
+    flex-shrink: 0;
+  }
+  .btn-primary:hover { background: #E0FF4D; }
+
+  /* Try Now popup */
+  .try-now-bar {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 24px;
+    padding: 14px 0 4px;
+    flex-shrink: 0;
+  }
+  .try-now-link {
+    font-family: 'Inter', sans-serif;
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 20px;
+    color: #8A8A9A;
+    cursor: pointer;
+    transition: color 0.2s;
+    text-decoration: underline;
+    text-decoration-color: rgba(138,138,154,0.3);
+    text-underline-offset: 2px;
+  }
+  .try-now-link:hover { color: #F0EDE8; }
+  .cancel-link {
+    font-family: 'Inter', sans-serif;
+    font-weight: 400;
+    font-size: 13px;
+    line-height: 18px;
+    color: #5A5A6A;
+    cursor: pointer;
+    transition: color 0.2s;
+  }
+  .cancel-link:hover { color: #8A8A9A; }
+
+  .legal {
+    font-family: 'Inter', sans-serif;
+    font-weight: 400;
+    font-size: 11px;
+    line-height: 16px;
+    color: rgba(255,255,255,0.3);
+    text-align: center;
+    padding: 8px 0 4px;
+    max-width: 280px;
+    flex-shrink: 0;
+  }
+
+  /* Home indicator */
+  .home-indicator {
+    height: 34px;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    padding-bottom: 8px;
+    flex-shrink: 0;
+  }
+  .home-indicator__pill {
+    width: 134px;
+    height: 5px;
+    border-radius: 9999px;
+    background: rgba(255,255,255,0.3);
+  }
+</style>
+</head>
+<body>
+<div class="phone">
+  <!-- Status Bar -->
+  <div class="status-bar">
+    <span class="status-bar__time">9:41</span>
+  </div>
+
+  <!-- Close -->
+  <button class="btn-close">
+    <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+      <line x1="1" y1="1" x2="13" y2="13"/><line x1="13" y1="1" x2="1" y2="13"/>
+    </svg>
+  </button>
+
+  <!-- Hero -->
+  <div class="hero">
+    <div class="hero__bg"></div>
+    <div class="glow-ring"></div>
+    <div class="offer-badge">
+      <span class="offer-badge__text">50% OFF</span>
+    </div>
+    <div class="particle particle--1"></div>
+    <div class="particle particle--2"></div>
+    <div class="particle particle--3"></div>
+    <div class="particle particle--4"></div>
+    <div class="particle particle--5"></div>
+    <div class="hero__fade"></div>
+  </div>
+
+  <!-- Content -->
+  <div class="content">
+    <h1 class="title">Wait — one more thing</h1>
+    <p class="subtitle">Get 50% off your first week. This won't come back.</p>
+
+    <!-- Price block -->
+    <div class="price-block">
+      <span class="price-old">$4.99</span>
+      <div class="price-new">
+        $2.49<span class="price-new__period">/week</span>
+      </div>
+    </div>
+
+    <!-- Timer -->
+    <div class="timer">
+      <svg class="timer__icon" viewBox="0 0 16 16" fill="none">
+        <circle cx="8" cy="9" r="6" stroke="currentColor" stroke-width="1.5"/>
+        <line x1="8" y1="9" x2="8" y2="6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+        <line x1="8" y1="9" x2="10.5" y2="9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+        <line x1="6" y1="2" x2="10" y2="2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+      </svg>
+      <span class="timer__text">Offer expires in 4:59</span>
+    </div>
+
+    <div class="spacer"></div>
+
+    <!-- CTA -->
+    <button class="btn-primary">Claim this deal</button>
+
+    <!-- Try Now / Cancel -->
+    <div class="try-now-bar">
+      <span class="try-now-link">Try Now</span>
+      <span class="cancel-link">Cancel</span>
+    </div>
+
+    <p class="legal">Auto-renews at $4.99/week. Cancel anytime.</p>
+  </div>
+
+  <!-- Home Indicator -->
+  <div class="home-indicator">
+    <div class="home-indicator__pill"></div>
+  </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=390, initial-scale=1.0">
+<title>Trenddy — 640 My Videos</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; -webkit-font-smoothing: antialiased; }
+  body { background: #000; display: flex; justify-content: center; align-items: center; min-height: 100vh; font-family: 'Inter', sans-serif; }
+  .phone {
+    width: 390px; height: 844px; background: #0A0A0F; border-radius: 44px; overflow: hidden;
+    box-shadow:
+      0 0 0 1px rgba(255,255,255,0.06),
+      0 24px 80px rgba(0,0,0,0.8),
+      0 8px 32px rgba(0,0,0,0.6),
+      inset 0 1px 0 rgba(255,255,255,0.04);
+    position: relative; display: flex; flex-direction: column;
+  }
+
+  /* Status Bar */
+  .status-bar {
+    height: 47px; width: 100%; display: flex; justify-content: space-between; align-items: center;
+    padding: 14px 24px 0; flex-shrink: 0; position: relative; z-index: 10;
+  }
+  .status-bar__time { font: 600 15px/18px 'Inter', sans-serif; color: #fff; }
+  .status-bar__icons { display: flex; gap: 5px; align-items: center; }
+  .status-bar__icons svg { width: 16px; height: 16px; fill: #fff; }
+
+  /* Page title */
+  .page-header {
+    height: 48px; width: 100%; display: flex; align-items: center;
+    justify-content: center; flex-shrink: 0;
+  }
+  .page-title {
+    font: 600 17px/24px 'DM Sans', sans-serif; color: #F0EDE8;
+  }
+
+  /* Content */
+  .content { flex: 1; overflow-y: auto; overflow-x: hidden; }
+  .content::-webkit-scrollbar { display: none; }
+
+  /* Video grid */
+  .video-grid {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 12px; padding: 12px 20px 20px;
+  }
+  .video-card {
+    border-radius: 16px; overflow: hidden; background: #141420;
+    cursor: pointer; transition: transform 0.15s;
+  }
+  .video-card:hover { transform: scale(0.98); }
+  .video-card__thumb {
+    width: 100%; height: 220px; position: relative; overflow: hidden;
+  }
+  .video-card__thumb-bg {
+    position: absolute; inset: 0;
+  }
+  .thumb-bg-1 { background: linear-gradient(160deg, #6C5CE7 0%, #3d2580 40%, #1E1E30 100%); }
+  .thumb-bg-2 { background: linear-gradient(160deg, #00CEC9 0%, #0a6a68 40%, #1E1E30 100%); }
+  .thumb-bg-3 { background: linear-gradient(160deg, #e84393 0%, #842560 40%, #1E1E30 100%); }
+  .thumb-bg-4 { background: linear-gradient(160deg, #fdcb6e 0%, #8a6e20 40%, #1E1E30 100%); }
+  .video-card__thumb-shapes {
+    position: absolute; inset: 0; overflow: hidden;
+  }
+  .video-card__thumb-shapes::before {
+    content: ''; position: absolute; width: 100px; height: 100px; border-radius: 50%;
+    background: radial-gradient(circle, rgba(255,255,255,0.08) 0%, transparent 70%);
+    top: -20px; right: -15px;
+  }
+  .video-card__thumb-overlay {
+    position: absolute; bottom: 0; left: 0; right: 0; height: 50%;
+    background: linear-gradient(transparent, rgba(0,0,0,0.6));
+  }
+  /* Play icon */
+  .video-card__play {
+    position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%);
+    width: 40px; height: 40px; border-radius: 50%;
+    background: rgba(0,0,0,0.4); backdrop-filter: blur(4px);
+    display: flex; align-items: center; justify-content: center;
+  }
+  .video-card__play svg { width: 18px; height: 18px; fill: #fff; margin-left: 2px; }
+  /* Status badge */
+  .video-card__badge {
+    position: absolute; top: 10px; right: 10px;
+    padding: 3px 8px; border-radius: 6px;
+    font: 600 10px/14px 'Inter', sans-serif; text-transform: uppercase;
+    letter-spacing: 0.3px;
+  }
+  .badge--done { background: rgba(81,207,102,0.2); color: #51CF66; }
+  .badge--rendering { background: rgba(108,92,231,0.2); color: #6C5CE7; }
+  /* Card info */
+  .video-card__info {
+    padding: 10px 12px 12px;
+    display: flex; flex-direction: column; gap: 2px;
+  }
+  .video-card__name {
+    font: 500 13px/18px 'Inter', sans-serif; color: #F0EDE8;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+  .video-card__date {
+    font: 400 11px/16px 'Inter', sans-serif; color: #5A5A6A;
+  }
+
+  /* Tab Bar */
+  .tab-bar {
+    height: 83px; width: 100%; background: #141420; flex-shrink: 0;
+    display: flex; justify-content: space-around; align-items: flex-start;
+    padding-top: 10px; border-top: 0.5px solid #2A2A40; position: relative; z-index: 10;
+  }
+  .tab-item {
+    display: flex; flex-direction: column; align-items: center; gap: 4px;
+    cursor: pointer; min-width: 64px;
+  }
+  .tab-item svg { width: 24px; height: 24px; }
+  .tab-item__label { font: 400 10px/14px 'Inter', sans-serif; }
+  .tab-item--active svg { stroke: #CCFF00; }
+  .tab-item--active .tab-item__label { color: #CCFF00; }
+  .tab-item--inactive svg { stroke: rgba(255,255,255,0.5); }
+  .tab-item--inactive .tab-item__label { color: rgba(255,255,255,0.5); }
+
+  /* Home Indicator */
+  .home-indicator {
+    height: 34px; width: 100%; display: flex; justify-content: center;
+    align-items: flex-end; padding-bottom: 8px; flex-shrink: 0;
+    background: #141420;
+  }
+  .home-indicator__pill {
+    width: 134px; height: 5px; border-radius: 9999px;
+    background: rgba(255,255,255,0.3);
+  }
+</style>
+</head>
+<body>
+<div class="phone">
+  <!-- Status Bar -->
+  <div class="status-bar">
+    <span class="status-bar__time">9:41</span>
+    <div class="status-bar__icons">
+      <svg viewBox="0 0 17 12"><path d="M1 8.5h1.5v3H1zM4 6h1.5v5.5H4zM7 3.5h1.5V12H7zM10 1h1.5v10.5H10z" rx=".5"/></svg>
+      <svg viewBox="0 0 16 12"><path d="M8 3.3C5.5 3.3 3.3 4.3 1.8 6l1.2 1.2C4.2 5.8 6 5 8 5s3.8.8 5 2.2L14.2 6C12.7 4.3 10.5 3.3 8 3.3zM8 7c-1.4 0-2.6.6-3.5 1.5L5.7 9.7c.6-.6 1.4-1 2.3-1s1.7.4 2.3 1l1.2-1.2C10.6 7.6 9.4 7 8 7zm0 4.3L9.7 9.7c-.4-.5-1-.8-1.7-.8s-1.3.3-1.7.8L8 11.3z"/></svg>
+      <svg viewBox="0 0 25 12"><rect x="0" y="1" width="21" height="10" rx="2" stroke="#fff" stroke-width="1" fill="none"/><rect x="22" y="4" width="2" height="4" rx="0.5" fill="#fff" opacity="0.4"/><rect x="1.5" y="2.5" width="16" height="7" rx="1" fill="#CCFF00"/></svg>
+    </div>
+  </div>
+
+  <!-- Page Header -->
+  <div class="page-header">
+    <span class="page-title">My Videos</span>
+  </div>
+
+  <!-- Content -->
+  <div class="content">
+    <!-- Video Grid -->
+    <div class="video-grid">
+      <!-- Card 1 — Done -->
+      <div class="video-card">
+        <div class="video-card__thumb">
+          <div class="video-card__thumb-bg thumb-bg-1"></div>
+          <div class="video-card__thumb-shapes"></div>
+          <div class="video-card__thumb-overlay"></div>
+          <div class="video-card__play">
+            <svg viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+          </div>
+          <span class="video-card__badge badge--done">Done</span>
+        </div>
+        <div class="video-card__info">
+          <span class="video-card__name">Cyberpunk Glow</span>
+          <span class="video-card__date">Mar 26, 2026</span>
+        </div>
+      </div>
+
+      <!-- Card 2 — Rendering -->
+      <div class="video-card">
+        <div class="video-card__thumb">
+          <div class="video-card__thumb-bg thumb-bg-2"></div>
+          <div class="video-card__thumb-shapes"></div>
+          <div class="video-card__thumb-overlay"></div>
+          <div class="video-card__play">
+            <svg viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+          </div>
+          <span class="video-card__badge badge--rendering">Rendering</span>
+        </div>
+        <div class="video-card__info">
+          <span class="video-card__name">Ocean Vibes</span>
+          <span class="video-card__date">Mar 26, 2026</span>
+        </div>
+      </div>
+
+      <!-- Card 3 — Done -->
+      <div class="video-card">
+        <div class="video-card__thumb">
+          <div class="video-card__thumb-bg thumb-bg-3"></div>
+          <div class="video-card__thumb-shapes"></div>
+          <div class="video-card__thumb-overlay"></div>
+          <div class="video-card__play">
+            <svg viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+          </div>
+          <span class="video-card__badge badge--done">Done</span>
+        </div>
+        <div class="video-card__info">
+          <span class="video-card__name">K-Pop Dance</span>
+          <span class="video-card__date">Mar 25, 2026</span>
+        </div>
+      </div>
+
+      <!-- Card 4 — Done -->
+      <div class="video-card">
+        <div class="video-card__thumb">
+          <div class="video-card__thumb-bg thumb-bg-4"></div>
+          <div class="video-card__thumb-shapes"></div>
+          <div class="video-card__thumb-overlay"></div>
+          <div class="video-card__play">
+            <svg viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+          </div>
+          <span class="video-card__badge badge--done">Done</span>
+        </div>
+        <div class="video-card__info">
+          <span class="video-card__name">Golden Hour</span>
+          <span class="video-card__date">Mar 24, 2026</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tab Bar -->
+  <div class="tab-bar">
+    <div class="tab-item tab-item--inactive">
+      <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/>
+      </svg>
+      <span class="tab-item__label">Home</span>
+    </div>
+    <div class="tab-item tab-item--inactive">
+      <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/>
+        <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+      </svg>
+      <span class="tab-item__label">Explore</span>
+    </div>
+    <div class="tab-item tab-item--active">
+      <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="10"/><polygon points="10 8 16 12 10 16 10 8"/>
+      </svg>
+      <span class="tab-item__label">My Videos</span>
+    </div>
+    <div class="tab-item tab-item--inactive">
+      <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>
+      </svg>
+      <span class="tab-item__label">Profile</span>
+    </div>
+  </div>
+
+  <!-- Home Indicator -->
+  <div class="home-indicator">
+    <div class="home-indicator__pill"></div>
+  </div>
+</div>
+</body>
+</html>

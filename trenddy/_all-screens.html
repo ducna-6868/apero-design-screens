@@ -1,0 +1,633 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Trenddy — All Screens</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --bg: #0A0A0F;
+    --surface: #141420;
+    --surface2: #1E1E30;
+    --surface3: #2A2A40;
+    --primary: #CCFF00;
+    --accent: #6C5CE7;
+    --accent2: #00CEC9;
+    --text: #F0EDE8;
+    --text-sec: #8A8A9A;
+    --text-ter: #5A5A6A;
+    --border: #2A2A44;
+    --error: #FF6B6B;
+  }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Inter', sans-serif;
+    min-height: 100vh;
+  }
+
+  /* ── Header ── */
+  .header {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: rgba(10,10,15,0.85);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--border);
+    padding: 20px 32px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+
+  .header__left {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+
+  .header__logo {
+    width: 40px; height: 40px;
+    background: var(--primary);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .header__logo svg { width: 22px; height: 22px; }
+
+  .header__title {
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 700;
+    font-size: 22px;
+    color: var(--text);
+  }
+
+  .header__subtitle {
+    font-size: 13px;
+    color: var(--text-sec);
+    margin-left: 2px;
+  }
+
+  .header__actions {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+  }
+
+  /* ── Filter tabs ── */
+  .filters {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  .filter-btn {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    color: var(--text-sec);
+    font-family: 'Inter', sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    padding: 7px 16px;
+    border-radius: 9999px;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    white-space: nowrap;
+  }
+
+  .filter-btn:hover {
+    background: var(--surface2);
+    color: var(--text);
+  }
+
+  .filter-btn.active {
+    background: var(--primary);
+    color: var(--bg);
+    border-color: var(--primary);
+    font-weight: 600;
+  }
+
+  /* ── View toggle ── */
+  .view-toggle {
+    display: flex;
+    background: var(--surface);
+    border-radius: 8px;
+    overflow: hidden;
+    border: 1px solid var(--border);
+  }
+
+  .view-btn {
+    background: none;
+    border: none;
+    color: var(--text-sec);
+    padding: 7px 12px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.15s;
+  }
+
+  .view-btn.active {
+    background: var(--surface2);
+    color: var(--primary);
+  }
+
+  .view-btn svg { width: 16px; height: 16px; }
+
+  /* ── Scale slider ── */
+  .scale-control {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12px;
+    color: var(--text-sec);
+  }
+
+  .scale-control input[type="range"] {
+    width: 100px;
+    accent-color: var(--primary);
+    cursor: pointer;
+  }
+
+  /* ── Section headers ── */
+  .section {
+    padding: 32px 32px 0;
+  }
+
+  .section__header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 20px;
+  }
+
+  .section__dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  .section__title {
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 600;
+    font-size: 17px;
+    color: var(--text);
+  }
+
+  .section__count {
+    font-size: 13px;
+    color: var(--text-ter);
+    margin-left: auto;
+  }
+
+  /* ── Grid ── */
+  .grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 24px;
+    padding: 0 32px 40px;
+  }
+
+  .card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    transition: transform 0.2s ease, opacity 0.2s ease;
+    cursor: pointer;
+  }
+
+  .card:hover {
+    transform: translateY(-4px);
+  }
+
+  .card__frame {
+    border-radius: 22px;
+    overflow: hidden;
+    box-shadow:
+      0 0 0 1px rgba(255,255,255,0.05),
+      0 12px 40px rgba(0,0,0,0.6);
+    position: relative;
+    background: var(--surface);
+  }
+
+  .card__frame iframe {
+    border: none;
+    display: block;
+    pointer-events: none;
+  }
+
+  .card__label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .card__code {
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 700;
+    font-size: 13px;
+    color: var(--primary);
+    background: rgba(204,255,0,0.1);
+    padding: 2px 8px;
+    border-radius: 6px;
+  }
+
+  .card__name {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text-sec);
+    max-width: 180px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  /* ── Flow link ── */
+  .flow-link {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    z-index: 200;
+    background: var(--accent);
+    color: #fff;
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 600;
+    font-size: 14px;
+    padding: 12px 20px;
+    border-radius: 9999px;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    box-shadow: 0 8px 24px rgba(108,92,231,0.4);
+    transition: transform 0.15s ease;
+  }
+
+  .flow-link:hover { transform: translateY(-2px); }
+  .flow-link svg { width: 18px; height: 18px; }
+
+  /* ── Lightbox ── */
+  .lightbox {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 500;
+    background: rgba(0,0,0,0.85);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .lightbox.open { display: flex; }
+
+  .lightbox__close {
+    position: absolute;
+    top: 20px;
+    right: 24px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    color: var(--text);
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    z-index: 10;
+    transition: background 0.15s;
+  }
+
+  .lightbox__close:hover { background: var(--surface3); }
+
+  .lightbox__frame {
+    border-radius: 44px;
+    overflow: hidden;
+    box-shadow:
+      0 0 0 1px rgba(255,255,255,0.06),
+      0 32px 100px rgba(0,0,0,0.8);
+  }
+
+  .lightbox__frame iframe {
+    width: 390px;
+    height: 844px;
+    border: none;
+    display: block;
+  }
+
+  .lightbox__info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .lightbox__nav {
+    display: flex;
+    gap: 8px;
+  }
+
+  .lightbox__nav button {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    color: var(--text);
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.15s;
+  }
+
+  .lightbox__nav button:hover { background: var(--surface3); }
+
+  /* ── Hidden ── */
+  .hidden { display: none !important; }
+</style>
+</head>
+<body>
+
+<!-- Header -->
+<div class="header">
+  <div class="header__left">
+    <div class="header__logo">
+      <svg viewBox="0 0 24 24" fill="none"><polygon points="8,5 19,12 8,19" fill="#0A0A0F"/></svg>
+    </div>
+    <div>
+      <div class="header__title">Trenddy</div>
+      <div class="header__subtitle">26 screens &middot; premium-dark &middot; iPhone 13</div>
+    </div>
+  </div>
+
+  <div class="header__actions">
+    <div class="filters">
+      <button class="filter-btn active" data-filter="all">All</button>
+      <button class="filter-btn" data-filter="1xx">1xx Onboarding</button>
+      <button class="filter-btn" data-filter="2xx">2xx Monetization</button>
+      <button class="filter-btn" data-filter="3xx">3xx Main</button>
+      <button class="filter-btn" data-filter="6xx">6xx Explore & Create</button>
+    </div>
+
+    <div class="scale-control">
+      <span>Scale</span>
+      <input type="range" id="scaleSlider" min="30" max="80" value="45">
+      <span id="scaleValue">45%</span>
+    </div>
+
+    <div class="view-toggle">
+      <button class="view-btn active" data-view="grid" title="Grid view">
+        <svg viewBox="0 0 16 16" fill="currentColor"><rect x="1" y="1" width="6" height="6" rx="1"/><rect x="9" y="1" width="6" height="6" rx="1"/><rect x="1" y="9" width="6" height="6" rx="1"/><rect x="9" y="9" width="6" height="6" rx="1"/></svg>
+      </button>
+      <button class="view-btn" data-view="flow" title="Flow view">
+        <svg viewBox="0 0 16 16" fill="currentColor"><rect x="1" y="2" width="14" height="3" rx="1"/><rect x="1" y="7" width="14" height="3" rx="1"/><rect x="1" y="12" width="14" height="3" rx="1"/></svg>
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Screens Container -->
+<div id="screensContainer"></div>
+
+<!-- Flow Graph Link -->
+<a class="flow-link" href="_screenflow-graph.html" target="_blank">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="5" r="3"/><circle cx="5" cy="19" r="3"/><circle cx="19" cy="19" r="3"/><line x1="12" y1="8" x2="5" y2="16"/><line x1="12" y1="8" x2="19" y2="16"/></svg>
+  Screen Flow
+</a>
+
+<!-- Lightbox -->
+<div class="lightbox" id="lightbox">
+  <button class="lightbox__close" id="lightboxClose">&times;</button>
+  <div class="lightbox__frame">
+    <iframe id="lightboxIframe" src="about:blank"></iframe>
+  </div>
+  <div class="lightbox__info">
+    <div class="lightbox__nav">
+      <button id="prevScreen" title="Previous">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="15 18 9 12 15 6"/></svg>
+      </button>
+      <button id="nextScreen" title="Next">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="9 6 15 12 9 18"/></svg>
+      </button>
+    </div>
+    <span class="card__code" id="lightboxCode"></span>
+    <span class="card__name" id="lightboxName" style="max-width:none"></span>
+  </div>
+</div>
+
+<script>
+const SCREENS = [
+  { code: '101', name: 'Splash',               file: '101-splash.html',          group: '1xx' },
+  { code: '110', name: 'ONB1 — Hero Intro',     file: '110-onb1.html',            group: '1xx' },
+  { code: '120', name: 'ONB2 — Sports Clips',   file: '120-onb2.html',            group: '1xx' },
+  { code: '130', name: 'ONB3 — Quality',        file: '130-onb3.html',            group: '1xx' },
+  { code: '140', name: 'ONB4 — Social Proof',   file: '140-onb4.html',            group: '1xx' },
+  { code: '150', name: 'ONB5 — Pricing',        file: '150-onb5.html',            group: '1xx' },
+  { code: '160', name: 'ONB6 — CTA',            file: '160-onb6.html',            group: '1xx' },
+  { code: '201', name: 'Paywall (post-ONB)',     file: '201-paywall.html',         group: '2xx' },
+  { code: '202', name: 'Final Paywall (post-201)',file:'202-final-paywall.html',   group: '2xx' },
+  { code: '205', name: 'Paywall (in-app)',      file: '205-paywall.html',         group: '2xx' },
+  { code: '206', name: 'Final Paywall (in-app)',file: '206-final-paywall.html',   group: '2xx' },
+  { code: '310', name: 'Profile',               file: '310-profile.html',         group: '3xx' },
+  { code: '401', name: 'Home',                  file: '401-home.html',            group: '3xx' },
+  { code: '620', name: 'Explore',               file: '620-explore.html',         group: '6xx' },
+  { code: '621', name: 'Style Edit',            file: '621-style-edit.html',      group: '6xx' },
+  { code: '622', name: 'Prompt Gallery',        file: '622-prompt-gallery.html',  group: '6xx' },
+  { code: '623', name: 'Visual Style',          file: '623-visual-style.html',    group: '6xx' },
+  { code: '624', name: 'Photo Source (Explore)', file:'624-photo-source.html',    group: '6xx' },
+  { code: '630', name: 'Style Preview',         file: '630-style-preview.html',   group: '6xx' },
+  { code: '635', name: 'AI Preview',            file: '635-ai-preview.html',      group: '6xx' },
+  { code: '636', name: 'Create Confirm',        file: '636-create.html',          group: '6xx' },
+  { code: '640', name: 'My Videos',             file: '640-my-videos.html',       group: '6xx' },
+  { code: '650', name: 'Photo Preview',         file: '650-photo-preview.html',   group: '6xx' },
+  { code: '660', name: 'Result Loading',        file: '660-loading.html',         group: '6xx' },
+  { code: '670', name: 'Result',                file: '670-result.html',          group: '6xx' },
+  { code: '671', name: 'Download',              file: '671-download.html',        group: '6xx' },
+];
+
+const GROUPS = {
+  '1xx': { label: '1xx — Onboarding',     color: '#CCFF00' },
+  '2xx': { label: '2xx — Monetization',   color: '#FF6B6B' },
+  '3xx': { label: '3xx — Main',           color: '#00CEC9' },
+  '6xx': { label: '6xx — Explore & Create', color: '#6C5CE7' },
+};
+
+let currentFilter = 'all';
+let currentScale = 45;
+let currentView = 'grid';
+let lightboxIndex = -1;
+
+// ── Render ──
+function render() {
+  const container = document.getElementById('screensContainer');
+  container.innerHTML = '';
+
+  const filtered = currentFilter === 'all'
+    ? SCREENS
+    : SCREENS.filter(s => s.group === currentFilter);
+
+  if (currentView === 'flow') {
+    // Group by group
+    const groups = {};
+    filtered.forEach(s => {
+      if (!groups[s.group]) groups[s.group] = [];
+      groups[s.group].push(s);
+    });
+
+    for (const [gk, items] of Object.entries(groups)) {
+      const g = GROUPS[gk];
+      const section = document.createElement('div');
+      section.className = 'section';
+      section.innerHTML = `
+        <div class="section__header">
+          <div class="section__dot" style="background:${g.color}"></div>
+          <div class="section__title">${g.label}</div>
+          <div class="section__count">${items.length} screen${items.length > 1 ? 's' : ''}</div>
+        </div>
+      `;
+      container.appendChild(section);
+
+      const grid = document.createElement('div');
+      grid.className = 'grid';
+      items.forEach(s => grid.appendChild(createCard(s)));
+      container.appendChild(grid);
+    }
+  } else {
+    const grid = document.createElement('div');
+    grid.className = 'grid';
+    grid.style.padding = '24px 32px 40px';
+    filtered.forEach(s => grid.appendChild(createCard(s)));
+    container.appendChild(grid);
+  }
+}
+
+function createCard(screen) {
+  const scale = currentScale / 100;
+  const w = Math.round(390 * scale);
+  const h = Math.round(844 * scale);
+
+  const card = document.createElement('div');
+  card.className = 'card';
+  card.dataset.code = screen.code;
+  card.innerHTML = `
+    <div class="card__frame" style="width:${w}px;height:${h}px">
+      <iframe
+        src="${screen.file}"
+        width="390"
+        height="844"
+        loading="lazy"
+        style="transform:scale(${scale});transform-origin:top left;width:390px;height:844px"
+      ></iframe>
+    </div>
+    <div class="card__label">
+      <span class="card__code">${screen.code}</span>
+      <span class="card__name">${screen.name}</span>
+    </div>
+  `;
+
+  card.addEventListener('click', () => openLightbox(screen));
+  return card;
+}
+
+// ── Filters ──
+document.querySelectorAll('.filter-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    currentFilter = btn.dataset.filter;
+    render();
+  });
+});
+
+// ── Scale slider ──
+const slider = document.getElementById('scaleSlider');
+const scaleLabel = document.getElementById('scaleValue');
+slider.addEventListener('input', () => {
+  currentScale = parseInt(slider.value);
+  scaleLabel.textContent = currentScale + '%';
+  render();
+});
+
+// ── View toggle ──
+document.querySelectorAll('.view-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.view-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    currentView = btn.dataset.view;
+    render();
+  });
+});
+
+// ── Lightbox ──
+function getVisibleScreens() {
+  return currentFilter === 'all'
+    ? SCREENS
+    : SCREENS.filter(s => s.group === currentFilter);
+}
+
+function openLightbox(screen) {
+  const visible = getVisibleScreens();
+  lightboxIndex = visible.findIndex(s => s.code === screen.code);
+  showLightboxScreen(screen);
+  document.getElementById('lightbox').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function showLightboxScreen(screen) {
+  document.getElementById('lightboxIframe').src = screen.file;
+  document.getElementById('lightboxCode').textContent = screen.code;
+  document.getElementById('lightboxName').textContent = screen.name;
+}
+
+document.getElementById('lightboxClose').addEventListener('click', closeLightbox);
+document.getElementById('lightbox').addEventListener('click', (e) => {
+  if (e.target === e.currentTarget) closeLightbox();
+});
+
+function closeLightbox() {
+  document.getElementById('lightbox').classList.remove('open');
+  document.getElementById('lightboxIframe').src = 'about:blank';
+  document.body.style.overflow = '';
+}
+
+document.getElementById('prevScreen').addEventListener('click', () => {
+  const visible = getVisibleScreens();
+  lightboxIndex = (lightboxIndex - 1 + visible.length) % visible.length;
+  showLightboxScreen(visible[lightboxIndex]);
+});
+
+document.getElementById('nextScreen').addEventListener('click', () => {
+  const visible = getVisibleScreens();
+  lightboxIndex = (lightboxIndex + 1) % visible.length;
+  showLightboxScreen(visible[lightboxIndex]);
+});
+
+document.addEventListener('keydown', (e) => {
+  if (!document.getElementById('lightbox').classList.contains('open')) return;
+  if (e.key === 'Escape') closeLightbox();
+  if (e.key === 'ArrowLeft') document.getElementById('prevScreen').click();
+  if (e.key === 'ArrowRight') document.getElementById('nextScreen').click();
+});
+
+// ── Init ──
+render();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Apero — Design Screens</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: #0a0a0c;
+    color: #fff;
+    font-family: system-ui, -apple-system, sans-serif;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .container {
+    text-align: center;
+    padding: 48px 24px;
+    max-width: 600px;
+  }
+  h1 {
+    font-size: 36px;
+    font-weight: 800;
+    margin-bottom: 8px;
+  }
+  .subtitle {
+    color: #8e8e93;
+    font-size: 16px;
+    margin-bottom: 48px;
+  }
+  .projects {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+  .project-card {
+    display: block;
+    text-decoration: none;
+    background: #1a1a1e;
+    border: 1px solid #2a2a2e;
+    border-radius: 16px;
+    padding: 24px;
+    transition: all .2s;
+    text-align: left;
+  }
+  .project-card:hover {
+    border-color: #FF6B9D;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(255,107,157,0.15);
+  }
+  .project-card h2 {
+    font-size: 20px;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 4px;
+  }
+  .project-card .desc {
+    color: #8e8e93;
+    font-size: 14px;
+    margin-bottom: 12px;
+  }
+  .project-card .meta {
+    display: flex;
+    gap: 12px;
+  }
+  .badge {
+    font-size: 12px;
+    padding: 3px 10px;
+    border-radius: 99px;
+    font-weight: 600;
+  }
+  .badge-pink { background: #FF6B9D22; color: #FF6B9D; }
+  .badge-green { background: #CCFF0022; color: #CCFF00; }
+  .badge-purple { background: #C850C022; color: #C850C0; }
+  .footer {
+    margin-top: 48px;
+    color: #636366;
+    font-size: 13px;
+  }
+</style>
+</head>
+<body>
+<div class="container">
+  <h1>Apero Design</h1>
+  <p class="subtitle">Mobile App Screen Mockups</p>
+
+  <div class="projects">
+    <a class="project-card" href="./glowtrend/_all-screens.html">
+      <h2>IIP068 — Glowtrend</h2>
+      <p class="desc">AI Photo Transformation · Image-to-Image · Trend-driven</p>
+      <div class="meta">
+        <span class="badge badge-pink">20 screens</span>
+        <span class="badge badge-purple">7 flows</span>
+      </div>
+    </a>
+
+    <a class="project-card" href="./trenddy/_all-screens.html">
+      <h2>IIP070 — Trenddy</h2>
+      <p class="desc">AI Video Creator · Trend Templates · Style Transfer</p>
+      <div class="meta">
+        <span class="badge badge-green">26 screens</span>
+        <span class="badge badge-purple">10 flows</span>
+      </div>
+    </a>
+  </div>
+
+  <p class="footer">Built by Apero · Design mockups for review</p>
+</div>
+</body>
+</html>

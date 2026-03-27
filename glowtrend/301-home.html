@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=390, initial-scale=1.0">
+<title>Glowtrend — Home</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  body {
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+    background: #0D0D0F;
+    color: #FFFFFF;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    min-height: 100vh;
+    padding: 20px 0;
+    background-color: #111;
+  }
+  .phone-frame {
+    width: 390px;
+    min-height: 844px;
+    background: #0D0D0F;
+    position: relative;
+    overflow-x: hidden;
+    overflow-y: auto;
+    border-radius: 40px;
+    box-shadow: 0 0 0 3px #2A2A2E, 0 20px 60px rgba(0,0,0,0.6);
+  }
+
+  /* Status Bar */
+  .status-bar {
+    height: 47px;
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    padding: 0 24px 8px;
+    font-size: 14px;
+    font-weight: 600;
+  }
+  .status-bar .time { font-weight: 700; }
+  .status-bar .icons { display: flex; gap: 6px; align-items: center; }
+  .status-bar .icons span { font-size: 12px; }
+
+  /* Header */
+  .header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 8px 20px 12px;
+  }
+  .logo {
+    font-size: 26px;
+    font-weight: 800;
+    background: linear-gradient(135deg, #FF6B9D, #C850C0);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    letter-spacing: -0.5px;
+  }
+  .header-actions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .pro-badge {
+    background: linear-gradient(135deg, #FFD700, #FFAA00);
+    color: #1A1A1E;
+    font-size: 11px;
+    font-weight: 800;
+    padding: 4px 10px;
+    border-radius: 8px;
+    letter-spacing: 0.5px;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .pro-badge:hover {
+    transform: scale(1.05);
+    box-shadow: 0 2px 12px rgba(255, 215, 0, 0.4);
+  }
+  .gear-icon {
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10px;
+    background: #1A1A1E;
+    cursor: pointer;
+    transition: background 0.2s;
+    font-size: 18px;
+  }
+  .gear-icon:hover { background: #242428; }
+
+  /* Category Tabs */
+  .category-tabs {
+    display: flex;
+    gap: 4px;
+    padding: 4px 20px 12px;
+    overflow-x: auto;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+  .category-tabs::-webkit-scrollbar { display: none; }
+  .tab {
+    flex-shrink: 0;
+    padding: 8px 16px;
+    font-size: 14px;
+    font-weight: 500;
+    color: #8E8E93;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: color 0.2s, background 0.2s;
+    position: relative;
+    white-space: nowrap;
+  }
+  .tab:hover { color: #FFFFFF; background: #1A1A1E; }
+  .tab.active {
+    color: #FFFFFF;
+    font-weight: 600;
+  }
+  .tab.active::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 24px;
+    height: 3px;
+    border-radius: 2px;
+    background: linear-gradient(90deg, #FF6B9D, #C850C0);
+  }
+
+  /* Template Grid */
+  .content-area {
+    padding: 0 20px 20px;
+  }
+  .template-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+  .template-card {
+    border-radius: 12px;
+    overflow: hidden;
+    background: #1A1A1E;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .template-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+  }
+  .template-thumb {
+    width: 100%;
+    height: 160px;
+    position: relative;
+  }
+  .template-thumb .overlay-label {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    background: rgba(0,0,0,0.5);
+    backdrop-filter: blur(8px);
+    font-size: 10px;
+    font-weight: 600;
+    padding: 3px 8px;
+    border-radius: 6px;
+    color: #FFD700;
+  }
+  .template-card .label {
+    padding: 10px 12px;
+    font-size: 13px;
+    font-weight: 600;
+    color: #FFFFFF;
+  }
+
+  /* Gradient placeholders */
+  .grad-cyberpunk { background: linear-gradient(135deg, #0ff, #f0f, #ff0); }
+  .grad-anime { background: linear-gradient(135deg, #FF6B9D, #FFB347, #FF6B9D); }
+  .grad-oil { background: linear-gradient(135deg, #2E4057, #8B6914, #D4A937); }
+  .grad-watercolor { background: linear-gradient(135deg, #89CFF0, #A7C7E7, #F0E6FF); }
+  .grad-avatar { background: linear-gradient(135deg, #7B2FBE, #4A90D9, #00D4FF); }
+  .grad-yearbook { background: linear-gradient(135deg, #C850C0, #FF6B9D, #FFAA5C); }
+
+  /* Pack Card */
+  .pack-card {
+    margin-top: 16px;
+    background: #1A1A1E;
+    border-radius: 16px;
+    padding: 16px;
+    border: 1px solid #242428;
+    cursor: pointer;
+    transition: border-color 0.2s, transform 0.2s;
+  }
+  .pack-card:hover {
+    border-color: #C850C0;
+    transform: translateY(-1px);
+  }
+  .pack-thumbs {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 14px;
+  }
+  .pack-thumbs .mini-thumb {
+    flex: 1;
+    height: 72px;
+    border-radius: 10px;
+  }
+  .pack-mini-1 { background: linear-gradient(135deg, #1E3A5F, #4A90D9); }
+  .pack-mini-2 { background: linear-gradient(135deg, #3A1E5F, #9B59B6); }
+  .pack-mini-3 { background: linear-gradient(135deg, #1E5F3A, #2ECC71); }
+  .pack-info {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .pack-title {
+    font-size: 15px;
+    font-weight: 700;
+    color: #FFFFFF;
+  }
+  .pack-subtitle {
+    font-size: 12px;
+    color: #8E8E93;
+    margin-top: 2px;
+  }
+  .pack-btn {
+    background: linear-gradient(135deg, #FF6B9D, #C850C0);
+    color: #FFFFFF;
+    border: none;
+    padding: 10px 18px;
+    border-radius: 12px;
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+    white-space: nowrap;
+  }
+  .pack-btn:hover {
+    transform: scale(1.03);
+    box-shadow: 0 4px 16px rgba(200, 80, 192, 0.4);
+  }
+
+  /* Floating Progress */
+  .floating-progress {
+    position: sticky;
+    bottom: 50px;
+    margin: 20px 20px 0;
+    background: #242428;
+    border-radius: 14px;
+    padding: 14px 18px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    border: 1px solid #333;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+  }
+  .progress-spinner {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    border: 3px solid #333;
+    border-top-color: #C850C0;
+    animation: spin 1s linear infinite;
+  }
+  @keyframes spin {
+    to { transform: rotate(360deg); }
+  }
+  .progress-info { flex: 1; }
+  .progress-label {
+    font-size: 13px;
+    font-weight: 600;
+    color: #FFFFFF;
+    margin-bottom: 6px;
+  }
+  .progress-bar-track {
+    height: 4px;
+    background: #333;
+    border-radius: 2px;
+    overflow: hidden;
+  }
+  .progress-bar-fill {
+    height: 100%;
+    width: 45%;
+    background: linear-gradient(90deg, #FF6B9D, #C850C0);
+    border-radius: 2px;
+    transition: width 0.3s;
+  }
+  .progress-pct {
+    font-size: 14px;
+    font-weight: 700;
+    color: #C850C0;
+  }
+
+  /* Infinite scroll dots */
+  .scroll-indicator {
+    display: flex;
+    justify-content: center;
+    gap: 6px;
+    padding: 20px 0 8px;
+  }
+  .scroll-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #636366;
+    animation: pulse-dot 1.4s ease-in-out infinite;
+  }
+  .scroll-dot:nth-child(2) { animation-delay: 0.2s; }
+  .scroll-dot:nth-child(3) { animation-delay: 0.4s; }
+  @keyframes pulse-dot {
+    0%, 80%, 100% { opacity: 0.3; transform: scale(0.8); }
+    40% { opacity: 1; transform: scale(1.2); }
+  }
+
+  /* Bottom safe area */
+  .bottom-safe { height: 34px; }
+</style>
+</head>
+<body>
+<div class="phone-frame">
+
+  <!-- Status Bar -->
+  <div class="status-bar">
+    <span class="time">9:41</span>
+    <div class="icons">
+      <span>&#9679;&#9679;&#9679;&#9679;&#9675;</span>
+      <span>WiFi</span>
+      <span>&#128267;</span>
+    </div>
+  </div>
+
+  <!-- Header -->
+  <div class="header">
+    <div class="logo">Glowtrend</div>
+    <div class="header-actions">
+      <div class="pro-badge">PRO</div>
+      <div class="gear-icon">&#9881;</div>
+    </div>
+  </div>
+
+  <!-- Category Tabs -->
+  <div class="category-tabs">
+    <div class="tab active">Most Used</div>
+    <div class="tab">Trending</div>
+    <div class="tab">Portrait</div>
+    <div class="tab">Anime</div>
+    <div class="tab">Fantasy</div>
+    <div class="tab">Professional</div>
+  </div>
+
+  <!-- Content -->
+  <div class="content-area">
+
+    <!-- Template Grid -->
+    <div class="template-grid">
+      <div class="template-card">
+        <div class="template-thumb grad-cyberpunk">
+          <span class="overlay-label">HOT</span>
+        </div>
+        <div class="label">Cyberpunk</div>
+      </div>
+      <div class="template-card">
+        <div class="template-thumb grad-anime">
+          <span class="overlay-label">NEW</span>
+        </div>
+        <div class="label">Anime Girl</div>
+      </div>
+      <div class="template-card">
+        <div class="template-thumb grad-oil"></div>
+        <div class="label">Oil Painting</div>
+      </div>
+      <div class="template-card">
+        <div class="template-thumb grad-watercolor"></div>
+        <div class="label">Watercolor</div>
+      </div>
+      <div class="template-card">
+        <div class="template-thumb grad-avatar">
+          <span class="overlay-label">PRO</span>
+        </div>
+        <div class="label">3D Avatar</div>
+      </div>
+      <div class="template-card">
+        <div class="template-thumb grad-yearbook"></div>
+        <div class="label">Yearbook</div>
+      </div>
+    </div>
+
+    <!-- Pack Card -->
+    <div class="pack-card">
+      <div class="pack-thumbs">
+        <div class="mini-thumb pack-mini-1"></div>
+        <div class="mini-thumb pack-mini-2"></div>
+        <div class="mini-thumb pack-mini-3"></div>
+      </div>
+      <div class="pack-info">
+        <div>
+          <div class="pack-title">Professional Headshots Pack</div>
+          <div class="pack-subtitle">12 premium styles included</div>
+        </div>
+        <button class="pack-btn">Get Full Pack</button>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Floating Progress Indicator -->
+  <div class="floating-progress">
+    <div class="progress-spinner"></div>
+    <div class="progress-info">
+      <div class="progress-label">Generating...</div>
+      <div class="progress-bar-track">
+        <div class="progress-bar-fill"></div>
+      </div>
+    </div>
+    <div class="progress-pct">45%</div>
+  </div>
+
+  <!-- Infinite scroll indicator -->
+  <div class="scroll-indicator">
+    <div class="scroll-dot"></div>
+    <div class="scroll-dot"></div>
+    <div class="scroll-dot"></div>
+  </div>
+
+  <!-- Bottom Safe Area -->
+  <div class="bottom-safe"></div>
+
+</div>
+</body>
+</html>

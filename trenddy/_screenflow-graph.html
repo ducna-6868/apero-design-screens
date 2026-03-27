@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Trenddy — Screen Flow</title>
+  <style>
+    /* ── Reset & Base ─────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: #0A0A0F;
+      color: #ffffff;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    /* ── Header ───────────────────────────────────────── */
+    header {
+      width: 100%;
+      max-width: 1400px;
+      padding: 32px 40px 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      flex-wrap: wrap;
+      gap: 24px;
+    }
+
+    .title-block h1 {
+      font-size: 28px;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+      color: #fff;
+    }
+    .title-block h1 span {
+      color: #CCFF00;
+    }
+    .title-block p {
+      margin-top: 4px;
+      font-size: 13px;
+      color: #888;
+    }
+
+    /* ── Legend ────────────────────────────────────────── */
+    .legend {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+      padding: 14px 20px;
+      background: #141420;
+      border: 1px solid #222233;
+      border-radius: 12px;
+      font-size: 12px;
+      line-height: 1;
+    }
+    .legend-section {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .legend-section strong {
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: #666;
+    }
+    .legend-items {
+      display: flex;
+      gap: 14px;
+      flex-wrap: wrap;
+    }
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .legend-swatch {
+      width: 14px;
+      height: 14px;
+      border-radius: 4px;
+      flex-shrink: 0;
+    }
+    .legend-line {
+      width: 24px;
+      height: 3px;
+      border-radius: 2px;
+      flex-shrink: 0;
+    }
+
+    /* ── Diagram Container ────────────────────────────── */
+    .diagram-wrapper {
+      width: 100%;
+      max-width: 1600px;
+      padding: 24px 40px 48px;
+      overflow-x: auto;
+      overflow-y: auto;
+    }
+
+    .mermaid {
+      display: flex;
+      justify-content: center;
+    }
+
+    /* ── Mermaid Overrides ─────────────────────────────── */
+    /* Subgraph labels */
+    .mermaid svg .cluster-label span,
+    .mermaid svg .cluster-label {
+      color: #ccc !important;
+      fill: #ccc !important;
+      font-weight: 600 !important;
+      font-size: 14px !important;
+    }
+
+    /* Subgraph backgrounds */
+    .mermaid svg .cluster rect {
+      rx: 12 !important;
+      ry: 12 !important;
+      fill: #0e0e18 !important;
+      stroke-width: 2px !important;
+    }
+
+    /* Node shapes */
+    .mermaid svg .node rect,
+    .mermaid svg .node .label-container {
+      fill: #141420 !important;
+      stroke: #333355 !important;
+      stroke-width: 1.5px !important;
+      rx: 10 !important;
+      ry: 10 !important;
+    }
+
+    /* Node text */
+    .mermaid svg .node .label {
+      color: #fff !important;
+      fill: #fff !important;
+      font-family: 'Inter', -apple-system, sans-serif !important;
+      font-size: 12px !important;
+    }
+    .mermaid svg .nodeLabel {
+      color: #fff !important;
+    }
+
+    /* Edge labels */
+    .mermaid svg .edgeLabel {
+      background-color: #1a1a2e !important;
+      color: #ccc !important;
+      font-size: 10px !important;
+    }
+    .mermaid svg .edgeLabel rect {
+      fill: #1a1a2e !important;
+      opacity: 1 !important;
+    }
+    .mermaid svg .edgeLabel span {
+      color: #ccc !important;
+    }
+
+    /* Edge lines */
+    .mermaid svg .flowchart-link {
+      stroke: #555577 !important;
+      stroke-width: 1.5px !important;
+    }
+
+    /* Arrowheads */
+    .mermaid svg marker path {
+      fill: #555577 !important;
+      stroke: #555577 !important;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Header & Legend -->
+  <header>
+    <div class="title-block">
+      <h1><span>Trenddy</span> — Screen Flow</h1>
+      <p>26 screens across 4 groups &middot; Interactive Mermaid.js diagram</p>
+    </div>
+
+    <div class="legend">
+      <!-- Groups -->
+      <div class="legend-section">
+        <strong>Groups</strong>
+        <div class="legend-items">
+          <div class="legend-item">
+            <div class="legend-swatch" style="border: 2px solid #CCFF00; background: transparent;"></div>
+            <span>1xx Onboarding</span>
+          </div>
+          <div class="legend-item">
+            <div class="legend-swatch" style="border: 2px solid #FF6B6B; background: transparent;"></div>
+            <span>2xx Monetization</span>
+          </div>
+          <div class="legend-item">
+            <div class="legend-swatch" style="border: 2px solid #00CEC9; background: transparent;"></div>
+            <span>3xx Main</span>
+          </div>
+          <div class="legend-item">
+            <div class="legend-swatch" style="border: 2px solid #6C5CE7; background: transparent;"></div>
+            <span>6xx Explore & Create</span>
+          </div>
+        </div>
+      </div>
+      <!-- Edges -->
+      <div class="legend-section">
+        <strong>Edges</strong>
+        <div class="legend-items">
+          <div class="legend-item">
+            <div class="legend-line" style="background: #888;"></div>
+            <span>Main flow</span>
+          </div>
+          <div class="legend-item">
+            <div class="legend-line" style="background: #CCFF00;"></div>
+            <span>CTA / Subscribe</span>
+          </div>
+          <div class="legend-item">
+            <div class="legend-line" style="background: #FF6B6B;"></div>
+            <span>Paywall trigger</span>
+          </div>
+          <div class="legend-item">
+            <div class="legend-line" style="background: #00CEC9; border-top: 2px dashed #00CEC9; height: 0; width: 24px;"></div>
+            <span>Tab bar</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Mermaid Diagram -->
+  <div class="diagram-wrapper">
+    <pre class="mermaid">
+flowchart TD
+
+  %% ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  %% SUBGRAPH: 1xx Onboarding
+  %% ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  subgraph ONB["1xx — Onboarding"]
+    S101["101 · Splash"]
+    S110["110 · ONB1"]
+    S120["120 · ONB2"]
+    S130["130 · ONB3"]
+    S140["140 · ONB4"]
+    S150["150 · ONB5"]
+    S160["160 · ONB6"]
+  end
+
+  %% ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  %% SUBGRAPH: 2xx Monetization
+  %% ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  subgraph MON["2xx — Monetization"]
+    S201["201 · Paywall post-ONB"]
+    S202["202 · Final Paywall"]
+    S205["205 · Paywall in-app"]
+    S206["206 · Final Paywall in-app"]
+  end
+
+  %% ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  %% SUBGRAPH: 3xx Main
+  %% ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  subgraph MAIN["3xx — Main"]
+    S310["310 · Profile"]
+    S401["401 · Home"]
+  end
+
+  %% ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  %% SUBGRAPH: 6xx Explore & Create
+  %% ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  subgraph EXP["6xx — Explore & Create"]
+    S620["620 · Explore"]
+    S621["621 · Style Edit popup"]
+    S622["622 · Prompt Gallery"]
+    S623["623 · Visual Style"]
+    S630["630 · Style Preview"]
+    S635["635 · AI Preview"]
+    S636["636 · Create Confirm"]
+    S640["640 · My Videos"]
+    S641["641 · Photo Source"]
+    S650["650 · Photo Preview"]
+    S660["660 · Result Loading"]
+    S670["670 · Result"]
+    S671["671 · Download"]
+  end
+
+  %% ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  %% FLOW 1: Onboarding (links 0-7)
+  %% ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  S101 --> S110
+  S110 --> S120
+  S120 --> S130
+  S130 --> S140
+  S140 --> S150
+  S150 --> S160
+  S160 --> S201
+
+  %% FLOW 1 Skips (links 7-8)
+  S130 -. "Skip" .-> S201
+  S150 -. "Free trial" .-> S201
+
+  %% ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  %% FLOW 2: Post-ONB Paywall (links 9-11)
+  %% ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  S201 -- "Subscribe" --> S401
+  S201 -- "Close" --> S202
+  S202 -- "Cancel popup" --> S401
+
+  %% ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  %% FLOW 3: Tab Bar Navigation (links 12-14)
+  %% ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  S401 <-. "Tab" .-> S620
+  S620 <-. "Tab" .-> S640
+  S640 <-. "Tab" .-> S310
+
+  %% ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  %% FLOW 4: Home → Template Creation (links 15-22)
+  %% ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  S401 -- "tap style" --> S630
+  S630 -- "Create" --> S641
+  S641 -- "photo" --> S650
+  S650 -- "Continue" --> S635
+  S635 -- "Generate" --> S636
+  S636 -- "confirmed" --> S660
+  S660 --> S670
+  S636 -- "no sub" --> S201
+
+  %% ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  %% FLOW 5: Explore → Custom Creation (links 23-29)
+  %% ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  S620 -- "Try Now + sub" --> S621
+  S620 -- "no sub" --> S205
+  S621 -- "Prompt Gallery" --> S622
+  S621 -- "Visual Style" --> S623
+  S621 -- "Upload" --> S641
+  S621 -- "Generate + sub" --> S660
+  S621 -- "no sub" --> S205
+
+  %% ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  %% FLOW 6: In-app Paywall (links 30-32)
+  %% ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  S205 -- "Subscribe" --> S621
+  S205 -- "Close" --> S206
+  S206 -- "Close" --> S621
+
+  %% ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  %% FLOW 7: Result (links 33-35)
+  %% ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  S670 -- "Download" --> S671
+  S670 -- "Regenerate" --> S660
+  S670 -- "Regen no token" --> S201
+
+  %% ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  %% STYLES — Subgraph borders
+  %% ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  style ONB fill:#0e0e18,stroke:#CCFF00,stroke-width:2px,color:#CCFF00
+  style MON fill:#0e0e18,stroke:#FF6B6B,stroke-width:2px,color:#FF6B6B
+  style MAIN fill:#0e0e18,stroke:#00CEC9,stroke-width:2px,color:#00CEC9
+  style EXP fill:#0e0e18,stroke:#6C5CE7,stroke-width:2px,color:#6C5CE7
+
+  %% Node styling — Onboarding (1xx lime)
+  style S101 fill:#141420,stroke:#CCFF00,stroke-width:1.5px,color:#fff
+  style S110 fill:#141420,stroke:#CCFF00,stroke-width:1.5px,color:#fff
+  style S120 fill:#141420,stroke:#CCFF00,stroke-width:1.5px,color:#fff
+  style S130 fill:#141420,stroke:#CCFF00,stroke-width:1.5px,color:#fff
+  style S140 fill:#141420,stroke:#CCFF00,stroke-width:1.5px,color:#fff
+  style S150 fill:#141420,stroke:#CCFF00,stroke-width:1.5px,color:#fff
+  style S160 fill:#141420,stroke:#CCFF00,stroke-width:1.5px,color:#fff
+
+  %% Node styling — Monetization (2xx red)
+  style S201 fill:#141420,stroke:#FF6B6B,stroke-width:1.5px,color:#fff
+  style S202 fill:#141420,stroke:#FF6B6B,stroke-width:1.5px,color:#fff
+  style S205 fill:#141420,stroke:#FF6B6B,stroke-width:1.5px,color:#fff
+  style S206 fill:#141420,stroke:#FF6B6B,stroke-width:1.5px,color:#fff
+
+  %% Node styling — Main (3xx teal)
+  style S310 fill:#141420,stroke:#00CEC9,stroke-width:1.5px,color:#fff
+  style S401 fill:#141420,stroke:#00CEC9,stroke-width:1.5px,color:#fff
+
+  %% Node styling — Explore & Create (6xx purple)
+  style S620 fill:#141420,stroke:#6C5CE7,stroke-width:1.5px,color:#fff
+  style S621 fill:#141420,stroke:#6C5CE7,stroke-width:1.5px,color:#fff
+  style S622 fill:#141420,stroke:#6C5CE7,stroke-width:1.5px,color:#fff
+  style S623 fill:#141420,stroke:#6C5CE7,stroke-width:1.5px,color:#fff
+  style S630 fill:#141420,stroke:#6C5CE7,stroke-width:1.5px,color:#fff
+  style S635 fill:#141420,stroke:#6C5CE7,stroke-width:1.5px,color:#fff
+  style S636 fill:#141420,stroke:#6C5CE7,stroke-width:1.5px,color:#fff
+  style S640 fill:#141420,stroke:#6C5CE7,stroke-width:1.5px,color:#fff
+  style S641 fill:#141420,stroke:#6C5CE7,stroke-width:1.5px,color:#fff
+  style S650 fill:#141420,stroke:#6C5CE7,stroke-width:1.5px,color:#fff
+  style S660 fill:#141420,stroke:#6C5CE7,stroke-width:1.5px,color:#fff
+  style S670 fill:#141420,stroke:#6C5CE7,stroke-width:1.5px,color:#fff
+  style S671 fill:#141420,stroke:#6C5CE7,stroke-width:1.5px,color:#fff
+
+  %% ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  %% Edge styling — CTA / Subscribe actions (lime)
+  %% ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  %% link 9:  S201 --Subscribe--> S401
+  linkStyle 9 stroke:#CCFF00,stroke-width:2px
+  %% link 11: S202 --Cancel popup--> S401
+  linkStyle 11 stroke:#CCFF00,stroke-width:2px
+  %% link 23: S620 --Try Now + sub--> S621
+  linkStyle 23 stroke:#CCFF00,stroke-width:2px
+  %% link 28: S621 --Generate + sub--> S660
+  linkStyle 28 stroke:#CCFF00,stroke-width:2px
+  %% link 30: S205 --Subscribe--> S621
+  linkStyle 30 stroke:#CCFF00,stroke-width:2px
+
+  %% ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  %% Edge styling — Paywall triggers (red)
+  %% ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  %% link 22: S636 --no sub--> S201
+  linkStyle 22 stroke:#FF6B6B,stroke-width:2px
+  %% link 24: S620 --no sub--> S205
+  linkStyle 24 stroke:#FF6B6B,stroke-width:2px
+  %% link 29: S621 --no sub--> S205
+  linkStyle 29 stroke:#FF6B6B,stroke-width:2px
+  %% link 35: S670 --Regen no token--> S201
+  linkStyle 35 stroke:#FF6B6B,stroke-width:2px
+
+  %% ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  %% Edge styling — Tab bar (teal)
+  %% ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  linkStyle 12 stroke:#00CEC9,stroke-width:2px
+  linkStyle 13 stroke:#00CEC9,stroke-width:2px
+  linkStyle 14 stroke:#00CEC9,stroke-width:2px
+    </pre>
+  </div>
+
+  <!-- Mermaid.js CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+  <script>
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: 'dark',
+      themeVariables: {
+        darkMode: true,
+        background: '#0A0A0F',
+        mainBkg: '#141420',
+        nodeBorder: '#333355',
+        clusterBkg: '#0e0e18',
+        clusterBorder: '#333355',
+        lineColor: '#555577',
+        textColor: '#ffffff',
+        primaryColor: '#141420',
+        primaryTextColor: '#ffffff',
+        primaryBorderColor: '#333355',
+        secondaryColor: '#1a1a2e',
+        tertiaryColor: '#0e0e18',
+        edgeLabelBackground: '#1a1a2e',
+        fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, Segoe UI, sans-serif',
+        fontSize: '13px'
+      },
+      flowchart: {
+        htmlLabels: true,
+        curve: 'basis',
+        nodeSpacing: 40,
+        rankSpacing: 60,
+        padding: 16,
+        useMaxWidth: false
+      }
+    });
+  </script>
+</body>
+</html>

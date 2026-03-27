@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Glowtrend — All Screens Gallery</title>
+<style>
+  :root {
+    --bg: #0a0a0c;
+    --surface: #141416;
+    --card: #1a1a1e;
+    --border: #2a2a2e;
+    --text: #ffffff;
+    --text2: #8e8e93;
+    --muted: #636366;
+    --pink: #FF6B9D;
+    --purple: #C850C0;
+    --gold: #FFD700;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: system-ui, -apple-system, sans-serif;
+    min-height: 100vh;
+  }
+
+  /* Header */
+  .header {
+    position: sticky; top: 0; z-index: 100;
+    background: rgba(10,10,12,0.92);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--border);
+    padding: 16px 24px;
+  }
+  .header-top {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 12px;
+  }
+  .logo {
+    font-size: 24px; font-weight: 800;
+    background: linear-gradient(135deg, var(--pink), var(--purple));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  }
+  .logo span { -webkit-text-fill-color: #fff; }
+  .screen-count {
+    font-size: 13px; color: var(--text2);
+    background: var(--card); padding: 4px 12px; border-radius: 99px;
+  }
+
+  /* Filter tabs */
+  .filters {
+    display: flex; gap: 8px; overflow-x: auto;
+    scrollbar-width: none; -ms-overflow-style: none;
+  }
+  .filters::-webkit-scrollbar { display: none; }
+  .filter-btn {
+    padding: 6px 16px; border-radius: 99px;
+    border: 1px solid var(--border); background: transparent;
+    color: var(--text2); font-size: 13px; font-weight: 500;
+    cursor: pointer; white-space: nowrap; transition: all .2s;
+  }
+  .filter-btn:hover { border-color: var(--pink); color: var(--pink); }
+  .filter-btn.active {
+    background: linear-gradient(135deg, var(--pink), var(--purple));
+    border-color: transparent; color: #fff;
+  }
+
+  /* Scale controls */
+  .controls {
+    display: flex; align-items: center; gap: 12px;
+    padding: 12px 24px;
+  }
+  .controls label { font-size: 13px; color: var(--text2); }
+  .controls input[type=range] {
+    flex: 1; accent-color: var(--pink);
+  }
+  .controls .scale-val {
+    font-size: 13px; color: var(--pink); font-weight: 600; min-width: 40px;
+  }
+
+  /* Grid */
+  .grid {
+    display: flex; flex-wrap: wrap; gap: 24px;
+    padding: 16px 24px 48px;
+    justify-content: center;
+  }
+  .screen-card {
+    display: flex; flex-direction: column;
+    align-items: center; cursor: pointer;
+    transition: transform .2s;
+  }
+  .screen-card:hover { transform: translateY(-4px); }
+  .iframe-wrap {
+    width: 390px; height: 844px;
+    border-radius: 40px; overflow: hidden;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.6), 0 0 0 2px var(--border);
+    transform-origin: top center;
+    transition: transform .3s;
+  }
+  .iframe-wrap iframe {
+    width: 390px; height: 844px; border: none;
+    pointer-events: none;
+  }
+  .screen-label {
+    margin-top: 12px; text-align: center;
+  }
+  .screen-code {
+    font-size: 11px; font-weight: 600;
+    padding: 2px 8px; border-radius: 99px;
+    display: inline-block; margin-bottom: 4px;
+  }
+  .screen-name {
+    font-size: 14px; font-weight: 500; color: var(--text2);
+  }
+
+  /* Group colors */
+  .g-1xx .screen-code { background: var(--pink); color: #fff; }
+  .g-2xx .screen-code { background: var(--gold); color: #000; }
+  .g-3xx .screen-code { background: #00CEC9; color: #000; }
+  .g-4xx .screen-code { background: var(--purple); color: #fff; }
+
+  /* Lightbox */
+  .lightbox {
+    display: none; position: fixed; inset: 0; z-index: 200;
+    background: rgba(0,0,0,0.9); backdrop-filter: blur(8px);
+    align-items: center; justify-content: center;
+  }
+  .lightbox.open { display: flex; }
+  .lb-content {
+    position: relative;
+    width: 390px; height: 844px;
+    border-radius: 40px; overflow: hidden;
+    box-shadow: 0 0 60px rgba(255,107,157,0.2);
+  }
+  .lb-content iframe {
+    width: 390px; height: 844px; border: none;
+  }
+  .lb-close {
+    position: absolute; top: 20px; right: 20px; z-index: 10;
+    width: 36px; height: 36px; border-radius: 50%;
+    background: rgba(0,0,0,0.6); border: none;
+    color: #fff; font-size: 20px; cursor: pointer;
+  }
+  .lb-nav {
+    position: absolute; top: 50%; transform: translateY(-50%);
+    width: 44px; height: 44px; border-radius: 50%;
+    background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2);
+    color: #fff; font-size: 20px; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .lb-prev { left: -60px; }
+  .lb-next { right: -60px; }
+  .lb-info {
+    position: absolute; bottom: -50px; left: 0; right: 0;
+    text-align: center; color: var(--text2); font-size: 14px;
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-top">
+    <div class="logo">Glow<span>trend</span> — Screens</div>
+    <div class="screen-count" id="countBadge">20 screens</div>
+  </div>
+  <div class="filters" id="filters"></div>
+</div>
+
+<div class="controls">
+  <label>Scale:</label>
+  <input type="range" id="scaleSlider" min="20" max="100" value="40">
+  <span class="scale-val" id="scaleVal">40%</span>
+</div>
+
+<div class="grid" id="grid"></div>
+
+<div class="lightbox" id="lightbox">
+  <div class="lb-content" id="lbContent">
+    <button class="lb-close" onclick="closeLB()">✕</button>
+    <iframe id="lbFrame" src=""></iframe>
+  </div>
+  <button class="lb-nav lb-prev" onclick="navLB(-1)">‹</button>
+  <button class="lb-nav lb-next" onclick="navLB(1)">›</button>
+  <div class="lb-info" id="lbInfo"></div>
+</div>
+
+<script>
+const SCREENS = [
+  { code: '101', name: 'Splash', file: '101-splash.html', group: '1xx' },
+  { code: '102', name: 'Showcase 1', file: '102-showcase1.html', group: '1xx' },
+  { code: '103', name: 'Showcase 2', file: '103-showcase2.html', group: '1xx' },
+  { code: '104', name: 'Showcase 3', file: '104-showcase3.html', group: '1xx' },
+  { code: '105', name: 'Showcase 4', file: '105-showcase4.html', group: '1xx' },
+  { code: '106', name: 'Showcase 5', file: '106-showcase5.html', group: '1xx' },
+  { code: '107', name: 'Showcase 6', file: '107-showcase6.html', group: '1xx' },
+  { code: '201', name: 'ONB Paywall', file: '201-paywall.html', group: '2xx' },
+  { code: '202', name: 'Last Chance', file: '202-last-chance.html', group: '2xx' },
+  { code: '205', name: 'Home Paywall', file: '205-home-paywall.html', group: '2xx' },
+  { code: '206', name: 'Returned Paywall', file: '206-returned-paywall.html', group: '2xx' },
+  { code: '301', name: 'Home', file: '301-home.html', group: '3xx' },
+  { code: '310', name: 'Profile', file: '310-profile.html', group: '3xx' },
+  { code: '420', name: 'Settings', file: '420-settings.html', group: '4xx' },
+  { code: '450', name: 'Select Photo', file: '450-select-photo.html', group: '4xx' },
+  { code: '455', name: 'Analyzing', file: '455-analyzing.html', group: '4xx' },
+  { code: '460', name: 'Loading', file: '460-loading.html', group: '4xx' },
+  { code: '470', name: 'Result', file: '470-result.html', group: '4xx' },
+  { code: '472', name: 'Save Success', file: '472-save-success.html', group: '4xx' },
+  { code: '473', name: 'Share', file: '473-share.html', group: '4xx' },
+];
+
+const GROUPS = {
+  '1xx': { label: '1xx — Onboarding', color: '#FF6B9D' },
+  '2xx': { label: '2xx — Paywall', color: '#FFD700' },
+  '3xx': { label: '3xx — Main', color: '#00CEC9' },
+  '4xx': { label: '4xx — Features', color: '#C850C0' },
+};
+
+let currentFilter = 'all';
+let currentScale = 40;
+let lbIndex = 0;
+let visibleScreens = [...SCREENS];
+
+// Build filter buttons
+function buildFilters() {
+  const f = document.getElementById('filters');
+  let html = '<button class="filter-btn active" data-group="all">All</button>';
+  for (const [key, g] of Object.entries(GROUPS)) {
+    html += `<button class="filter-btn" data-group="${key}">${g.label}</button>`;
+  }
+  f.innerHTML = html;
+  f.querySelectorAll('.filter-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      f.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      currentFilter = btn.dataset.group;
+      renderGrid();
+    });
+  });
+}
+
+function renderGrid() {
+  visibleScreens = currentFilter === 'all'
+    ? [...SCREENS]
+    : SCREENS.filter(s => s.group === currentFilter);
+
+  document.getElementById('countBadge').textContent = `${visibleScreens.length} screens`;
+
+  const scale = currentScale / 100;
+  const w = Math.round(390 * scale);
+  const h = Math.round(844 * scale);
+
+  const grid = document.getElementById('grid');
+  grid.innerHTML = visibleScreens.map((s, i) => `
+    <div class="screen-card g-${s.group}" onclick="openLB(${i})">
+      <div class="iframe-wrap" style="width:${w}px;height:${h}px;border-radius:${Math.round(40*scale)}px">
+        <iframe src="${s.file}" style="transform:scale(${scale});transform-origin:top left;width:390px;height:844px"></iframe>
+      </div>
+      <div class="screen-label">
+        <span class="screen-code">${s.code}</span>
+        <div class="screen-name">${s.name}</div>
+      </div>
+    </div>
+  `).join('');
+}
+
+// Scale slider
+document.getElementById('scaleSlider').addEventListener('input', e => {
+  currentScale = parseInt(e.target.value);
+  document.getElementById('scaleVal').textContent = currentScale + '%';
+  renderGrid();
+});
+
+// Lightbox
+function openLB(idx) {
+  lbIndex = idx;
+  const s = visibleScreens[idx];
+  document.getElementById('lbFrame').src = s.file;
+  document.getElementById('lbInfo').textContent = `${s.code} — ${s.name}`;
+  document.getElementById('lightbox').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeLB() {
+  document.getElementById('lightbox').classList.remove('open');
+  document.getElementById('lbFrame').src = '';
+  document.body.style.overflow = '';
+}
+function navLB(dir) {
+  lbIndex = (lbIndex + dir + visibleScreens.length) % visibleScreens.length;
+  const s = visibleScreens[lbIndex];
+  document.getElementById('lbFrame').src = s.file;
+  document.getElementById('lbInfo').textContent = `${s.code} — ${s.name}`;
+}
+document.addEventListener('keydown', e => {
+  if (!document.getElementById('lightbox').classList.contains('open')) return;
+  if (e.key === 'Escape') closeLB();
+  if (e.key === 'ArrowLeft') navLB(-1);
+  if (e.key === 'ArrowRight') navLB(1);
+});
+document.getElementById('lightbox').addEventListener('click', e => {
+  if (e.target === document.getElementById('lightbox')) closeLB();
+});
+
+buildFilters();
+renderGrid();
+</script>
+</body>
+</html>

@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Trenddy — 140 Onboarding 4 Social Proof</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: #000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    font-family: 'Inter', sans-serif;
+  }
+  .phone {
+    width: 390px;
+    height: 844px;
+    background: #0A0A0F;
+    border-radius: 44px;
+    overflow: hidden;
+    position: relative;
+    box-shadow:
+      0 0 0 1px rgba(255,255,255,0.06),
+      0 24px 80px rgba(0,0,0,0.8),
+      0 8px 32px rgba(0,0,0,0.6),
+      inset 0 1px 0 rgba(255,255,255,0.04);
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* Status bar */
+  .status-bar {
+    height: 47px;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 14px 24px 0;
+    flex-shrink: 0;
+  }
+  .status-bar__time {
+    font-family: 'Inter', sans-serif;
+    font-weight: 600;
+    font-size: 15px;
+    color: #F0EDE8;
+  }
+  .status-bar__icons {
+    display: flex;
+    gap: 5px;
+    align-items: center;
+  }
+  .status-bar__icons svg { width: 16px; height: 16px; color: #F0EDE8; }
+
+  /* Content area */
+  .content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 40px 24px 0;
+    overflow-y: auto;
+  }
+
+  /* App icon */
+  .app-icon {
+    width: 72px;
+    height: 72px;
+    background: #CCFF00;
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 12px;
+    flex-shrink: 0;
+  }
+  .app-icon svg {
+    width: 36px;
+    height: 36px;
+  }
+
+  /* App name */
+  .app-name {
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 600;
+    font-size: 20px;
+    line-height: 28px;
+    color: #F0EDE8;
+    margin-bottom: 4px;
+  }
+
+  /* App tagline */
+  .app-tagline {
+    font-family: 'Inter', sans-serif;
+    font-weight: 400;
+    font-size: 15px;
+    line-height: 22px;
+    color: #8A8A9A;
+    margin-bottom: 32px;
+  }
+
+  /* Title */
+  .title {
+    text-align: center;
+    margin-bottom: 32px;
+  }
+  .title__white {
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 700;
+    font-size: 24px;
+    line-height: 32px;
+    color: #F0EDE8;
+    display: block;
+  }
+  .title__lime {
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 700;
+    font-size: 24px;
+    line-height: 32px;
+    color: #CCFF00;
+    display: block;
+  }
+
+  /* Testimonial card */
+  .testimonial-card {
+    width: 342px;
+    background: #141420;
+    border-radius: 24px;
+    padding: 24px 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-bottom: 24px;
+    flex-shrink: 0;
+  }
+
+  .testimonial-header {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 9999px;
+    background: #1E1E30;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  .avatar__text {
+    font-family: 'Inter', sans-serif;
+    font-weight: 500;
+    font-size: 13px;
+    color: #F0EDE8;
+    text-align: center;
+  }
+
+  .star-rating {
+    display: flex;
+    flex-direction: row;
+    gap: 2px;
+  }
+  .star-rating svg {
+    width: 16px;
+    height: 16px;
+    color: #FFD700;
+  }
+
+  .review-text {
+    font-family: 'Inter', sans-serif;
+    font-weight: 400;
+    font-size: 15px;
+    line-height: 1.5;
+    color: #F0EDE8;
+    font-style: italic;
+  }
+
+  /* Page indicator */
+  .page-indicator {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 24px;
+  }
+  .dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 9999px;
+    background: rgba(255,255,255,0.2);
+  }
+  .dot--active {
+    background: #CCFF00;
+    box-shadow: 0 0 8px rgba(204,255,0,0.4);
+  }
+
+  .spacer { flex: 1; }
+
+  /* Text button */
+  .btn-text {
+    background: none;
+    border: none;
+    font-family: 'Inter', sans-serif;
+    font-weight: 500;
+    font-size: 15px;
+    color: #F0EDE8;
+    cursor: pointer;
+    padding: 12px 0;
+    margin-bottom: 16px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+  }
+  .btn-text:hover { color: #CCFF00; }
+
+  /* Home indicator */
+  .home-indicator {
+    height: 34px;
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    padding-bottom: 8px;
+    flex-shrink: 0;
+  }
+  .home-indicator__pill {
+    width: 134px;
+    height: 5px;
+    border-radius: 9999px;
+    background: rgba(255,255,255,0.3);
+  }
+</style>
+</head>
+<body>
+<div class="phone">
+  <!-- Status Bar -->
+  <div class="status-bar">
+    <div class="status-bar__time">9:41</div>
+    <div class="status-bar__icons">
+      <svg width="16" height="16" viewBox="0 0 18 12" fill="none"><path d="M1 8.5C2.5 5 5.5 2.5 9 2.5s6.5 2.5 8 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><path d="M4 10C5 8 7 6.5 9 6.5s4 1.5 5 3.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><circle cx="9" cy="11" r="1.5" fill="currentColor"/></svg>
+      <svg width="16" height="16" viewBox="0 0 16 12" fill="none"><rect x="0.5" y="1" width="3" height="10" rx="1" fill="currentColor" opacity="0.3"/><rect x="4.5" y="3" width="3" height="8" rx="1" fill="currentColor" opacity="0.5"/><rect x="8.5" y="0.5" width="3" height="11" rx="1" fill="currentColor" opacity="0.7"/><rect x="12.5" y="0" width="3" height="11.5" rx="1" fill="currentColor"/></svg>
+      <svg width="27" height="12" viewBox="0 0 27 12" fill="none"><rect x="0.5" y="0.5" width="22" height="11" rx="2.5" stroke="currentColor" stroke-opacity="0.35"/><rect x="2" y="2" width="18" height="8" rx="1.5" fill="currentColor"/><path d="M25 4.5v3a2 2 0 000-3z" fill="currentColor" opacity="0.4"/></svg>
+    </div>
+  </div>
+
+  <!-- Content -->
+  <div class="content">
+    <!-- App Icon -->
+    <div class="app-icon">
+      <svg viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M8 10L18 6L28 10V20C28 25.5 23.5 30 18 30C12.5 30 8 25.5 8 20V10Z" fill="white" opacity="0.15"/>
+        <path d="M13 16L18 8L23 16H13Z" fill="white"/>
+        <rect x="15" y="16" width="6" height="10" rx="1" fill="white"/>
+      </svg>
+    </div>
+
+    <!-- App Name -->
+    <div class="app-name">Trenddy</div>
+
+    <!-- App Tagline -->
+    <div class="app-tagline">AI Video Generation</div>
+
+    <!-- Title -->
+    <div class="title">
+      <span class="title__white">Trusted by</span>
+      <span class="title__lime">50K+ fans.</span>
+    </div>
+
+    <!-- Testimonial Card -->
+    <div class="testimonial-card">
+      <!-- Header Row -->
+      <div class="testimonial-header">
+        <div class="avatar">
+          <span class="avatar__text">MJ</span>
+        </div>
+        <div class="star-rating">
+          <svg viewBox="0 0 16 16" fill="currentColor"><path d="M8 1.3l2.1 4.2 4.7.7-3.4 3.3.8 4.7L8 11.8l-4.2 2.4.8-4.7L1.2 6.2l4.7-.7L8 1.3z"/></svg>
+          <svg viewBox="0 0 16 16" fill="currentColor"><path d="M8 1.3l2.1 4.2 4.7.7-3.4 3.3.8 4.7L8 11.8l-4.2 2.4.8-4.7L1.2 6.2l4.7-.7L8 1.3z"/></svg>
+          <svg viewBox="0 0 16 16" fill="currentColor"><path d="M8 1.3l2.1 4.2 4.7.7-3.4 3.3.8 4.7L8 11.8l-4.2 2.4.8-4.7L1.2 6.2l4.7-.7L8 1.3z"/></svg>
+          <svg viewBox="0 0 16 16" fill="currentColor"><path d="M8 1.3l2.1 4.2 4.7.7-3.4 3.3.8 4.7L8 11.8l-4.2 2.4.8-4.7L1.2 6.2l4.7-.7L8 1.3z"/></svg>
+          <svg viewBox="0 0 16 16" fill="currentColor"><path d="M8 1.3l2.1 4.2 4.7.7-3.4 3.3.8 4.7L8 11.8l-4.2 2.4.8-4.7L1.2 6.2l4.7-.7L8 1.3z"/></svg>
+        </div>
+      </div>
+
+      <!-- Review Text -->
+      <div class="review-text">"Made 3 NBA clips in 5 min. They all slapped."</div>
+    </div>
+
+    <!-- Page Indicator -->
+    <div class="page-indicator">
+      <div class="dot"></div>
+      <div class="dot"></div>
+      <div class="dot"></div>
+      <div class="dot dot--active"></div>
+      <div class="dot"></div>
+      <div class="dot"></div>
+    </div>
+
+    <div class="spacer"></div>
+
+    <!-- Continue text button -->
+    <button class="btn-text">Continue</button>
+  </div>
+
+  <!-- Home indicator -->
+  <div class="home-indicator">
+    <div class="home-indicator__pill"></div>
+  </div>
+</div>
+</body>
+</html>

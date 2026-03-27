@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GlowTrend — Returned User Paywall</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: #000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+  }
+
+  .device {
+    width: 390px;
+    height: 844px;
+    background: #0D0D0F;
+    position: relative;
+    overflow: hidden;
+    border-radius: 44px;
+    border: 2px solid #2A2A2E;
+  }
+
+  /* Animated gradient background */
+  .gradient-bg {
+    position: absolute;
+    top: -80px;
+    left: -40px;
+    right: -40px;
+    height: 380px;
+    background: radial-gradient(ellipse at 30% 25%, rgba(255,107,157,0.22) 0%, transparent 50%),
+                radial-gradient(ellipse at 70% 20%, rgba(200,80,192,0.2) 0%, transparent 50%);
+    filter: blur(40px);
+    animation: gradientShift 7s ease-in-out infinite alternate;
+    pointer-events: none;
+  }
+  @keyframes gradientShift {
+    0% { transform: translate(0, 0) scale(1); opacity: 0.8; }
+    50% { transform: translate(10px, -8px) scale(1.04); opacity: 1; }
+    100% { transform: translate(-8px, 5px) scale(1); opacity: 0.85; }
+  }
+
+  .screen {
+    position: relative;
+    z-index: 1;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    padding: 60px 24px 34px;
+  }
+
+  /* Close button — top right */
+  .close-btn {
+    position: absolute;
+    top: 60px;
+    right: 20px;
+    width: 32px;
+    height: 32px;
+    background: rgba(255,255,255,0.08);
+    border: none;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 10;
+  }
+  .close-btn svg {
+    width: 14px;
+    height: 14px;
+    stroke: #8E8E93;
+    stroke-width: 2.5;
+    fill: none;
+  }
+
+  /* Title area */
+  .title-area {
+    text-align: center;
+    margin-top: 36px;
+    margin-bottom: 8px;
+  }
+  .wave-emoji {
+    font-size: 48px;
+    display: block;
+    margin-bottom: 14px;
+    animation: wave 2s ease-in-out infinite;
+    transform-origin: 70% 70%;
+  }
+  @keyframes wave {
+    0%, 100% { transform: rotate(0deg); }
+    15% { transform: rotate(14deg); }
+    30% { transform: rotate(-8deg); }
+    40% { transform: rotate(14deg); }
+    50% { transform: rotate(-4deg); }
+    60% { transform: rotate(10deg); }
+    70% { transform: rotate(0deg); }
+  }
+  .welcome-title {
+    font-size: 30px;
+    font-weight: 800;
+    color: #FFFFFF;
+    margin-bottom: 10px;
+    letter-spacing: -0.5px;
+  }
+  .pro-row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 8px;
+  }
+  .brand-name {
+    font-size: 22px;
+    font-weight: 700;
+    color: #FFFFFF;
+  }
+  .pro-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 4px 10px;
+    background: linear-gradient(135deg, #FFD700, #FFAA00);
+    border-radius: 8px;
+    font-size: 12px;
+    font-weight: 800;
+    color: #1A1A1E;
+    letter-spacing: 1px;
+    position: relative;
+    overflow: hidden;
+  }
+  .pro-badge::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 60%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.45), transparent);
+    animation: shimmer 2.5s ease-in-out infinite;
+  }
+  @keyframes shimmer {
+    0% { left: -100%; }
+    100% { left: 200%; }
+  }
+
+  .subtitle {
+    font-size: 15px;
+    color: #8E8E93;
+    margin-top: 6px;
+    margin-bottom: 28px;
+    text-align: center;
+  }
+
+  /* Benefits list */
+  .benefits {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 13px;
+    margin-bottom: 28px;
+    padding: 0 8px;
+  }
+  .benefits li {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    font-size: 15.5px;
+    color: #FFFFFF;
+    font-weight: 500;
+  }
+  .check-icon {
+    width: 26px;
+    height: 26px;
+    min-width: 26px;
+    background: rgba(52,199,89,0.15);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    color: #34C759;
+    font-weight: 700;
+  }
+
+  /* Package options */
+  .packages {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 18px;
+  }
+  .package-card {
+    background: #1A1A1E;
+    border: 2px solid #2A2A2E;
+    border-radius: 16px;
+    padding: 15px 18px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    cursor: pointer;
+    transition: border-color 0.3s, box-shadow 0.3s;
+    position: relative;
+  }
+  .package-card.selected {
+    border-color: transparent;
+    box-shadow: 0 0 0 2px #C850C0, 0 0 20px rgba(200,80,192,0.2);
+  }
+  .radio {
+    width: 22px;
+    height: 22px;
+    min-width: 22px;
+    border-radius: 50%;
+    border: 2px solid #636366;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: border-color 0.3s;
+  }
+  .package-card.selected .radio {
+    border-color: #C850C0;
+  }
+  .radio-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #FF6B9D, #C850C0);
+    transform: scale(0);
+    transition: transform 0.2s;
+  }
+  .package-card.selected .radio-dot {
+    transform: scale(1);
+  }
+  .package-info { flex: 1; }
+  .package-label {
+    font-size: 14px;
+    color: #8E8E93;
+    font-weight: 500;
+    margin-bottom: 2px;
+  }
+  .package-price {
+    font-size: 17px;
+    font-weight: 700;
+    color: #FFFFFF;
+  }
+  .save-badge {
+    display: inline-flex;
+    padding: 4px 10px;
+    background: linear-gradient(135deg, #FF6B9D, #C850C0);
+    border-radius: 8px;
+    font-size: 11px;
+    font-weight: 700;
+    color: #FFFFFF;
+    letter-spacing: 0.5px;
+  }
+
+  .spacer { flex: 1; }
+
+  /* CTA button */
+  .cta-btn {
+    width: 100%;
+    height: 52px;
+    border: none;
+    border-radius: 16px;
+    background: linear-gradient(135deg, #FF6B9D, #C850C0);
+    color: #FFFFFF;
+    font-size: 17px;
+    font-weight: 700;
+    cursor: pointer;
+    letter-spacing: 0.2px;
+    position: relative;
+    overflow: hidden;
+    margin-bottom: 14px;
+  }
+  .cta-btn::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 50%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.15), transparent);
+    animation: ctaShimmer 3s ease-in-out infinite;
+  }
+  @keyframes ctaShimmer {
+    0% { left: -100%; }
+    100% { left: 200%; }
+  }
+
+  /* Footer */
+  .footer-note {
+    text-align: center;
+    font-size: 13px;
+    color: #636366;
+    margin-bottom: 10px;
+  }
+  .footer-links {
+    text-align: center;
+    font-size: 12px;
+    color: #636366;
+    display: flex;
+    justify-content: center;
+    gap: 6px;
+  }
+  .footer-links a {
+    color: #8E8E93;
+    text-decoration: none;
+  }
+  .footer-links span { color: #636366; }
+</style>
+</head>
+<body>
+<div class="device">
+  <div class="gradient-bg"></div>
+  <div class="screen">
+
+    <button class="close-btn">
+      <svg viewBox="0 0 14 14"><line x1="1" y1="1" x2="13" y2="13"/><line x1="13" y1="1" x2="1" y2="13"/></svg>
+    </button>
+
+    <div class="title-area">
+      <span class="wave-emoji">&#128075;</span>
+      <h1 class="welcome-title">Welcome Back!</h1>
+      <div class="pro-row">
+        <span class="brand-name">GlowTrend</span>
+        <span class="pro-badge">PRO</span>
+      </div>
+    </div>
+    <p class="subtitle">Pick up where you left off</p>
+
+    <ul class="benefits">
+      <li><span class="check-icon">&#10003;</span>Unlimited AI generations</li>
+      <li><span class="check-icon">&#10003;</span>Access all premium styles</li>
+      <li><span class="check-icon">&#10003;</span>HD quality exports</li>
+      <li><span class="check-icon">&#10003;</span>No watermarks</li>
+      <li><span class="check-icon">&#10003;</span>Priority processing</li>
+    </ul>
+
+    <div class="spacer"></div>
+
+    <div class="packages">
+      <div class="package-card" onclick="select(this)">
+        <div class="radio"><div class="radio-dot"></div></div>
+        <div class="package-info">
+          <div class="package-label">Weekly</div>
+          <div class="package-price">$4.99/week</div>
+        </div>
+      </div>
+      <div class="package-card selected" onclick="select(this)">
+        <div class="radio"><div class="radio-dot"></div></div>
+        <div class="package-info">
+          <div class="package-label">Yearly</div>
+          <div class="package-price">$29.99/year</div>
+        </div>
+        <span class="save-badge">SAVE 88%</span>
+      </div>
+    </div>
+
+    <button class="cta-btn">Continue</button>
+
+    <p class="footer-note">No commitment, cancel anytime</p>
+    <div class="footer-links">
+      <a href="#">Restore</a><span>|</span>
+      <a href="#">Terms of Service</a><span>|</span>
+      <a href="#">Privacy Policy</a>
+    </div>
+
+  </div>
+</div>
+
+<script>
+function select(card) {
+  document.querySelectorAll('.package-card').forEach(c => c.classList.remove('selected'));
+  card.classList.add('selected');
+}
+</script>
+</body>
+</html>

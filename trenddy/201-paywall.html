@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Trenddy — 201 Paywall (Post-Onboarding)</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: #000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    font-family: 'Inter', sans-serif;
+  }
+  .phone {
+    width: 390px;
+    height: 844px;
+    background: #0A0A0F;
+    border-radius: 44px;
+    overflow: hidden;
+    position: relative;
+    box-shadow:
+      0 0 0 1px rgba(255,255,255,0.06),
+      0 24px 80px rgba(0,0,0,0.8),
+      0 8px 32px rgba(0,0,0,0.6),
+      inset 0 1px 0 rgba(255,255,255,0.04);
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* Status bar */
+  .status-bar {
+    height: 47px;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 14px 24px 0;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 10;
+  }
+  .status-bar__time {
+    font-family: 'Inter', sans-serif;
+    font-weight: 600;
+    font-size: 15px;
+    color: #fff;
+    letter-spacing: 0.2px;
+  }
+
+  /* Close button */
+  .btn-close {
+    position: absolute;
+    top: 55px;
+    right: 16px;
+    z-index: 20;
+    width: 32px;
+    height: 32px;
+    border-radius: 9999px;
+    background: rgba(255,255,255,0.1);
+    backdrop-filter: blur(8px);
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s;
+  }
+  .btn-close:hover { background: rgba(255,255,255,0.18); }
+  .btn-close svg { width: 14px; height: 14px; color: #fff; }
+
+  /* Hero area */
+  .hero {
+    width: 100%;
+    height: 260px;
+    position: relative;
+    overflow: hidden;
+    flex-shrink: 0;
+  }
+  .hero__bg {
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 80% 60% at 30% 40%, rgba(204,255,0,0.25) 0%, transparent 60%),
+      radial-gradient(ellipse 70% 50% at 75% 30%, rgba(108,92,231,0.3) 0%, transparent 55%),
+      radial-gradient(ellipse 60% 70% at 50% 80%, rgba(0,206,201,0.2) 0%, transparent 50%),
+      radial-gradient(ellipse 100% 100% at 50% 50%, rgba(20,20,32,1) 0%, #0A0A0F 100%);
+  }
+  .hero__fade {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 80px;
+    background: linear-gradient(to top, #0A0A0F 0%, transparent 100%);
+  }
+
+  /* Sparkle decorations */
+  .sparkle {
+    position: absolute;
+    border-radius: 1px;
+    background: #fff;
+    opacity: 0;
+    animation: sparkle-pulse 3s ease-in-out infinite;
+  }
+  .sparkle--1 { width: 3px; height: 3px; top: 60px; left: 80px; animation-delay: 0s; }
+  .sparkle--2 { width: 2px; height: 2px; top: 90px; right: 60px; animation-delay: 0.8s; }
+  .sparkle--3 { width: 4px; height: 4px; top: 140px; left: 50%; animation-delay: 1.5s; }
+  .sparkle--4 { width: 2px; height: 2px; top: 110px; left: 160px; animation-delay: 2.2s; }
+  .sparkle--5 { width: 3px; height: 3px; top: 180px; right: 100px; animation-delay: 0.4s; }
+
+  .star {
+    position: absolute;
+    opacity: 0;
+    animation: star-float 4s ease-in-out infinite;
+  }
+  .star--1 { top: 70px; left: 60px; animation-delay: 0.2s; }
+  .star--2 { top: 130px; right: 50px; animation-delay: 1.2s; }
+  .star--3 { top: 100px; left: 50%; transform: translateX(-50%); animation-delay: 2.5s; }
+
+  @keyframes sparkle-pulse {
+    0%, 100% { opacity: 0; transform: scale(0.5); }
+    50% { opacity: 0.9; transform: scale(1); }
+  }
+  @keyframes star-float {
+    0%, 100% { opacity: 0; transform: translateY(4px) scale(0.7); }
+    50% { opacity: 0.7; transform: translateY(-4px) scale(1); }
+  }
+
+  /* Content area */
+  .content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    padding: 0 24px;
+    overflow: hidden;
+  }
+
+  .title {
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 700;
+    font-size: 28px;
+    line-height: 36px;
+    color: #F0EDE8;
+    text-align: center;
+    margin-bottom: 8px;
+  }
+  .subtitle {
+    font-family: 'Inter', sans-serif;
+    font-weight: 400;
+    font-size: 15px;
+    line-height: 22px;
+    color: #8A8A9A;
+    text-align: center;
+    margin-bottom: 20px;
+  }
+
+  /* Benefits list */
+  .benefits {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-bottom: 20px;
+  }
+  .benefit-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .benefit-row__icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    background: rgba(204,255,0,0.08);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  .benefit-row__icon svg { width: 18px; height: 18px; color: #CCFF00; }
+  .benefit-row__text {
+    font-family: 'Inter', sans-serif;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 20px;
+    color: #F0EDE8;
+  }
+
+  /* Plan cards */
+  .plans {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    width: 100%;
+    margin-bottom: 20px;
+  }
+  .plan-card {
+    width: 100%;
+    background: #141420;
+    border: 2px solid #2A2A44;
+    border-radius: 16px;
+    padding: 16px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+    transition: border-color 0.25s, box-shadow 0.25s;
+    position: relative;
+  }
+  .plan-card--selected {
+    border-color: #CCFF00;
+    box-shadow: 0 0 20px rgba(204,255,0,0.08), inset 0 0 0 1px rgba(204,255,0,0.05);
+  }
+  .plan-card__info {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+  .plan-card__name {
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 600;
+    font-size: 16px;
+    line-height: 22px;
+    color: #F0EDE8;
+  }
+  .plan-card__price {
+    font-family: 'Inter', sans-serif;
+    font-weight: 400;
+    font-size: 13px;
+    line-height: 18px;
+    color: #8A8A9A;
+  }
+  .plan-card__radio {
+    width: 22px;
+    height: 22px;
+    border-radius: 9999px;
+    border: 2px solid #2A2A44;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: border-color 0.25s, background 0.25s;
+    flex-shrink: 0;
+  }
+  .plan-card--selected .plan-card__radio {
+    border-color: #CCFF00;
+    background: #CCFF00;
+  }
+  .plan-card__radio-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 9999px;
+    background: #0A0A0F;
+    opacity: 0;
+    transition: opacity 0.25s;
+  }
+  .plan-card--selected .plan-card__radio-dot { opacity: 1; }
+
+  /* Badge */
+  .plan-card__badge {
+    position: absolute;
+    top: -10px;
+    right: 16px;
+    background: #CCFF00;
+    border-radius: 9999px;
+    padding: 3px 10px;
+    font-family: 'Inter', sans-serif;
+    font-weight: 700;
+    font-size: 10px;
+    line-height: 16px;
+    color: #0A0A0F;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+  }
+  .plan-card__badge--outline {
+    background: transparent;
+    border: 1.5px solid #CCFF00;
+    color: #CCFF00;
+  }
+
+  /* Spacer */
+  .spacer { flex: 1; }
+
+  /* CTA */
+  .btn-primary {
+    width: 100%;
+    height: 56px;
+    background: #CCFF00;
+    border: none;
+    border-radius: 9999px;
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 700;
+    font-size: 16px;
+    line-height: 22px;
+    color: #0A0A0F;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    transition: background 0.2s;
+    flex-shrink: 0;
+  }
+  .btn-primary:hover { background: #E0FF4D; }
+
+  .restore-link {
+    font-family: 'Inter', sans-serif;
+    font-weight: 400;
+    font-size: 13px;
+    line-height: 18px;
+    color: #5A5A6A;
+    text-align: center;
+    padding: 14px 0;
+    cursor: pointer;
+    transition: color 0.2s;
+    flex-shrink: 0;
+  }
+  .restore-link:hover { color: #8A8A9A; }
+
+  /* Home indicator */
+  .home-indicator {
+    height: 34px;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    padding-bottom: 8px;
+    flex-shrink: 0;
+  }
+  .home-indicator__pill {
+    width: 134px;
+    height: 5px;
+    border-radius: 9999px;
+    background: rgba(255,255,255,0.3);
+  }
+</style>
+</head>
+<body>
+<div class="phone">
+  <!-- Status Bar -->
+  <div class="status-bar">
+    <span class="status-bar__time">9:41</span>
+  </div>
+
+  <!-- Close -->
+  <button class="btn-close">
+    <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+      <line x1="1" y1="1" x2="13" y2="13"/><line x1="13" y1="1" x2="1" y2="13"/>
+    </svg>
+  </button>
+
+  <!-- Hero -->
+  <div class="hero">
+    <div class="hero__bg"></div>
+    <div class="sparkle sparkle--1"></div>
+    <div class="sparkle sparkle--2"></div>
+    <div class="sparkle sparkle--3"></div>
+    <div class="sparkle sparkle--4"></div>
+    <div class="sparkle sparkle--5"></div>
+    <!-- Stars (4-pointed) -->
+    <svg class="star star--1" width="16" height="16" viewBox="0 0 16 16" fill="none">
+      <path d="M8 0L9.2 6.8L16 8L9.2 9.2L8 16L6.8 9.2L0 8L6.8 6.8Z" fill="rgba(204,255,0,0.6)"/>
+    </svg>
+    <svg class="star star--2" width="12" height="12" viewBox="0 0 16 16" fill="none">
+      <path d="M8 0L9.2 6.8L16 8L9.2 9.2L8 16L6.8 9.2L0 8L6.8 6.8Z" fill="rgba(255,255,255,0.5)"/>
+    </svg>
+    <svg class="star star--3" width="20" height="20" viewBox="0 0 16 16" fill="none">
+      <path d="M8 0L9.2 6.8L16 8L9.2 9.2L8 16L6.8 9.2L0 8L6.8 6.8Z" fill="rgba(0,206,201,0.4)"/>
+    </svg>
+    <div class="hero__fade"></div>
+  </div>
+
+  <!-- Content -->
+  <div class="content">
+    <h1 class="title">Unlock everything</h1>
+    <p class="subtitle">Create unlimited AI videos with one plan.</p>
+
+    <!-- Benefits -->
+    <div class="benefits">
+      <div class="benefit-row">
+        <div class="benefit-row__icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
+          </svg>
+        </div>
+        <span class="benefit-row__text">Unlimited AI video generation</span>
+      </div>
+      <div class="benefit-row">
+        <div class="benefit-row__icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/>
+          </svg>
+        </div>
+        <span class="benefit-row__text">Access all premium styles</span>
+      </div>
+      <div class="benefit-row">
+        <div class="benefit-row__icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+          </svg>
+        </div>
+        <span class="benefit-row__text">No watermarks, HD export</span>
+      </div>
+    </div>
+
+    <!-- Plans -->
+    <div class="plans">
+      <!-- Weekly -->
+      <div class="plan-card" onclick="selectPlan(this)">
+        <div class="plan-card__info">
+          <span class="plan-card__name">Weekly</span>
+          <span class="plan-card__price">$4.99/week</span>
+        </div>
+        <div class="plan-card__radio"><div class="plan-card__radio-dot"></div></div>
+      </div>
+
+      <!-- Monthly (pre-selected) -->
+      <div class="plan-card plan-card--selected" onclick="selectPlan(this)">
+        <span class="plan-card__badge">Most popular</span>
+        <div class="plan-card__info">
+          <span class="plan-card__name">Monthly</span>
+          <span class="plan-card__price">$12.99/month</span>
+        </div>
+        <div class="plan-card__radio"><div class="plan-card__radio-dot"></div></div>
+      </div>
+
+      <!-- Yearly -->
+      <div class="plan-card" onclick="selectPlan(this)">
+        <span class="plan-card__badge plan-card__badge--outline">Best value</span>
+        <div class="plan-card__info">
+          <span class="plan-card__name">Yearly</span>
+          <span class="plan-card__price">$49.99/year</span>
+        </div>
+        <div class="plan-card__radio"><div class="plan-card__radio-dot"></div></div>
+      </div>
+    </div>
+
+    <div class="spacer"></div>
+
+    <button class="btn-primary">Start free trial</button>
+    <div class="restore-link">Restore purchase</div>
+  </div>
+
+  <!-- Home Indicator -->
+  <div class="home-indicator">
+    <div class="home-indicator__pill"></div>
+  </div>
+</div>
+
+<script>
+function selectPlan(card) {
+  document.querySelectorAll('.plan-card').forEach(c => c.classList.remove('plan-card--selected'));
+  card.classList.add('plan-card--selected');
+}
+</script>
+</body>
+</html>

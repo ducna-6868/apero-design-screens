@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Trenddy — 206 Final Paywall</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: #000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    font-family: 'Inter', sans-serif;
+  }
+  .phone {
+    width: 390px;
+    height: 844px;
+    background: #0A0A0F;
+    border-radius: 44px;
+    overflow: hidden;
+    position: relative;
+    box-shadow:
+      0 0 0 1px rgba(255,255,255,0.06),
+      0 24px 80px rgba(0,0,0,0.8),
+      0 8px 32px rgba(0,0,0,0.6),
+      inset 0 1px 0 rgba(255,255,255,0.04);
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* Status bar */
+  .status-bar {
+    height: 47px;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 14px 24px 0;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 10;
+  }
+  .status-bar__time {
+    font-family: 'Inter', sans-serif;
+    font-weight: 600;
+    font-size: 15px;
+    color: #fff;
+  }
+
+  /* Close */
+  .btn-close {
+    position: absolute;
+    top: 55px;
+    right: 16px;
+    z-index: 20;
+    width: 32px;
+    height: 32px;
+    border-radius: 9999px;
+    background: rgba(255,255,255,0.1);
+    backdrop-filter: blur(8px);
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s;
+  }
+  .btn-close:hover { background: rgba(255,255,255,0.18); }
+  .btn-close svg { width: 14px; height: 14px; color: #fff; }
+
+  /* Hero with pulsing lime glow orb */
+  .hero {
+    width: 100%;
+    height: 340px;
+    position: relative;
+    overflow: hidden;
+    flex-shrink: 0;
+  }
+  .hero__bg {
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 70% 50% at 50% 50%, rgba(30,30,48,0.8) 0%, transparent 70%),
+      linear-gradient(180deg, #141420 0%, #0A0A0F 100%);
+  }
+  .hero__fade {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 120px;
+    background: linear-gradient(to top, #0A0A0F 0%, transparent 100%);
+    z-index: 3;
+  }
+
+  /* Pulsing lime orb */
+  .orb {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 160px;
+    height: 160px;
+    border-radius: 9999px;
+    background: radial-gradient(circle, rgba(204,255,0,0.2) 0%, rgba(204,255,0,0.05) 40%, transparent 70%);
+    animation: orb-pulse 2.5s ease-in-out infinite;
+    z-index: 1;
+  }
+  .orb-inner {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 80px;
+    height: 80px;
+    border-radius: 9999px;
+    background: radial-gradient(circle, rgba(204,255,0,0.35) 0%, rgba(204,255,0,0.08) 50%, transparent 70%);
+    animation: orb-pulse 2.5s ease-in-out infinite 0.3s;
+    z-index: 2;
+  }
+  .orb-core {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 28px;
+    height: 28px;
+    border-radius: 9999px;
+    background: radial-gradient(circle, rgba(204,255,0,0.6) 0%, rgba(204,255,0,0.15) 60%, transparent 100%);
+    box-shadow: 0 0 40px rgba(204,255,0,0.25), 0 0 80px rgba(204,255,0,0.08);
+    animation: orb-pulse 2.5s ease-in-out infinite 0.6s;
+    z-index: 3;
+  }
+
+  @keyframes orb-pulse {
+    0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.7; }
+    50% { transform: translate(-50%, -50%) scale(1.15); opacity: 1; }
+  }
+
+  /* Radiating rings */
+  .ring {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    border-radius: 9999px;
+    border: 1px solid rgba(204,255,0,0.06);
+    animation: ring-expand 4s ease-out infinite;
+    z-index: 1;
+  }
+  .ring--1 { width: 120px; height: 120px; animation-delay: 0s; }
+  .ring--2 { width: 120px; height: 120px; animation-delay: 1.3s; }
+  .ring--3 { width: 120px; height: 120px; animation-delay: 2.6s; }
+
+  @keyframes ring-expand {
+    0% { transform: translate(-50%, -50%) scale(1); opacity: 0.4; border-color: rgba(204,255,0,0.1); }
+    100% { transform: translate(-50%, -50%) scale(3); opacity: 0; border-color: rgba(204,255,0,0); }
+  }
+
+  /* Ambient sparkles */
+  .dot {
+    position: absolute;
+    border-radius: 9999px;
+    background: rgba(204,255,0,0.5);
+    opacity: 0;
+    animation: dot-blink 3s ease-in-out infinite;
+  }
+  .dot--1 { width: 3px; height: 3px; top: 80px; left: 60px; animation-delay: 0.5s; }
+  .dot--2 { width: 2px; height: 2px; top: 130px; right: 55px; animation-delay: 1.8s; }
+  .dot--3 { width: 4px; height: 4px; top: 200px; left: 90px; animation-delay: 0s; }
+  .dot--4 { width: 2px; height: 2px; top: 100px; left: 260px; animation-delay: 2.5s; }
+  .dot--5 { width: 3px; height: 3px; top: 240px; right: 80px; animation-delay: 1s; }
+  .dot--6 { width: 2px; height: 2px; top: 160px; left: 40px; animation-delay: 3s; background: rgba(108,92,231,0.4); }
+
+  @keyframes dot-blink {
+    0%, 100% { opacity: 0; }
+    50% { opacity: 0.8; }
+  }
+
+  /* Content */
+  .content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 0 24px;
+    overflow: hidden;
+  }
+
+  .title {
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 700;
+    font-size: 36px;
+    line-height: 44px;
+    color: #F0EDE8;
+    text-align: center;
+    margin-bottom: 8px;
+    letter-spacing: -0.5px;
+  }
+  .subtitle {
+    font-family: 'Inter', sans-serif;
+    font-weight: 400;
+    font-size: 15px;
+    line-height: 22px;
+    color: #8A8A9A;
+    text-align: center;
+    max-width: 280px;
+    margin-bottom: 32px;
+  }
+
+  /* Price display */
+  .price-block {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 40px;
+  }
+  .price-old {
+    font-family: 'Inter', sans-serif;
+    font-weight: 400;
+    font-size: 18px;
+    line-height: 24px;
+    color: #5A5A6A;
+    text-decoration: line-through;
+  }
+  .price-row {
+    display: flex;
+    align-items: baseline;
+    gap: 4px;
+  }
+  .price-new {
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 700;
+    font-size: 48px;
+    line-height: 56px;
+    color: #CCFF00;
+    letter-spacing: -1px;
+  }
+  .price-period {
+    font-family: 'Inter', sans-serif;
+    font-weight: 400;
+    font-size: 17px;
+    line-height: 24px;
+    color: #F0EDE8;
+  }
+
+  .spacer { flex: 1; }
+
+  /* CTA */
+  .btn-primary {
+    width: 100%;
+    height: 56px;
+    background: #CCFF00;
+    border: none;
+    border-radius: 9999px;
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 700;
+    font-size: 16px;
+    color: #0A0A0F;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s;
+    flex-shrink: 0;
+    position: relative;
+    overflow: hidden;
+  }
+  .btn-primary:hover { background: #E0FF4D; }
+
+  /* Shimmer effect on CTA */
+  .btn-primary::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 60%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+    animation: shimmer 3s ease-in-out infinite;
+  }
+  @keyframes shimmer {
+    0% { left: -100%; }
+    50%, 100% { left: 150%; }
+  }
+
+  .no-thanks {
+    font-family: 'Inter', sans-serif;
+    font-weight: 400;
+    font-size: 13px;
+    line-height: 18px;
+    color: #3A3A4A;
+    text-align: center;
+    padding: 14px 0 4px;
+    cursor: pointer;
+    transition: color 0.2s;
+    flex-shrink: 0;
+  }
+  .no-thanks:hover { color: #5A5A6A; }
+
+  /* Home indicator */
+  .home-indicator {
+    height: 34px;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    padding-bottom: 8px;
+    flex-shrink: 0;
+  }
+  .home-indicator__pill {
+    width: 134px;
+    height: 5px;
+    border-radius: 9999px;
+    background: rgba(255,255,255,0.3);
+  }
+</style>
+</head>
+<body>
+<div class="phone">
+  <!-- Status Bar -->
+  <div class="status-bar">
+    <span class="status-bar__time">9:41</span>
+  </div>
+
+  <!-- Close -->
+  <button class="btn-close">
+    <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+      <line x1="1" y1="1" x2="13" y2="13"/><line x1="13" y1="1" x2="1" y2="13"/>
+    </svg>
+  </button>
+
+  <!-- Hero -->
+  <div class="hero">
+    <div class="hero__bg"></div>
+    <div class="ring ring--1"></div>
+    <div class="ring ring--2"></div>
+    <div class="ring ring--3"></div>
+    <div class="orb"></div>
+    <div class="orb-inner"></div>
+    <div class="orb-core"></div>
+    <div class="dot dot--1"></div>
+    <div class="dot dot--2"></div>
+    <div class="dot dot--3"></div>
+    <div class="dot dot--4"></div>
+    <div class="dot dot--5"></div>
+    <div class="dot dot--6"></div>
+    <div class="hero__fade"></div>
+  </div>
+
+  <!-- Content -->
+  <div class="content">
+    <h1 class="title">Last chance!</h1>
+    <p class="subtitle">Special offer just for you — 50% off.</p>
+
+    <!-- Price -->
+    <div class="price-block">
+      <span class="price-old">$4.99</span>
+      <div class="price-row">
+        <span class="price-new">$2.49</span>
+        <span class="price-period">/week</span>
+      </div>
+    </div>
+
+    <div class="spacer"></div>
+
+    <!-- CTA -->
+    <button class="btn-primary">Try now</button>
+    <div class="no-thanks">No thanks</div>
+  </div>
+
+  <!-- Home Indicator -->
+  <div class="home-indicator">
+    <div class="home-indicator__pill"></div>
+  </div>
+</div>
+</body>
+</html>
