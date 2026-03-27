@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BeautyLens — Screen Flow</title>
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+body {
+  background: #0f0f1a;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  color: #eee;
+  overflow: auto;
+}
+#header {
+  position: sticky; top: 0; z-index: 100;
+  background: #0f0f1a; border-bottom: 1px solid #2a2a3a;
+  padding: 10px 20px;
+  display: flex; align-items: center; gap: 12px;
+}
+#header h1 { font-size: 16px; font-weight: 700; }
+#header span { font-size: 12px; color: #9a8e94; }
+#graph-container {
+  width: 100%; min-height: calc(100vh - 50px);
+  display: flex; justify-content: center;
+  padding: 20px;
+}
+#graph-container svg { max-width: 100%; height: auto; }
+.node rect, .node polygon { rx: 10; ry: 10; }
+.edgeLabel { font-size: 11px !important; }
+</style>
+</head>
+<body>
+<div id="header">
+  <h1>BeautyLens — Screen Flow Graph</h1>
+  <span>IIP071 | i2i (x=2) | 40 screens | 6 paywalls</span>
+</div>
+<div id="graph-container">
+  <pre class="mermaid">
+graph TD
+  %% ===== STYLES =====
+  classDef screen fill:#1e1e3a,stroke:#8B5CF6,stroke-width:2px,color:#e0dcf0,font-size:13px
+  classDef paywall fill:#3a2200,stroke:#F59E0B,stroke-width:2px,color:#fcd34d,font-size:13px
+  classDef success fill:#0d2e1f,stroke:#10B981,stroke-width:2px,color:#6ee7b7,font-size:13px
+  classDef utility fill:#0d1e2e,stroke:#06B6D4,stroke-width:2px,color:#67e8f9,font-size:13px
+  classDef error fill:#2e0d0d,stroke:#EF4444,stroke-width:2px,color:#fca5a5,font-size:13px
+
+  %% ===== SPLASH =====
+  101["101 Splash"]:::screen
+  101 -->|"first launch"| 110
+  101 -->|"returning valid sub"| 301
+  101 -->|"returning invalid sub"| 204
+
+  %% ===== ONBOARDING (1xx) =====
+  110["110 ONB 1 - Before/After Hero"]:::screen
+  120["120 ONB 2 - Makeup Looks"]:::screen
+  130["130 ONB 3 - Facial Features"]:::screen
+  140["140 ONB 4 - Trending"]:::screen
+  150["150 ONB 5 - Social Sharing"]:::screen
+  160["160 ONB 6 - Final CTA"]:::screen
+  110 -->|"next"| 120
+  120 -->|"next"| 130
+  130 -->|"next"| 140
+  140 -->|"next"| 150
+  150 -->|"next"| 160
+
+  %% ===== SHARED PAYWALLS (20x) =====
+  201["201 Onboarding PW - Weekly $6.99"]:::paywall
+  202["202 Last Chance PW - Annual $49.99"]:::paywall
+  203["203 Home PW - Go Pro"]:::paywall
+  204["204 Return PW - Resubscribe"]:::paywall
+
+  160 -->|"CTA"| 201
+  201 -->|"subscribe"| 291
+  201 -->|"dismiss"| 202
+  202 -->|"subscribe"| 291
+  202 -->|"dismiss"| 301
+  204 -->|"subscribe"| 291
+  204 -->|"dismiss"| 301
+
+  %% ===== UTILITY (29x) =====
+  291["291 Purchase Success"]:::success
+  292["292 Restore Purchase"]:::utility
+  291 -->|"continue"| 301
+
+  %% ===== HOME & ENTRY (3xx) =====
+  301["301 Home - Template Feed"]:::screen
+  311["311 Settings"]:::screen
+  301 -->|"settings"| 311
+  311 -.->|"back"| 301
+  301 -.->|"Go Pro"| 203
+  203 -->|"subscribe"| 291
+  203 -.->|"dismiss"| 301
+  311 -->|"restore"| 292
+
+  %% ===== UPLOAD FLOW (530-537) =====
+  301 -->|"tap template / Create"| 530
+  530["530 Upload Photo"]:::screen
+  531["531 Permission Photos"]:::screen
+  532["532 Permission Camera"]:::screen
+  535["535 Camera"]:::screen
+  536["536 Photo Preview"]:::screen
+  537["537 No Face Detected"]:::error
+
+  530 -.->|"first time"| 531
+  531 -.->|"granted"| 530
+  530 -.->|"camera"| 532
+  532 -.->|"granted"| 535
+  535 -->|"capture"| 536
+  530 -->|"select photo"| 536
+  536 -->|"face OK"| 550
+  536 -->|"no face"| 537
+  537 -.->|"retry"| 530
+
+  %% ===== PREVIEW (550) =====
+  550["550 Analyze / Preview"]:::screen
+
+  %% ===== MAKEUP LOOKS (540) =====
+  540["540 Makeup Looks - Templates"]:::screen
+  550 -->|"Looks tab"| 540
+
+  %% ===== FACIAL FEATURES (541-545) =====
+  541["541 Hair"]:::screen
+  542["542 Eyebrows"]:::screen
+  543["543 Eyes"]:::screen
+  544["544 Nose"]:::screen
+  545["545 Lips"]:::screen
+  550 -->|"Features tab"| 541
+  541 -.->|"switch"| 542
+  542 -.->|"switch"| 543
+  543 -.->|"switch"| 544
+  544 -.->|"switch"| 545
+
+  %% ===== PER-FEATURE PAYWALLS (22x) =====
+  222["222 Generate PW - Weekly $6.99"]:::paywall
+  223["223 During Generate PW - Unlock Now"]:::paywall
+
+  540 -->|"sub: generate"| 560
+  540 -.->|"non-sub"| 222
+  541 -->|"sub: generate"| 561
+  541 -.->|"non-sub"| 222
+  542 -.->|"non-sub"| 222
+  543 -.->|"non-sub"| 222
+  544 -.->|"non-sub"| 222
+  545 -.->|"non-sub"| 222
+
+  222 -->|"subscribe"| 291B["291 Purchase OK"]:::success
+  291B --> 560
+  222 -->|"dismiss"| 562
+
+  %% ===== LOADING (560-565) =====
+  560["560 Loading - Makeup"]:::screen
+  561["561 Loading - Facial"]:::screen
+  562["562 Fake Loading"]:::screen
+  564["564 Fail - Makeup"]:::error
+  565["565 Fail - Facial"]:::error
+
+  560 -->|"success"| 570
+  560 -->|"fail"| 564
+  561 -->|"success"| 570
+  561 -->|"fail"| 565
+  564 -.->|"retry"| 560
+  565 -.->|"retry"| 561
+  564 -.->|"give up"| 301
+  565 -.->|"give up"| 301
+
+  562 -->|"complete"| 223
+  223 -->|"subscribe"| 291C["291 Purchase OK"]:::success
+  291C --> 301
+  223 -->|"dismiss"| 301
+
+  %% ===== RESULT (570-574) =====
+  570["570 Result - Dual Mode"]:::screen
+  571["571 Exit Popup"]:::screen
+  572["572 Save Success"]:::success
+  573["573 Share Sheet"]:::screen
+  574["574 Share Success"]:::success
+
+  570 -->|"save"| 572
+  570 -->|"share"| 573
+  573 -->|"shared"| 574
+  570 -.->|"try another look"| 540
+  570 -.->|"switch to features"| 541
+  570 -->|"exit"| 571
+  571 -->|"save and exit"| 572
+  571 -->|"discard"| 301
+  572 -.->|"done"| 301
+  </pre>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
+<script>
+  mermaid.initialize({
+    startOnLoad: true,
+    theme: 'dark',
+    themeVariables: {
+      darkMode: true,
+      background: '#0f0f1a',
+      primaryColor: '#1e1e3a',
+      primaryTextColor: '#e0dcf0',
+      primaryBorderColor: '#8B5CF6',
+      lineColor: '#A78BFA',
+      secondaryColor: '#332200',
+      tertiaryColor: '#0d2e1f',
+      fontSize: '14px',
+      fontFamily: '-apple-system, sans-serif',
+      edgeLabelBackground: '#1a1a2e',
+    },
+    flowchart: {
+      htmlLabels: true,
+      curve: 'basis',
+      rankSpacing: 60,
+      nodeSpacing: 40,
+      padding: 15,
+      useMaxWidth: false,
+    },
+  });
+</script>
+</body>
+</html>
