@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>573 — Share Sheet</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: #000; display: flex; justify-content: center; align-items: center; min-height: 100vh; font-family: 'Inter', sans-serif; }
+  .phone-frame { width: 390px; height: 844px; border-radius: 44px; background: #1A1118; position: relative; overflow: hidden; }
+
+  /* Status Bar */
+  .status-bar { height: 47px; display: flex; align-items: center; justify-content: space-between; padding: 14px 24px 0; }
+  .status-time { font-family: 'DM Sans', sans-serif; font-weight: 700; font-size: 15px; color: #F5EDE8; }
+  .status-icons { display: flex; gap: 6px; align-items: center; }
+  .status-icons svg { width: 18px; height: 18px; }
+
+  /* Overlay Backdrop */
+  .overlay-backdrop { position: absolute; inset: 0; background: rgba(10, 5, 8, 0.75); z-index: 20; border-radius: 44px; }
+
+  /* Bottom Sheet */
+  .bottom-sheet { position: absolute; bottom: 0; left: 0; right: 0; background: #231920; border-radius: 24px 24px 0 0; z-index: 30; padding: 0 24px 34px; }
+
+  /* Handle */
+  .sheet-handle { width: 36px; height: 5px; background: #40343A; border-radius: 100px; margin: 12px auto 0; }
+
+  /* Headline */
+  .sheet-headline { font-family: 'DM Sans', sans-serif; font-weight: 700; font-size: 20px; color: #F5EDE8; text-align: center; margin-top: 20px; }
+
+  /* Platform Row */
+  .platform-row { display: flex; justify-content: center; gap: 24px; margin-top: 24px; }
+  .platform-item { display: flex; flex-direction: column; align-items: center; gap: 8px; }
+  .platform-circle { width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; }
+  .platform-circle.instagram { background: linear-gradient(135deg, #E1306C, #F77737); }
+  .platform-circle.tiktok { background: #000; }
+  .platform-circle.imessage { background: #34C759; }
+  .platform-circle svg { width: 28px; height: 28px; }
+  .platform-label { font-family: 'Inter', sans-serif; font-weight: 500; font-size: 11px; color: #9A8E94; }
+
+  /* Toggle Row */
+  .toggle-row { display: flex; align-items: center; justify-content: space-between; margin-top: 28px; padding: 0 4px; }
+  .toggle-label { font-family: 'Inter', sans-serif; font-weight: 500; font-size: 15px; color: #F5EDE8; }
+  .toggle-switch { width: 40px; height: 24px; background: #D4A574; border-radius: 12px; position: relative; cursor: pointer; }
+  .toggle-knob { width: 20px; height: 20px; background: #FFFFFF; border-radius: 50%; position: absolute; top: 2px; right: 2px; transition: all 0.2s; }
+
+  /* Secondary Button */
+  .btn-secondary { width: 100%; height: 48px; border-radius: 9999px; background: transparent; border: 1.5px solid #D4A574; font-family: 'DM Sans', sans-serif; font-weight: 600; font-size: 15px; color: #D4A574; cursor: pointer; margin-top: 20px; }
+
+  /* Home Indicator */
+  .home-indicator { position: absolute; bottom: 8px; left: 50%; transform: translateX(-50%); width: 134px; height: 5px; background: #F5EDE8; border-radius: 100px; z-index: 35; }
+</style>
+</head>
+<body>
+<div class="phone-frame">
+
+  <!-- Status Bar -->
+  <div class="status-bar">
+    <span class="status-time">9:41</span>
+    <div class="status-icons">
+      <svg viewBox="0 0 18 18" fill="none"><rect x="1" y="3" width="3" height="12" rx="1" fill="#F5EDE8"/><rect x="5.5" y="5" width="3" height="10" rx="1" fill="#F5EDE8"/><rect x="10" y="7" width="3" height="8" rx="1" fill="#F5EDE8"/><rect x="14.5" y="9" width="3" height="6" rx="1" fill="#F5EDE8"/></svg>
+      <svg viewBox="0 0 18 18" fill="none"><path d="M9 3C5.5 3 2.5 5 1 8c1.5 3 4.5 5 8 5s6.5-2 8-5c-1.5-3-4.5-5-8-5z" stroke="#F5EDE8" stroke-width="1.5" fill="none"/><circle cx="9" cy="8" r="2.5" fill="#F5EDE8"/></svg>
+      <svg viewBox="0 0 18 18" fill="none"><rect x="1" y="4" width="14" height="10" rx="2" stroke="#F5EDE8" stroke-width="1.5"/><rect x="16" y="7" width="2" height="4" rx="0.5" fill="#F5EDE8"/><rect x="2.5" y="5.5" width="8" height="7" rx="1" fill="#F5EDE8"/></svg>
+    </div>
+  </div>
+
+  <!-- Overlay Backdrop -->
+  <div class="overlay-backdrop"></div>
+
+  <!-- Bottom Sheet -->
+  <div class="bottom-sheet">
+    <div class="sheet-handle"></div>
+    <div class="sheet-headline">Share Your Look</div>
+
+    <!-- Platform Icons -->
+    <div class="platform-row">
+      <!-- Instagram -->
+      <div class="platform-item">
+        <div class="platform-circle instagram">
+          <svg viewBox="0 0 28 28" fill="none">
+            <rect x="4" y="4" width="20" height="20" rx="6" stroke="#FFFFFF" stroke-width="2"/>
+            <circle cx="14" cy="14" r="5" stroke="#FFFFFF" stroke-width="2"/>
+            <circle cx="20.5" cy="7.5" r="1.5" fill="#FFFFFF"/>
+          </svg>
+        </div>
+        <span class="platform-label">Instagram</span>
+      </div>
+      <!-- TikTok -->
+      <div class="platform-item">
+        <div class="platform-circle tiktok">
+          <svg viewBox="0 0 28 28" fill="none">
+            <path d="M18.5 5C18.5 5 18.5 8.5 22 9.5V13C22 13 19.5 13 18.5 11.5V19C18.5 22.5 15.5 25 12 24C8.5 23 7 19.5 8.5 16.5C10 13.5 13.5 13 15 14V17.5C15 17.5 13 16.5 12 17.5C11 18.5 11.5 20.5 13 21C14.5 21.5 16 20.5 16 19V5H18.5Z" fill="#FFFFFF"/>
+          </svg>
+        </div>
+        <span class="platform-label">TikTok</span>
+      </div>
+      <!-- iMessage -->
+      <div class="platform-item">
+        <div class="platform-circle imessage">
+          <svg viewBox="0 0 28 28" fill="none">
+            <path d="M14 5C8.5 5 4 8.5 4 13C4 15.5 5.5 17.5 7.5 19L6.5 23L10.5 20.5C11.5 21 12.7 21 14 21C19.5 21 24 17.5 24 13C24 8.5 19.5 5 14 5Z" fill="#FFFFFF"/>
+          </svg>
+        </div>
+        <span class="platform-label">iMessage</span>
+      </div>
+    </div>
+
+    <!-- Toggle Row -->
+    <div class="toggle-row">
+      <span class="toggle-label">Include watermark</span>
+      <div class="toggle-switch">
+        <div class="toggle-knob"></div>
+      </div>
+    </div>
+
+    <!-- More Options Button -->
+    <button class="btn-secondary">More Options</button>
+  </div>
+
+  <!-- Home Indicator -->
+  <div class="home-indicator"></div>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>530 — Upload Photo</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: #000; display: flex; justify-content: center; align-items: center; min-height: 100vh; font-family: 'Inter', sans-serif; }
+  .phone-frame { width: 390px; height: 844px; border-radius: 44px; background: #1A1118; position: relative; overflow: hidden; }
+
+  /* Status Bar */
+  .status-bar { height: 47px; display: flex; align-items: center; justify-content: space-between; padding: 14px 24px 0; }
+  .status-time { font-family: 'DM Sans', sans-serif; font-weight: 700; font-size: 15px; color: #F5EDE8; }
+  .status-icons { display: flex; gap: 6px; align-items: center; }
+  .status-icons svg { width: 18px; height: 18px; }
+
+  /* Nav Bar */
+  .nav-bar { height: 44px; display: flex; align-items: center; justify-content: space-between; padding: 0 20px; position: relative; }
+  .nav-back { width: 20px; height: 20px; cursor: pointer; }
+  .nav-title { position: absolute; left: 50%; transform: translateX(-50%); font-family: 'DM Sans', sans-serif; font-weight: 700; font-size: 17px; color: #F5EDE8; white-space: nowrap; }
+  .nav-right { width: 24px; height: 24px; cursor: pointer; }
+
+  /* Gallery Grid */
+  .gallery-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; padding: 0; margin-top: 8px; overflow-y: auto; height: calc(844px - 47px - 44px - 8px - 34px); }
+  .gallery-item { aspect-ratio: 1; position: relative; }
+  .gallery-item:nth-child(1) { background: linear-gradient(135deg, #352A30, #2A1F26); }
+  .gallery-item:nth-child(2) { background: linear-gradient(180deg, #2A1F26, #40343A); }
+  .gallery-item:nth-child(3) { background: linear-gradient(45deg, #40343A, #352A30); }
+  .gallery-item:nth-child(4) { background: linear-gradient(225deg, #352A30, #2A1F26); }
+  .gallery-item:nth-child(5) { background: linear-gradient(160deg, #2A1F26, #352A30); }
+  .gallery-item:nth-child(6) { background: linear-gradient(90deg, #352A30, #40343A); }
+  .gallery-item:nth-child(7) { background: linear-gradient(200deg, #40343A, #2A1F26); }
+  .gallery-item:nth-child(8) { background: linear-gradient(135deg, #2A1F26, #40343A); }
+  .gallery-item:nth-child(9) { background: linear-gradient(315deg, #352A30, #2A1F26); }
+  .gallery-item:nth-child(10) { background: linear-gradient(270deg, #2A1F26, #352A30); }
+  .gallery-item:nth-child(11) { background: linear-gradient(45deg, #352A30, #2A1F26); }
+  .gallery-item:nth-child(12) { background: linear-gradient(180deg, #40343A, #352A30); }
+
+  /* Home Indicator */
+  .home-indicator { position: absolute; bottom: 8px; left: 50%; transform: translateX(-50%); width: 134px; height: 5px; background: #F5EDE8; border-radius: 100px; }
+</style>
+</head>
+<body>
+<div class="phone-frame">
+
+  <!-- Status Bar -->
+  <div class="status-bar">
+    <span class="status-time">9:41</span>
+    <div class="status-icons">
+      <svg viewBox="0 0 18 18" fill="none"><rect x="1" y="3" width="3" height="12" rx="1" fill="#F5EDE8"/><rect x="5.5" y="5" width="3" height="10" rx="1" fill="#F5EDE8"/><rect x="10" y="7" width="3" height="8" rx="1" fill="#F5EDE8"/><rect x="14.5" y="9" width="3" height="6" rx="1" fill="#F5EDE8"/></svg>
+      <svg viewBox="0 0 18 18" fill="none"><path d="M9 3C5.5 3 2.5 5 1 8c1.5 3 4.5 5 8 5s6.5-2 8-5c-1.5-3-4.5-5-8-5z" stroke="#F5EDE8" stroke-width="1.5" fill="none"/><circle cx="9" cy="8" r="2.5" fill="#F5EDE8"/></svg>
+      <svg viewBox="0 0 18 18" fill="none"><rect x="1" y="4" width="14" height="10" rx="2" stroke="#F5EDE8" stroke-width="1.5"/><rect x="16" y="7" width="2" height="4" rx="0.5" fill="#F5EDE8"/><rect x="2.5" y="5.5" width="8" height="7" rx="1" fill="#F5EDE8"/></svg>
+    </div>
+  </div>
+
+  <!-- Nav Bar -->
+  <div class="nav-bar">
+    <svg class="nav-back" viewBox="0 0 20 20" fill="none">
+      <path d="M12.5 15L7.5 10L12.5 5" stroke="#D4A574" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+    <span class="nav-title">Upload Photo</span>
+    <svg class="nav-right" viewBox="0 0 24 24" fill="none">
+      <rect x="2" y="4" width="20" height="16" rx="3" stroke="#D4A574" stroke-width="2"/>
+      <circle cx="12" cy="12" r="4" stroke="#D4A574" stroke-width="2"/>
+      <circle cx="17.5" cy="7.5" r="1.5" fill="#D4A574"/>
+    </svg>
+  </div>
+
+  <!-- Gallery Grid -->
+  <div class="gallery-grid">
+    <div class="gallery-item"></div>
+    <div class="gallery-item"></div>
+    <div class="gallery-item"></div>
+    <div class="gallery-item"></div>
+    <div class="gallery-item"></div>
+    <div class="gallery-item"></div>
+    <div class="gallery-item"></div>
+    <div class="gallery-item"></div>
+    <div class="gallery-item"></div>
+    <div class="gallery-item"></div>
+    <div class="gallery-item"></div>
+    <div class="gallery-item"></div>
+  </div>
+
+  <!-- Home Indicator -->
+  <div class="home-indicator"></div>
+
+</div>
+</body>
+</html>

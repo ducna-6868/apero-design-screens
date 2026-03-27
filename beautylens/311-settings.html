@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=390, initial-scale=1.0">
+<title>BeautyLens — 311 Settings</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; -webkit-font-smoothing: antialiased; }
+  body { background: #000; display: flex; justify-content: center; align-items: center; min-height: 100vh; font-family: 'Inter', sans-serif; }
+
+  .phone-frame {
+    width: 390px; height: 844px; border-radius: 44px; overflow: hidden;
+    background: #1A1118; position: relative; display: flex; flex-direction: column;
+  }
+
+  /* ── Status Bar ── */
+  .status-bar {
+    height: 47px; width: 100%; padding: 14px 24px 0; display: flex;
+    justify-content: space-between; align-items: center; flex-shrink: 0;
+  }
+  .status-bar .time { font-family: 'DM Sans', sans-serif; font-weight: 700; font-size: 15px; color: #F5EDE8; }
+  .status-bar .icons { display: flex; gap: 6px; align-items: center; }
+  .status-bar .icons svg { width: 16px; height: 16px; fill: #F5EDE8; }
+
+  /* ── Nav Bar ── */
+  .nav-bar {
+    height: 48px; display: flex; align-items: center; padding: 0 20px;
+    position: relative; flex-shrink: 0;
+  }
+  .nav-bar .back-btn {
+    position: absolute; left: 20px; width: 20px; height: 20px; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .nav-bar .title {
+    flex: 1; text-align: center; font-family: 'DM Sans', sans-serif;
+    font-weight: 700; font-size: 17px; color: #F5EDE8;
+  }
+
+  /* ── Scrollable Content ── */
+  .content {
+    flex: 1; overflow-y: auto; padding: 8px 20px 40px;
+    -webkit-overflow-scrolling: touch;
+  }
+  .content::-webkit-scrollbar { display: none; }
+
+  /* ── Section ── */
+  .section { margin-bottom: 24px; }
+  .section-label {
+    font-family: 'DM Sans', sans-serif; font-weight: 600; font-size: 13px;
+    color: #9A8E94; text-transform: uppercase; letter-spacing: 1px;
+    margin-bottom: 8px; padding-left: 4px;
+  }
+
+  /* ── Card ── */
+  .card {
+    background: #2A1F26; border-radius: 12px; overflow: hidden;
+  }
+
+  /* ── Row ── */
+  .row {
+    height: 48px; display: flex; align-items: center; justify-content: space-between;
+    padding: 0 16px; cursor: pointer;
+  }
+  .row-label {
+    font-family: 'Inter', sans-serif; font-weight: 500; font-size: 15px; color: #F5EDE8;
+  }
+  .row-right {
+    display: flex; align-items: center; gap: 8px;
+  }
+  .row-value {
+    font-family: 'Inter', sans-serif; font-weight: 400; font-size: 15px; color: #9A8E94;
+  }
+  .row-value.active-status {
+    color: #6BCB77;
+  }
+  .chevron {
+    width: 16px; height: 16px; flex-shrink: 0;
+  }
+
+  /* ── Separator ── */
+  .separator {
+    height: 0.5px; background: rgba(255,255,255,0.06); margin: 0 16px;
+  }
+
+  /* ── About / Version ── */
+  .about-center {
+    text-align: center; padding: 16px 0 0;
+  }
+  .about-center .version {
+    font-family: 'Inter', sans-serif; font-weight: 400; font-size: 13px; color: #6A5E64;
+  }
+
+  /* ── Home Indicator ── */
+  .home-indicator {
+    position: absolute; bottom: 8px; left: 50%; transform: translateX(-50%);
+    width: 134px; height: 5px; border-radius: 3px; background: #F5EDE8; opacity: 0.3;
+  }
+</style>
+</head>
+<body>
+<div class="phone-frame">
+
+  <!-- Status Bar -->
+  <div class="status-bar">
+    <span class="time">9:41</span>
+    <div class="icons">
+      <svg viewBox="0 0 17 12"><path d="M1 4.5C3.3 1.8 6.5 0 10 0s6.7 1.8 9 4.5M4 7.5c1.5-1.7 3.6-2.8 6-2.8s4.5 1.1 6 2.8M7.5 10.5c1-1 2.3-1.5 3.5-1.5s2.5.5 3.5 1.5" fill="none" stroke="#F5EDE8" stroke-width="1.2"/></svg>
+      <svg viewBox="0 0 16 12"><rect x="0" y="1" width="3" height="11" rx="0.5" fill="#F5EDE8" opacity="0.4"/><rect x="4.5" y="4" width="3" height="8" rx="0.5" fill="#F5EDE8" opacity="0.6"/><rect x="9" y="2" width="3" height="10" rx="0.5" fill="#F5EDE8" opacity="0.8"/><rect x="13" y="0" width="3" height="12" rx="0.5" fill="#F5EDE8"/></svg>
+      <svg viewBox="0 0 25 12"><rect x="0" y="1" width="21" height="10" rx="2" stroke="#F5EDE8" stroke-width="1" fill="none"/><rect x="22" y="4" width="2" height="4" rx="0.5" fill="#F5EDE8" opacity="0.5"/><rect x="1.5" y="2.5" width="16" height="7" rx="1" fill="#F5EDE8"/></svg>
+    </div>
+  </div>
+
+  <!-- Nav Bar -->
+  <div class="nav-bar">
+    <div class="back-btn">
+      <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="#D4A574" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M12.5 15L7.5 10L12.5 5"/>
+      </svg>
+    </div>
+    <div class="title">Settings</div>
+  </div>
+
+  <!-- Scrollable Content -->
+  <div class="content">
+
+    <!-- Section 1: Subscription -->
+    <div class="section">
+      <div class="section-label">Subscription</div>
+      <div class="card">
+        <div class="row">
+          <span class="row-label">Plan</span>
+          <div class="row-right">
+            <span class="row-value">Weekly $6.99</span>
+            <svg class="chevron" viewBox="0 0 16 16" fill="none" stroke="#6A5E64" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 4l4 4-4 4"/></svg>
+          </div>
+        </div>
+        <div class="separator"></div>
+        <div class="row">
+          <span class="row-label">Status</span>
+          <div class="row-right">
+            <span class="row-value active-status">Active</span>
+          </div>
+        </div>
+        <div class="separator"></div>
+        <div class="row">
+          <span class="row-label">Manage Subscription</span>
+          <div class="row-right">
+            <svg class="chevron" viewBox="0 0 16 16" fill="none" stroke="#6A5E64" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 4l4 4-4 4"/></svg>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Section 2: General -->
+    <div class="section">
+      <div class="section-label">General</div>
+      <div class="card">
+        <div class="row">
+          <span class="row-label">Language</span>
+          <div class="row-right">
+            <span class="row-value">English</span>
+            <svg class="chevron" viewBox="0 0 16 16" fill="none" stroke="#6A5E64" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 4l4 4-4 4"/></svg>
+          </div>
+        </div>
+        <div class="separator"></div>
+        <div class="row">
+          <span class="row-label">Restore Purchase</span>
+          <div class="row-right">
+            <svg class="chevron" viewBox="0 0 16 16" fill="none" stroke="#6A5E64" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 4l4 4-4 4"/></svg>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Section 3: Legal -->
+    <div class="section">
+      <div class="section-label">Legal</div>
+      <div class="card">
+        <div class="row">
+          <span class="row-label">Terms of Service</span>
+          <div class="row-right">
+            <svg class="chevron" viewBox="0 0 16 16" fill="none" stroke="#6A5E64" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 4l4 4-4 4"/></svg>
+          </div>
+        </div>
+        <div class="separator"></div>
+        <div class="row">
+          <span class="row-label">Privacy Policy</span>
+          <div class="row-right">
+            <svg class="chevron" viewBox="0 0 16 16" fill="none" stroke="#6A5E64" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 4l4 4-4 4"/></svg>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Section 4: About -->
+    <div class="section">
+      <div class="about-center">
+        <span class="version">Version 1.0.0</span>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Home Indicator -->
+  <div class="home-indicator"></div>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>532 — Camera Permission</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: #000; display: flex; justify-content: center; align-items: center; min-height: 100vh; font-family: 'Inter', sans-serif; }
+  .phone-frame { width: 390px; height: 844px; border-radius: 44px; background: #1A1118; position: relative; overflow: hidden; }
+
+  .status-bar { height: 47px; display: flex; align-items: center; justify-content: space-between; padding: 14px 24px 0; }
+  .status-time { font-family: 'DM Sans', sans-serif; font-weight: 700; font-size: 15px; color: #F5EDE8; }
+  .status-icons { display: flex; gap: 6px; align-items: center; }
+  .status-icons svg { width: 18px; height: 18px; }
+
+  .overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(10, 5, 8, 0.75); z-index: 10; display: flex; align-items: center; justify-content: center; }
+
+  .dialog { background: #231920; border-radius: 24px; padding: 32px 24px 24px; width: 320px; display: flex; flex-direction: column; align-items: center; text-align: center; }
+  .dialog-icon { width: 48px; height: 48px; margin-bottom: 20px; }
+  .dialog-headline { font-family: 'DM Sans', sans-serif; font-weight: 700; font-size: 20px; color: #F5EDE8; margin-bottom: 12px; }
+  .dialog-body { font-family: 'Inter', sans-serif; font-weight: 400; font-size: 15px; color: #9A8E94; line-height: 1.5; margin-bottom: 28px; max-width: 260px; }
+  .btn-primary { height: 52px; width: 100%; border-radius: 9999px; background: linear-gradient(135deg, #D4A574 0%, #C9828E 100%); color: #1A1118; font-family: 'DM Sans', sans-serif; font-weight: 700; font-size: 16px; border: none; cursor: pointer; box-shadow: 0 4px 24px rgba(212, 165, 116, 0.2); margin-bottom: 12px; }
+  .btn-ghost { height: 52px; width: 100%; border-radius: 9999px; background: transparent; color: #9A8E94; font-family: 'DM Sans', sans-serif; font-weight: 700; font-size: 16px; border: none; cursor: pointer; }
+
+  .home-indicator { position: absolute; bottom: 8px; left: 50%; transform: translateX(-50%); width: 134px; height: 5px; background: #F5EDE8; border-radius: 100px; z-index: 1; }
+</style>
+</head>
+<body>
+<div class="phone-frame">
+
+  <!-- Status Bar -->
+  <div class="status-bar">
+    <span class="status-time">9:41</span>
+    <div class="status-icons">
+      <svg viewBox="0 0 18 18" fill="none"><rect x="1" y="3" width="3" height="12" rx="1" fill="#F5EDE8"/><rect x="5.5" y="5" width="3" height="10" rx="1" fill="#F5EDE8"/><rect x="10" y="7" width="3" height="8" rx="1" fill="#F5EDE8"/><rect x="14.5" y="9" width="3" height="6" rx="1" fill="#F5EDE8"/></svg>
+      <svg viewBox="0 0 18 18" fill="none"><path d="M9 3C5.5 3 2.5 5 1 8c1.5 3 4.5 5 8 5s6.5-2 8-5c-1.5-3-4.5-5-8-5z" stroke="#F5EDE8" stroke-width="1.5" fill="none"/><circle cx="9" cy="8" r="2.5" fill="#F5EDE8"/></svg>
+      <svg viewBox="0 0 18 18" fill="none"><rect x="1" y="4" width="14" height="10" rx="2" stroke="#F5EDE8" stroke-width="1.5"/><rect x="16" y="7" width="2" height="4" rx="0.5" fill="#F5EDE8"/><rect x="2.5" y="5.5" width="8" height="7" rx="1" fill="#F5EDE8"/></svg>
+    </div>
+  </div>
+
+  <!-- Overlay + Dialog -->
+  <div class="overlay">
+    <div class="dialog">
+      <!-- Camera Icon -->
+      <svg class="dialog-icon" viewBox="0 0 48 48" fill="none">
+        <rect x="4" y="12" width="40" height="28" rx="6" stroke="#D4A574" stroke-width="3"/>
+        <path d="M16 12l2-5h12l2 5" stroke="#D4A574" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+        <circle cx="24" cy="26" r="8" stroke="#D4A574" stroke-width="3"/>
+        <circle cx="24" cy="26" r="3" fill="#D4A574"/>
+      </svg>
+      <div class="dialog-headline">Allow Camera Access</div>
+      <div class="dialog-body">BeautyLens needs camera access so you can take a selfie.</div>
+      <button class="btn-primary">Allow</button>
+      <button class="btn-ghost">Don't Allow</button>
+    </div>
+  </div>
+
+  <!-- Home Indicator -->
+  <div class="home-indicator"></div>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>550 — Analyze / Preview</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: #000; display: flex; justify-content: center; align-items: center; min-height: 100vh; font-family: 'Inter', sans-serif; }
+  .phone-frame { width: 390px; height: 844px; border-radius: 44px; background: #1A1118; position: relative; overflow: hidden; display: flex; flex-direction: column; }
+
+  .status-bar { height: 47px; display: flex; align-items: center; justify-content: space-between; padding: 14px 24px 0; flex-shrink: 0; }
+  .status-time { font-family: 'DM Sans', sans-serif; font-weight: 700; font-size: 15px; color: #F5EDE8; }
+  .status-icons { display: flex; gap: 6px; align-items: center; }
+  .status-icons svg { width: 18px; height: 18px; }
+
+  .nav-bar { height: 44px; display: flex; align-items: center; justify-content: space-between; padding: 0 20px; position: relative; flex-shrink: 0; }
+  .nav-back { width: 20px; height: 20px; cursor: pointer; }
+  .nav-title { position: absolute; left: 50%; transform: translateX(-50%); font-family: 'DM Sans', sans-serif; font-weight: 700; font-size: 17px; color: #F5EDE8; white-space: nowrap; }
+  .nav-right { width: 24px; height: 24px; cursor: pointer; }
+
+  .content { flex: 1; display: flex; flex-direction: column; align-items: center; padding: 16px 20px 0; }
+
+  /* Photo with face bounding box */
+  .photo-container { width: 350px; height: 400px; border-radius: 16px; background: linear-gradient(160deg, #2A1F26 0%, #352A30 50%, #2A1F26 100%); position: relative; margin-bottom: 24px; flex-shrink: 0; }
+  .face-box { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -55%); width: 140px; height: 180px; border: 2px dashed #D4A574; border-radius: 8px; }
+
+  /* Segmented Control — neutral state */
+  .segmented { display: flex; width: 350px; background: #2A1F26; border-radius: 9999px; padding: 4px; margin-bottom: 20px; flex-shrink: 0; }
+  .seg-tab { flex: 1; height: 36px; border-radius: 9999px; display: flex; align-items: center; justify-content: center; font-size: 15px; cursor: pointer; border: none; background: transparent; color: #9A8E94; font-family: 'Inter', sans-serif; font-weight: 400; }
+
+  /* Instruction */
+  .instruction { font-family: 'Inter', sans-serif; font-weight: 400; font-size: 15px; color: #9A8E94; text-align: center; line-height: 1.5; max-width: 300px; }
+
+  .home-indicator { position: absolute; bottom: 8px; left: 50%; transform: translateX(-50%); width: 134px; height: 5px; background: #F5EDE8; border-radius: 100px; }
+</style>
+</head>
+<body>
+<div class="phone-frame">
+
+  <!-- Status Bar -->
+  <div class="status-bar">
+    <span class="status-time">9:41</span>
+    <div class="status-icons">
+      <svg viewBox="0 0 18 18" fill="none"><rect x="1" y="3" width="3" height="12" rx="1" fill="#F5EDE8"/><rect x="5.5" y="5" width="3" height="10" rx="1" fill="#F5EDE8"/><rect x="10" y="7" width="3" height="8" rx="1" fill="#F5EDE8"/><rect x="14.5" y="9" width="3" height="6" rx="1" fill="#F5EDE8"/></svg>
+      <svg viewBox="0 0 18 18" fill="none"><path d="M9 3C5.5 3 2.5 5 1 8c1.5 3 4.5 5 8 5s6.5-2 8-5c-1.5-3-4.5-5-8-5z" stroke="#F5EDE8" stroke-width="1.5" fill="none"/><circle cx="9" cy="8" r="2.5" fill="#F5EDE8"/></svg>
+      <svg viewBox="0 0 18 18" fill="none"><rect x="1" y="4" width="14" height="10" rx="2" stroke="#F5EDE8" stroke-width="1.5"/><rect x="16" y="7" width="2" height="4" rx="0.5" fill="#F5EDE8"/><rect x="2.5" y="5.5" width="8" height="7" rx="1" fill="#F5EDE8"/></svg>
+    </div>
+  </div>
+
+  <!-- Nav Bar -->
+  <div class="nav-bar">
+    <svg class="nav-back" viewBox="0 0 20 20" fill="none">
+      <path d="M12.5 15L7.5 10L12.5 5" stroke="#D4A574" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+    <span class="nav-title">Preview</span>
+    <!-- Redo / Refresh Icon -->
+    <svg class="nav-right" viewBox="0 0 24 24" fill="none">
+      <path d="M21 3v6h-6" stroke="#D4A574" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M21 9A9 9 0 1 0 18.36 18.36" stroke="#D4A574" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+  </div>
+
+  <!-- Content -->
+  <div class="content">
+    <!-- Photo with face bounding box -->
+    <div class="photo-container">
+      <div class="face-box"></div>
+    </div>
+
+    <!-- Segmented Control — neutral state -->
+    <div class="segmented">
+      <div class="seg-tab">Looks</div>
+      <div class="seg-tab">Features</div>
+    </div>
+
+    <!-- Instruction -->
+    <div class="instruction">Choose Looks for full makeup or Features for individual edits</div>
+  </div>
+
+  <!-- Home Indicator -->
+  <div class="home-indicator"></div>
+
+</div>
+</body>
+</html>

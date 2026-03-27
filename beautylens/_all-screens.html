@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IIP071 BeautyLens — All Screens</title>
+<style>
+  :root {
+    --bg: #1A1118;
+    --surface: #2A1F26;
+    --surface2: #352A30;
+    --primary: #D4A574;
+    --accent: #C9828E;
+    --accent2: #B8A0D2;
+    --text: #F5EDE8;
+    --text2: #9A8E94;
+    --text3: #6A5E64;
+    --border: #3D3038;
+    --error: #FF7B7B;
+    --success: #6BCB77;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', -apple-system, sans-serif;
+    min-height: 100vh;
+  }
+  @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap');
+
+  /* Header */
+  .header {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: rgba(26, 17, 24, 0.92);
+    backdrop-filter: blur(20px) saturate(1.4);
+    -webkit-backdrop-filter: blur(20px) saturate(1.4);
+    border-bottom: 0.5px solid var(--border);
+    padding: 16px 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .header-left { display: flex; align-items: center; gap: 12px; }
+  .header-logo {
+    width: 36px; height: 36px;
+    border-radius: 10px;
+    background: linear-gradient(135deg, var(--primary), var(--accent));
+    display: flex; align-items: center; justify-content: center;
+  }
+  .header-logo svg { width: 18px; height: 18px; fill: #1A1118; }
+  .header h1 { font-size: 18px; font-weight: 700; color: var(--text); }
+  .header .meta { font-size: 12px; color: var(--text2); font-family: 'Inter', sans-serif; }
+  .header-right { display: flex; gap: 8px; }
+  .flow-link {
+    padding: 6px 14px;
+    border-radius: 9999px;
+    background: rgba(212, 165, 116, 0.12);
+    border: 1px solid rgba(212, 165, 116, 0.25);
+    color: var(--primary);
+    font-size: 12px;
+    font-weight: 600;
+    text-decoration: none;
+    font-family: 'Inter', sans-serif;
+  }
+  .flow-link:hover { background: rgba(212, 165, 116, 0.2); }
+
+  /* Groups */
+  .group-nav {
+    display: flex;
+    gap: 8px;
+    padding: 16px 24px;
+    overflow-x: auto;
+    border-bottom: 0.5px solid var(--border);
+    background: var(--bg);
+    position: sticky;
+    top: 57px;
+    z-index: 90;
+  }
+  .group-btn {
+    padding: 6px 16px;
+    border-radius: 9999px;
+    border: 1px solid var(--border);
+    background: transparent;
+    color: var(--text2);
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    white-space: nowrap;
+    font-family: 'Inter', sans-serif;
+    transition: all 0.2s;
+  }
+  .group-btn:hover { border-color: var(--primary); color: var(--primary); }
+  .group-btn.active { background: rgba(212,165,116,0.15); border-color: var(--primary); color: var(--primary); }
+
+  /* Grid */
+  .gallery {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 20px;
+    padding: 24px;
+  }
+  .screen-card {
+    text-decoration: none;
+    display: flex;
+    flex-direction: column;
+    border-radius: 16px;
+    overflow: hidden;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    transition: all 0.2s;
+  }
+  .screen-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 32px rgba(212, 165, 116, 0.12);
+    border-color: var(--primary);
+  }
+  .screen-card iframe {
+    width: 390px;
+    height: 844px;
+    border: none;
+    transform-origin: top left;
+    transform: scale(0.51);
+    pointer-events: none;
+  }
+  .iframe-wrap {
+    width: 100%;
+    height: 0;
+    padding-bottom: 216%;
+    position: relative;
+    overflow: hidden;
+    background: var(--bg);
+  }
+  .iframe-wrap iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+  }
+  .screen-label {
+    padding: 10px 12px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .screen-code {
+    font-family: 'Inter', sans-serif;
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--primary);
+    padding: 2px 8px;
+    background: rgba(212, 165, 116, 0.12);
+    border-radius: 6px;
+  }
+  .screen-name {
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--text2);
+    font-family: 'Inter', sans-serif;
+  }
+
+  /* Group Divider */
+  .group-divider {
+    grid-column: 1 / -1;
+    padding: 24px 0 8px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .group-divider .badge {
+    padding: 4px 12px;
+    border-radius: 9999px;
+    font-size: 11px;
+    font-weight: 700;
+    font-family: 'Inter', sans-serif;
+    letter-spacing: 0.5px;
+    white-space: nowrap;
+  }
+  .group-divider .line {
+    flex: 1;
+    height: 0.5px;
+    background: var(--border);
+  }
+  .badge-1xx { background: rgba(212,165,116,0.15); color: var(--primary); }
+  .badge-2xx { background: rgba(201,130,142,0.15); color: var(--accent); }
+  .badge-3xx { background: rgba(107,203,119,0.15); color: var(--success); }
+  .badge-5xx { background: rgba(184,160,210,0.15); color: var(--accent2); }
+
+  @media (max-width: 600px) {
+    .gallery { grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 12px; padding: 12px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-left">
+    <div class="header-logo">
+      <svg viewBox="0 0 24 24"><path d="M12 2C13.1 2 14 2.9 14 4C14 5.1 13.1 6 12 6C10.9 6 10 5.1 10 4C10 2.9 10.9 2 12 2ZM21 9H15V22H13V16H11V22H9V9H3V7H21V9Z"/></svg>
+    </div>
+    <div>
+      <h1>BeautyLens</h1>
+      <div class="meta">IIP071 | i2i Beauty Editor | 40 screens | beauty-warm-dark</div>
+    </div>
+  </div>
+  <div class="header-right">
+    <a class="flow-link" href="_screenflow-graph.html">Screen Flow</a>
+  </div>
+</div>
+
+<div class="group-nav" id="groupNav"></div>
+<div class="gallery" id="gallery"></div>
+
+<script>
+const GROUPS = [
+  { id: '1xx', label: '1xx Onboarding', badge: 'badge-1xx' },
+  { id: '2xx', label: '2xx Paywall', badge: 'badge-2xx' },
+  { id: '3xx', label: '3xx Home', badge: 'badge-3xx' },
+  { id: '5xx', label: '5xx i2i Flow', badge: 'badge-5xx' },
+];
+
+const SCREENS = [
+  // 1xx
+  { code: '101', name: 'Splash', file: '101-splash.html', group: '1xx' },
+  { code: '110', name: 'ONB1 Before/After', file: '110-onb1.html', group: '1xx' },
+  { code: '120', name: 'ONB2 Makeup Looks', file: '120-onb2.html', group: '1xx' },
+  { code: '130', name: 'ONB3 Facial Features', file: '130-onb3.html', group: '1xx' },
+  { code: '140', name: 'ONB4 Trending', file: '140-onb4.html', group: '1xx' },
+  { code: '150', name: 'ONB5 Share', file: '150-onb5.html', group: '1xx' },
+  { code: '160', name: 'ONB6 Final CTA', file: '160-onb6.html', group: '1xx' },
+  // 2xx
+  { code: '201', name: 'Onboarding Paywall', file: '201-paywall.html', group: '2xx' },
+  { code: '202', name: 'Last Chance Paywall', file: '202-paywall.html', group: '2xx' },
+  { code: '203', name: 'Home Paywall', file: '203-paywall.html', group: '2xx' },
+  { code: '204', name: 'Return Paywall', file: '204-paywall.html', group: '2xx' },
+  { code: '222', name: 'Generate Paywall', file: '222-paywall.html', group: '2xx' },
+  { code: '223', name: 'During Generate PW', file: '223-paywall.html', group: '2xx' },
+  { code: '291', name: 'Purchase Success', file: '291-success.html', group: '2xx' },
+  { code: '292', name: 'Restore Purchase', file: '292-restore.html', group: '2xx' },
+  // 3xx
+  { code: '301', name: 'Home', file: '301-home.html', group: '3xx' },
+  { code: '311', name: 'Settings', file: '311-settings.html', group: '3xx' },
+  // 5xx
+  { code: '530', name: 'Upload Photo', file: '530-upload.html', group: '5xx' },
+  { code: '531', name: 'Permission Photos', file: '531-permission-photos.html', group: '5xx' },
+  { code: '532', name: 'Permission Camera', file: '532-permission-camera.html', group: '5xx' },
+  { code: '535', name: 'Camera', file: '535-camera.html', group: '5xx' },
+  { code: '536', name: 'Photo Preview', file: '536-photo-preview.html', group: '5xx' },
+  { code: '537', name: 'No Face Detected', file: '537-no-face.html', group: '5xx' },
+  { code: '540', name: 'Makeup Looks', file: '540-makeup-looks.html', group: '5xx' },
+  { code: '541', name: 'Hair', file: '541-hair.html', group: '5xx' },
+  { code: '542', name: 'Eyebrows', file: '542-eyebrows.html', group: '5xx' },
+  { code: '543', name: 'Eyes', file: '543-eyes.html', group: '5xx' },
+  { code: '544', name: 'Nose', file: '544-nose.html', group: '5xx' },
+  { code: '545', name: 'Lips', file: '545-lips.html', group: '5xx' },
+  { code: '550', name: 'Analyze / Preview', file: '550-preview.html', group: '5xx' },
+  { code: '560', name: 'Loading Makeup', file: '560-loading-makeup.html', group: '5xx' },
+  { code: '561', name: 'Loading Facial', file: '561-loading-facial.html', group: '5xx' },
+  { code: '562', name: 'Fake Loading', file: '562-fake-loading.html', group: '5xx' },
+  { code: '564', name: 'Fail Makeup', file: '564-fail-makeup.html', group: '5xx' },
+  { code: '565', name: 'Fail Facial', file: '565-fail-facial.html', group: '5xx' },
+  { code: '570', name: 'Result', file: '570-result.html', group: '5xx' },
+  { code: '571', name: 'Exit Popup', file: '571-exit-popup.html', group: '5xx' },
+  { code: '572', name: 'Save Success', file: '572-save-success.html', group: '5xx' },
+  { code: '573', name: 'Share Sheet', file: '573-share-sheet.html', group: '5xx' },
+  { code: '574', name: 'Share Success', file: '574-share-success.html', group: '5xx' },
+];
+
+let activeGroup = null;
+
+function render() {
+  const filtered = activeGroup ? SCREENS.filter(s => s.group === activeGroup) : SCREENS;
+  const gallery = document.getElementById('gallery');
+  let html = '';
+  let lastGroup = null;
+
+  filtered.forEach(s => {
+    if (s.group !== lastGroup) {
+      const g = GROUPS.find(g => g.id === s.group);
+      html += `<div class="group-divider"><span class="badge ${g.badge}">${g.label}</span><div class="line"></div></div>`;
+      lastGroup = s.group;
+    }
+    html += `
+      <a class="screen-card" href="${s.file}" target="_blank">
+        <div class="iframe-wrap">
+          <iframe src="${s.file}" loading="lazy" sandbox="allow-same-origin"></iframe>
+        </div>
+        <div class="screen-label">
+          <span class="screen-code">${s.code}</span>
+          <span class="screen-name">${s.name}</span>
+        </div>
+      </a>`;
+  });
+  gallery.innerHTML = html;
+}
+
+function renderNav() {
+  const nav = document.getElementById('groupNav');
+  let html = `<button class="group-btn ${!activeGroup ? 'active' : ''}" onclick="setGroup(null)">All (${SCREENS.length})</button>`;
+  GROUPS.forEach(g => {
+    const count = SCREENS.filter(s => s.group === g.id).length;
+    html += `<button class="group-btn ${activeGroup === g.id ? 'active' : ''}" onclick="setGroup('${g.id}')">${g.label} (${count})</button>`;
+  });
+  nav.innerHTML = html;
+}
+
+function setGroup(g) {
+  activeGroup = g;
+  renderNav();
+  render();
+}
+
+renderNav();
+render();
+</script>
+</body>
+</html>

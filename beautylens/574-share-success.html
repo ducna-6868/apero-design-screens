@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>574 — Share Success Toast</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: #000; display: flex; justify-content: center; align-items: center; min-height: 100vh; font-family: 'Inter', sans-serif; }
+  .phone-frame { width: 390px; height: 844px; border-radius: 44px; background: #1A1118; position: relative; overflow: hidden; display: flex; flex-direction: column; }
+
+  /* Status Bar */
+  .status-bar { height: 47px; display: flex; align-items: center; justify-content: space-between; padding: 14px 24px 0; flex-shrink: 0; position: absolute; top: 0; left: 0; right: 0; z-index: 10; }
+  .status-time { font-family: 'DM Sans', sans-serif; font-weight: 700; font-size: 15px; color: #F5EDE8; }
+  .status-icons { display: flex; gap: 6px; align-items: center; }
+  .status-icons svg { width: 18px; height: 18px; }
+
+  /* Nav Overlay */
+  .nav-overlay { position: absolute; top: 47px; left: 0; right: 0; height: 44px; display: flex; align-items: center; justify-content: space-between; padding: 0 20px; z-index: 10; }
+  .nav-back { width: 20px; height: 20px; cursor: pointer; }
+  .nav-share { width: 24px; height: 24px; cursor: pointer; }
+
+  /* AI Result Image (simplified background) */
+  .result-image { width: 390px; height: 370px; background: linear-gradient(135deg, #352A30 0%, #2A1F26 30%, #40343A 60%, #D4A574 100%); border-radius: 0 0 16px 16px; position: relative; flex-shrink: 0; overflow: hidden; }
+  .result-image::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at center, rgba(212, 165, 116, 0.15) 0%, transparent 70%);
+  }
+
+  /* Segmented Control */
+  .segmented-control { display: flex; margin: 16px 20px 0; background: #231920; border-radius: 12px; padding: 4px; flex-shrink: 0; }
+  .seg-item { flex: 1; height: 36px; display: flex; align-items: center; justify-content: center; border-radius: 10px; font-family: 'DM Sans', sans-serif; font-weight: 600; font-size: 14px; color: #9A8E94; cursor: pointer; }
+  .seg-item.active { background: #2A1F26; color: #F5EDE8; }
+
+  /* Template Carousel */
+  .template-carousel { display: flex; gap: 12px; padding: 16px 20px; overflow-x: auto; flex-shrink: 0; }
+  .template-carousel::-webkit-scrollbar { display: none; }
+  .template-card { width: 90px; height: 120px; border-radius: 12px; flex-shrink: 0; position: relative; overflow: hidden; }
+  .template-card.active { border: 2px solid #D4A574; }
+  .template-card:not(.active) { border: 2px solid transparent; }
+  .template-card-bg { width: 100%; height: 100%; }
+  .template-card:nth-child(1) .template-card-bg { background: linear-gradient(180deg, #40343A, #2A1F26); }
+  .template-card:nth-child(2) .template-card-bg { background: linear-gradient(180deg, #352A30, #231920); }
+  .template-card:nth-child(3) .template-card-bg { background: linear-gradient(180deg, #2A1F26, #352A30); }
+  .template-label { position: absolute; bottom: 8px; left: 8px; right: 8px; font-family: 'Inter', sans-serif; font-weight: 500; font-size: 11px; color: #F5EDE8; }
+
+  /* Spacer */
+  .spacer { flex: 1; }
+
+  /* CTA Bar */
+  .cta-bar { padding: 12px 20px; flex-shrink: 0; }
+  .btn-primary { width: 100%; height: 52px; border-radius: 9999px; background: linear-gradient(135deg, #D4A574 0%, #C9828E 100%); border: none; font-family: 'DM Sans', sans-serif; font-weight: 700; font-size: 16px; color: #1A1118; cursor: pointer; box-shadow: 0 4px 24px rgba(212, 165, 116, 0.2); }
+
+  /* Toast */
+  .toast { position: absolute; bottom: calc(8px + 5px + 16px); left: 50%; transform: translateX(-50%); background: #2A1F26; border-radius: 9999px; height: 48px; display: flex; align-items: center; gap: 8px; padding: 0 20px; z-index: 30; white-space: nowrap; max-width: 360px; }
+  .toast svg { width: 20px; height: 20px; flex-shrink: 0; }
+  .toast-text { font-family: 'Inter', sans-serif; font-weight: 400; font-size: 13px; color: #F5EDE8; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+  /* Home Indicator */
+  .home-indicator { position: absolute; bottom: 8px; left: 50%; transform: translateX(-50%); width: 134px; height: 5px; background: #F5EDE8; border-radius: 100px; }
+</style>
+</head>
+<body>
+<div class="phone-frame">
+
+  <!-- Status Bar -->
+  <div class="status-bar">
+    <span class="status-time">9:41</span>
+    <div class="status-icons">
+      <svg viewBox="0 0 18 18" fill="none"><rect x="1" y="3" width="3" height="12" rx="1" fill="#F5EDE8"/><rect x="5.5" y="5" width="3" height="10" rx="1" fill="#F5EDE8"/><rect x="10" y="7" width="3" height="8" rx="1" fill="#F5EDE8"/><rect x="14.5" y="9" width="3" height="6" rx="1" fill="#F5EDE8"/></svg>
+      <svg viewBox="0 0 18 18" fill="none"><path d="M9 3C5.5 3 2.5 5 1 8c1.5 3 4.5 5 8 5s6.5-2 8-5c-1.5-3-4.5-5-8-5z" stroke="#F5EDE8" stroke-width="1.5" fill="none"/><circle cx="9" cy="8" r="2.5" fill="#F5EDE8"/></svg>
+      <svg viewBox="0 0 18 18" fill="none"><rect x="1" y="4" width="14" height="10" rx="2" stroke="#F5EDE8" stroke-width="1.5"/><rect x="16" y="7" width="2" height="4" rx="0.5" fill="#F5EDE8"/><rect x="2.5" y="5.5" width="8" height="7" rx="1" fill="#F5EDE8"/></svg>
+    </div>
+  </div>
+
+  <!-- Nav Overlay -->
+  <div class="nav-overlay">
+    <svg class="nav-back" viewBox="0 0 20 20" fill="none">
+      <path d="M12.5 15L7.5 10L12.5 5" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+    <svg class="nav-share" viewBox="0 0 24 24" fill="none">
+      <path d="M4 12v7a2 2 0 002 2h12a2 2 0 002-2v-7" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      <polyline points="16 6 12 2 8 6" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      <line x1="12" y1="2" x2="12" y2="15" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round"/>
+    </svg>
+  </div>
+
+  <!-- AI Result Image -->
+  <div class="result-image"></div>
+
+  <!-- Segmented Control -->
+  <div class="segmented-control">
+    <div class="seg-item active">Looks</div>
+    <div class="seg-item">Features</div>
+  </div>
+
+  <!-- Template Carousel -->
+  <div class="template-carousel">
+    <div class="template-card active">
+      <div class="template-card-bg"></div>
+      <span class="template-label">Glass Skin</span>
+    </div>
+    <div class="template-card">
+      <div class="template-card-bg"></div>
+      <span class="template-label">Smokey</span>
+    </div>
+    <div class="template-card">
+      <div class="template-card-bg"></div>
+      <span class="template-label">Natural</span>
+    </div>
+  </div>
+
+  <!-- Spacer -->
+  <div class="spacer"></div>
+
+  <!-- CTA Bar -->
+  <div class="cta-bar">
+    <button class="btn-primary">Save & Share</button>
+  </div>
+
+  <!-- Toast -->
+  <div class="toast">
+    <svg viewBox="0 0 20 20" fill="none">
+      <circle cx="10" cy="10" r="9" fill="#6BCB77" opacity="0.2"/>
+      <path d="M6 10l3 3 5-6" stroke="#6BCB77" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+    <span class="toast-text">Shared! Your friends are going to love this look.</span>
+  </div>
+
+  <!-- Home Indicator -->
+  <div class="home-indicator"></div>
+
+</div>
+</body>
+</html>
