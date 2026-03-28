@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=390, height=844, initial-scale=1.0">
+<title>MoTyn - Last Chance</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    width: 390px; height: 844px; background: #0a0a0f;
+    font-family: system-ui, -apple-system, sans-serif;
+    color: #f1f1f6; overflow: hidden;
+    display: flex; flex-direction: column;
+  }
+  .status-bar { display: flex; justify-content: space-between; align-items: center; padding: 14px 24px 8px; }
+  .status-bar .time { font-size: 15px; font-weight: 700; color: #fff; }
+  .status-icons { display: flex; gap: 6px; align-items: center; }
+
+  .header { display: flex; justify-content: flex-end; padding: 8px 24px; }
+  .close-btn {
+    width: 32px; height: 32px; border-radius: 50%; background: #1c1c2e;
+    border: 1px solid #2d2d44; display: flex; align-items: center; justify-content: center;
+    cursor: pointer; color: #9ca3af; font-size: 16px; font-weight: 600;
+  }
+
+  .content {
+    flex: 1; display: flex; flex-direction: column;
+    align-items: center; padding: 40px 24px 0; text-align: center;
+  }
+  .fire-emoji { font-size: 80px; margin-bottom: 24px; }
+  .title { font-size: 32px; font-weight: 800; margin-bottom: 12px; }
+  .desc { font-size: 16px; color: #9ca3af; line-height: 1.6; max-width: 320px; }
+
+  .package {
+    width: 100%; padding: 20px; border-radius: 16px; margin-top: 40px;
+    background: linear-gradient(135deg, rgba(124,58,237,0.15), rgba(236,72,153,0.08));
+    border: 2px solid #7c3aed;
+    display: flex; justify-content: space-between; align-items: center;
+    position: relative; cursor: pointer;
+  }
+  .off-badge {
+    position: absolute; top: -10px; right: 16px;
+    padding: 3px 12px; border-radius: 8px; font-size: 11px; font-weight: 800;
+    background: linear-gradient(135deg, #ef4444, #f97316);
+    color: #fff; letter-spacing: 0.5px;
+  }
+  .package-left { display: flex; align-items: center; gap: 12px; }
+  .radio {
+    width: 22px; height: 22px; border-radius: 50%; border: 2px solid #7c3aed;
+    display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+  }
+  .radio-inner {
+    width: 12px; height: 12px; border-radius: 50%;
+    background: linear-gradient(135deg, #7c3aed, #ec4899);
+  }
+  .package-info { display: flex; flex-direction: column; gap: 2px; text-align: left; }
+  .package-label { font-size: 16px; font-weight: 700; }
+  .package-desc { font-size: 12px; color: #6b7280; }
+  .package-right { text-align: right; }
+  .package-original { font-size: 13px; color: #6b7280; text-decoration: line-through; }
+  .package-price { font-size: 20px; font-weight: 800; }
+  .package-period { font-size: 13px; color: #9ca3af; font-weight: 400; }
+
+  .bottom-area {
+    padding: 24px 24px 48px; display: flex; flex-direction: column; align-items: center; gap: 16px;
+  }
+  .btn-claim {
+    width: 100%; height: 56px; border-radius: 16px; border: none;
+    background: linear-gradient(135deg, #7c3aed, #ec4899);
+    color: #fff; font-size: 17px; font-weight: 700;
+    cursor: pointer; box-shadow: 0 8px 30px rgba(124,58,237,0.35);
+  }
+  .no-thanks {
+    font-size: 14px; color: #6b7280; background: none; border: none; cursor: pointer;
+  }
+</style>
+</head>
+<body>
+<div class="status-bar">
+  <span class="time">9:41</span>
+  <div class="status-icons">
+    <svg width="16" height="12" fill="#fff"><rect x="0" y="3" width="3" height="9" rx="0.5" opacity=".4"/><rect x="4" y="2" width="3" height="10" rx="0.5" opacity=".6"/><rect x="8" y="1" width="3" height="11" rx="0.5" opacity=".8"/><rect x="12" y="0" width="3" height="12" rx="0.5"/></svg>
+    <svg width="16" height="12" fill="#fff"><path d="M1 4.5c2.5-3 5-3.5 7-3.5s4.5.5 7 3.5" stroke="#fff" stroke-width="1.2" fill="none" opacity=".4"/><path d="M3.5 7c1.5-2 3-2.5 4.5-2.5s3 .5 4.5 2.5" stroke="#fff" stroke-width="1.2" fill="none" opacity=".7"/><circle cx="8" cy="10" r="1.5"/></svg>
+    <svg width="27" height="12" fill="#fff"><rect x="0" y="1" width="22" height="10" rx="2" stroke="#fff" stroke-width="1" fill="none"/><rect x="23" y="3.5" width="2.5" height="5" rx="1" opacity=".4"/><rect x="1.5" y="2.5" width="17" height="7" rx="1" fill="#32d74b"/></svg>
+  </div>
+</div>
+
+<div class="header">
+  <div class="close-btn">&#x2715;</div>
+</div>
+
+<div class="content">
+  <div class="fire-emoji">&#128293;</div>
+  <div class="title">Wait! Special Offer</div>
+  <div class="desc">Get 75% OFF your first week. Don't miss this exclusive deal to unlock all premium features.</div>
+
+  <div class="package">
+    <div class="off-badge">75% OFF</div>
+    <div class="package-left">
+      <div class="radio"><div class="radio-inner"></div></div>
+      <div class="package-info">
+        <div class="package-label">Weekly Trial</div>
+        <div class="package-desc">Cancel anytime</div>
+      </div>
+    </div>
+    <div class="package-right">
+      <div class="package-original">$9.99</div>
+      <div class="package-price">$2.49<span class="package-period">/week</span></div>
+    </div>
+  </div>
+</div>
+
+<div class="bottom-area">
+  <button class="btn-claim">Claim Offer</button>
+  <button class="no-thanks">No thanks</button>
+</div>
+</body>
+</html>

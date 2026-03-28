@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=390, height=844, initial-scale=1.0">
+<title>MoTyn - Processing</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    width: 390px; height: 844px; background: #0a0a0f;
+    font-family: system-ui, -apple-system, sans-serif;
+    color: #f1f1f6; overflow: hidden;
+    display: flex; flex-direction: column;
+  }
+  .status-bar { display: flex; justify-content: space-between; align-items: center; padding: 14px 24px 8px; }
+  .status-bar .time { font-size: 15px; font-weight: 700; color: #fff; }
+  .status-icons { display: flex; gap: 6px; align-items: center; }
+
+  .processing-content {
+    flex: 1; display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    padding: 0 40px; text-align: center;
+  }
+
+  .spinner-container {
+    width: 100px; height: 100px; position: relative;
+    margin-bottom: 32px;
+  }
+  .spinner-ring {
+    width: 100px; height: 100px; border-radius: 50%;
+    border: 4px solid #1c1c2e;
+    border-top: 4px solid transparent;
+    position: absolute; inset: 0;
+    animation: spin 1.2s linear infinite;
+  }
+  .spinner-ring::before {
+    content: ''; position: absolute; inset: -4px;
+    border-radius: 50%;
+    border: 4px solid transparent;
+    border-top-color: #7c3aed; border-right-color: #ec4899;
+    animation: spin 1.2s linear infinite;
+  }
+  .spinner-percent {
+    position: absolute; inset: 0;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 22px; font-weight: 800;
+    background: linear-gradient(135deg, #7c3aed, #ec4899);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  }
+
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  .proc-title {
+    font-size: 26px; font-weight: 800; margin-bottom: 12px;
+  }
+  .proc-desc {
+    font-size: 15px; color: #9ca3af; line-height: 1.6; margin-bottom: 36px;
+  }
+
+  .progress-bar-container {
+    width: 100%; height: 8px; border-radius: 4px;
+    background: #1c1c2e; overflow: hidden; margin-bottom: 32px;
+  }
+  .progress-fill {
+    width: 60%; height: 100%; border-radius: 4px;
+    background: linear-gradient(135deg, #7c3aed, #ec4899);
+    animation: pulse-width 2s ease-in-out infinite;
+  }
+  @keyframes pulse-width {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.7; }
+  }
+
+  .tip-text {
+    font-size: 13px; color: #6b7280; font-style: italic;
+    line-height: 1.5;
+  }
+</style>
+</head>
+<body>
+<div class="status-bar">
+  <span class="time">9:41</span>
+  <div class="status-icons">
+    <svg width="16" height="12" fill="#fff"><rect x="0" y="3" width="3" height="9" rx="0.5" opacity=".4"/><rect x="4" y="2" width="3" height="10" rx="0.5" opacity=".6"/><rect x="8" y="1" width="3" height="11" rx="0.5" opacity=".8"/><rect x="12" y="0" width="3" height="12" rx="0.5"/></svg>
+    <svg width="16" height="12" fill="#fff"><path d="M1 4.5c2.5-3 5-3.5 7-3.5s4.5.5 7 3.5" stroke="#fff" stroke-width="1.2" fill="none" opacity=".4"/><path d="M3.5 7c1.5-2 3-2.5 4.5-2.5s3 .5 4.5 2.5" stroke="#fff" stroke-width="1.2" fill="none" opacity=".7"/><circle cx="8" cy="10" r="1.5"/></svg>
+    <svg width="27" height="12" fill="#fff"><rect x="0" y="1" width="22" height="10" rx="2" stroke="#fff" stroke-width="1" fill="none"/><rect x="23" y="3.5" width="2.5" height="5" rx="1" opacity=".4"/><rect x="1.5" y="2.5" width="17" height="7" rx="1" fill="#32d74b"/></svg>
+  </div>
+</div>
+
+<div class="processing-content">
+  <div class="spinner-container">
+    <div class="spinner-ring"></div>
+    <div class="spinner-percent">67%</div>
+  </div>
+  <div class="proc-title">Processing...</div>
+  <div class="proc-desc">Your AI motion video is being generated. This may take a moment.</div>
+  <div class="progress-bar-container">
+    <div class="progress-fill"></div>
+  </div>
+  <div class="tip-text">Tip: Better lighting in photos produces better results</div>
+</div>
+</body>
+</html>
