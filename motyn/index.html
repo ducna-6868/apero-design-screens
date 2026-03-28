@@ -1,0 +1,1892 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>MoTyn - AI Photo & Video</title>
+<style>
+  :root {
+    --bg-primary: #0a0a0f;
+    --bg-secondary: #14141f;
+    --bg-card: #1c1c2e;
+    --bg-elevated: #252540;
+    --accent: #7c3aed;
+    --accent-light: #a78bfa;
+    --accent-gradient: linear-gradient(135deg, #7c3aed, #ec4899);
+    --text-primary: #f1f1f6;
+    --text-secondary: #9ca3af;
+    --text-muted: #6b7280;
+    --border: #2d2d44;
+    --success: #10b981;
+    --danger: #ef4444;
+    --warning: #f59e0b;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', Roboto, sans-serif;
+    background: #000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    color: var(--text-primary);
+  }
+
+  .phone-frame {
+    width: 393px;
+    height: 852px;
+    background: var(--bg-primary);
+    border-radius: 44px;
+    overflow: hidden;
+    position: relative;
+    box-shadow: 0 0 0 3px #333, 0 0 0 6px #111, 0 20px 60px rgba(0,0,0,0.8);
+  }
+
+  .screen {
+    position: absolute;
+    inset: 0;
+    display: none;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  .screen.active { display: flex; }
+
+  /* Status bar */
+  .status-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 28px 8px;
+    font-size: 14px;
+    font-weight: 600;
+    flex-shrink: 0;
+    z-index: 10;
+  }
+
+  .status-bar .time { font-weight: 700; }
+  .status-bar .icons { display: flex; gap: 6px; align-items: center; font-size: 12px; }
+
+  /* Common header */
+  .header {
+    display: flex;
+    align-items: center;
+    padding: 8px 20px 12px;
+    gap: 12px;
+    flex-shrink: 0;
+  }
+
+  .header .back-btn {
+    width: 36px; height: 36px;
+    display: flex; align-items: center; justify-content: center;
+    background: var(--bg-card);
+    border-radius: 50%;
+    border: none;
+    color: var(--text-primary);
+    font-size: 18px;
+    cursor: pointer;
+  }
+
+  .header .title {
+    font-size: 18px;
+    font-weight: 700;
+    flex: 1;
+  }
+
+  /* Scrollable content */
+  .scroll-content {
+    flex: 1;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .scroll-content::-webkit-scrollbar { display: none; }
+
+  /* Bottom safe area */
+  .bottom-safe { height: 34px; flex-shrink: 0; }
+
+  /* Buttons */
+  .btn-primary {
+    width: 100%;
+    padding: 16px;
+    background: var(--accent-gradient);
+    border: none;
+    border-radius: 14px;
+    color: #fff;
+    font-size: 17px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: opacity 0.2s;
+  }
+
+  .btn-primary:active { opacity: 0.85; }
+
+  .btn-primary.inactive {
+    background: var(--bg-elevated);
+    color: var(--text-muted);
+    cursor: not-allowed;
+  }
+
+  .btn-secondary {
+    width: 100%;
+    padding: 14px;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    color: var(--text-primary);
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+  }
+
+  /* ==================== SPLASH (101) ==================== */
+  #screen-splash {
+    background: var(--bg-primary);
+    justify-content: center;
+    align-items: center;
+  }
+
+  .splash-logo {
+    width: 120px; height: 120px;
+    background: var(--accent-gradient);
+    border-radius: 30px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 48px; font-weight: 800; color: #fff;
+    animation: pulse 2s ease-in-out infinite;
+    margin-bottom: 24px;
+  }
+
+  @keyframes pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+  }
+
+  .splash-title {
+    font-size: 32px; font-weight: 800;
+    background: var(--accent-gradient);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    margin-bottom: 8px;
+  }
+
+  .splash-subtitle {
+    color: var(--text-secondary);
+    font-size: 16px; font-weight: 500;
+  }
+
+  .splash-loader {
+    margin-top: 48px;
+    width: 40px; height: 40px;
+    border: 3px solid var(--bg-elevated);
+    border-top-color: var(--accent);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+  }
+
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* ==================== ONBOARDING (110-160) ==================== */
+  #screen-onboarding {
+    background: var(--bg-primary);
+  }
+
+  .ob-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 20px 32px;
+    text-align: center;
+  }
+
+  .ob-illustration {
+    width: 260px; height: 260px;
+    background: var(--bg-card);
+    border-radius: 32px;
+    display: flex; align-items: center; justify-content: center;
+    margin-bottom: 40px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .ob-illustration::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: var(--accent-gradient);
+    opacity: 0.15;
+  }
+
+  .ob-illustration .ob-icon {
+    font-size: 80px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .ob-title {
+    font-size: 26px; font-weight: 800;
+    margin-bottom: 12px;
+    line-height: 1.3;
+  }
+
+  .ob-desc {
+    font-size: 15px;
+    color: var(--text-secondary);
+    line-height: 1.6;
+    margin-bottom: 40px;
+  }
+
+  .ob-dots {
+    display: flex; gap: 8px; margin-bottom: 32px;
+  }
+
+  .ob-dots .dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: var(--bg-elevated);
+    transition: all 0.3s;
+  }
+
+  .ob-dots .dot.active {
+    width: 24px;
+    border-radius: 4px;
+    background: var(--accent);
+  }
+
+  .ob-bottom {
+    padding: 0 24px 20px;
+    flex-shrink: 0;
+  }
+
+  .ob-skip {
+    text-align: center;
+    margin-top: 16px;
+    color: var(--text-muted);
+    font-size: 14px;
+    cursor: pointer;
+  }
+
+  /* ==================== PAYWALL (201/202/203/211) ==================== */
+  #screen-paywall, #screen-paywall-last, #screen-paywall-home, #screen-paywall-aftergen {
+    background: var(--bg-primary);
+  }
+
+  .pw-close {
+    position: absolute;
+    top: 56px; right: 24px;
+    width: 32px; height: 32px;
+    background: rgba(255,255,255,0.1);
+    border: none; border-radius: 50%;
+    color: var(--text-secondary);
+    font-size: 18px;
+    cursor: pointer;
+    z-index: 20;
+    display: flex; align-items: center; justify-content: center;
+  }
+
+  .pw-header {
+    text-align: center;
+    padding: 24px 24px 0;
+  }
+
+  .pw-pro-badge {
+    display: inline-flex;
+    align-items: center; gap: 6px;
+    background: var(--accent-gradient);
+    padding: 6px 16px;
+    border-radius: 20px;
+    font-size: 14px; font-weight: 700;
+    margin-bottom: 16px;
+  }
+
+  .pw-title {
+    font-size: 28px; font-weight: 800;
+    margin-bottom: 8px;
+  }
+
+  .pw-benefits {
+    padding: 20px 24px;
+    display: flex; flex-direction: column; gap: 12px;
+  }
+
+  .pw-benefit {
+    display: flex; align-items: center; gap: 12px;
+    font-size: 15px; color: var(--text-secondary);
+  }
+
+  .pw-benefit .check {
+    width: 24px; height: 24px;
+    background: rgba(124,58,237,0.2);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    color: var(--accent-light);
+    font-size: 14px;
+    flex-shrink: 0;
+  }
+
+  .pw-packages {
+    padding: 0 24px;
+    display: flex; flex-direction: column; gap: 12px;
+  }
+
+  .pw-package {
+    background: var(--bg-card);
+    border: 2px solid var(--border);
+    border-radius: 16px;
+    padding: 16px 20px;
+    cursor: pointer;
+    position: relative;
+    transition: border-color 0.2s;
+  }
+
+  .pw-package.selected {
+    border-color: var(--accent);
+    background: rgba(124,58,237,0.08);
+  }
+
+  .pw-package .pkg-badge {
+    position: absolute;
+    top: -10px; right: 16px;
+    background: var(--accent-gradient);
+    padding: 2px 10px;
+    border-radius: 8px;
+    font-size: 11px; font-weight: 700;
+  }
+
+  .pw-package .pkg-title { font-weight: 700; font-size: 16px; margin-bottom: 4px; }
+
+  .pw-package .pkg-price {
+    display: flex; align-items: center; gap: 8px;
+  }
+
+  .pw-package .pkg-price .original {
+    text-decoration: line-through;
+    color: var(--text-muted);
+    font-size: 14px;
+  }
+
+  .pw-package .pkg-price .sale {
+    font-size: 18px; font-weight: 800;
+    background: var(--accent-gradient);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  }
+
+  .pw-bottom {
+    padding: 20px 24px;
+    flex-shrink: 0;
+  }
+
+  .pw-token-text {
+    text-align: center;
+    font-size: 13px;
+    color: var(--text-muted);
+    margin-top: 12px;
+  }
+
+  .pw-restore {
+    text-align: center;
+    margin-top: 12px;
+    font-size: 13px;
+    color: var(--text-muted);
+    cursor: pointer;
+    text-decoration: underline;
+  }
+
+  /* ==================== HOME (301) ==================== */
+  #screen-home {
+    background: var(--bg-primary);
+  }
+
+  .home-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 24px 16px;
+  }
+
+  .home-logo {
+    font-size: 24px; font-weight: 800;
+    background: var(--accent-gradient);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  }
+
+  .home-profile-btn {
+    width: 40px; height: 40px;
+    background: var(--bg-card);
+    border-radius: 50%;
+    border: none;
+    color: var(--text-primary);
+    font-size: 20px;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+  }
+
+  .home-banner {
+    margin: 0 24px 24px;
+    background: var(--accent-gradient);
+    border-radius: 20px;
+    padding: 24px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .home-banner::after {
+    content: '';
+    position: absolute;
+    top: -30px; right: -30px;
+    width: 120px; height: 120px;
+    background: rgba(255,255,255,0.1);
+    border-radius: 50%;
+  }
+
+  .home-banner .banner-tag {
+    display: inline-block;
+    background: rgba(255,255,255,0.2);
+    padding: 4px 12px;
+    border-radius: 8px;
+    font-size: 12px; font-weight: 600;
+    margin-bottom: 12px;
+  }
+
+  .home-banner h2 {
+    font-size: 22px; font-weight: 800;
+    margin-bottom: 6px;
+  }
+
+  .home-banner p {
+    font-size: 14px;
+    opacity: 0.85;
+  }
+
+  .home-section-title {
+    padding: 0 24px 12px;
+    font-size: 18px; font-weight: 700;
+  }
+
+  .home-feature-card {
+    margin: 0 24px 16px;
+    background: var(--bg-card);
+    border-radius: 20px;
+    padding: 20px;
+    cursor: pointer;
+    display: flex; align-items: center; gap: 16px;
+    border: 1px solid var(--border);
+    transition: border-color 0.2s;
+  }
+
+  .home-feature-card:active { border-color: var(--accent); }
+
+  .home-feature-icon {
+    width: 56px; height: 56px;
+    background: var(--accent-gradient);
+    border-radius: 16px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 28px;
+    flex-shrink: 0;
+  }
+
+  .home-feature-info h3 { font-size: 16px; font-weight: 700; margin-bottom: 4px; }
+  .home-feature-info p { font-size: 13px; color: var(--text-secondary); }
+
+  .home-templates-row {
+    padding: 0 24px;
+    display: flex; gap: 12px;
+    overflow-x: auto;
+    padding-bottom: 16px;
+  }
+
+  .home-templates-row::-webkit-scrollbar { display: none; }
+
+  .home-template-thumb {
+    width: 120px; height: 160px;
+    background: var(--bg-card);
+    border-radius: 16px;
+    flex-shrink: 0;
+    overflow: hidden;
+    position: relative;
+    cursor: pointer;
+    border: 1px solid var(--border);
+  }
+
+  .home-template-thumb .thumb-gradient {
+    position: absolute; inset: 0;
+    background: linear-gradient(180deg, transparent 50%, rgba(0,0,0,0.7));
+  }
+
+  .home-template-thumb .thumb-label {
+    position: absolute;
+    bottom: 10px; left: 10px;
+    font-size: 11px; font-weight: 600;
+  }
+
+  .home-template-thumb .thumb-bg {
+    width: 100%; height: 100%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 40px;
+    opacity: 0.6;
+  }
+
+  /* Bottom tab bar */
+  .tab-bar {
+    display: flex;
+    background: var(--bg-secondary);
+    border-top: 1px solid var(--border);
+    padding: 8px 0 28px;
+    flex-shrink: 0;
+  }
+
+  .tab-item {
+    flex: 1;
+    display: flex; flex-direction: column;
+    align-items: center; gap: 4px;
+    border: none; background: none;
+    color: var(--text-muted);
+    font-size: 10px; font-weight: 600;
+    cursor: pointer;
+    padding: 4px 0;
+  }
+
+  .tab-item.active { color: var(--accent-light); }
+
+  .tab-item .tab-icon { font-size: 22px; }
+
+  .tab-item-create {
+    flex: 1;
+    display: flex; flex-direction: column;
+    align-items: center; gap: 4px;
+    border: none; background: none;
+    font-size: 10px; font-weight: 600;
+    cursor: pointer;
+    padding: 4px 0;
+    color: #fff;
+  }
+
+  .tab-item-create .tab-icon-create {
+    width: 48px; height: 48px;
+    background: var(--accent-gradient);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 24px;
+    margin-top: -24px;
+    box-shadow: 0 4px 20px rgba(124,58,237,0.4);
+  }
+
+  /* ==================== EXPLORE (320) ==================== */
+  #screen-explore { background: var(--bg-primary); }
+
+  .explore-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    padding: 0 20px 20px;
+  }
+
+  .explore-card {
+    background: var(--bg-card);
+    border-radius: 16px;
+    overflow: hidden;
+    cursor: pointer;
+    border: 1px solid var(--border);
+    transition: border-color 0.2s;
+  }
+
+  .explore-card:active { border-color: var(--accent); }
+
+  .explore-card .card-thumb {
+    width: 100%; height: 200px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 48px;
+    background: var(--bg-elevated);
+    position: relative;
+  }
+
+  .explore-card .card-thumb .play-icon {
+    position: absolute;
+    bottom: 8px; right: 8px;
+    width: 28px; height: 28px;
+    background: rgba(0,0,0,0.6);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 12px;
+  }
+
+  .explore-card .card-info {
+    padding: 10px 12px;
+  }
+
+  .explore-card .card-info h4 { font-size: 13px; font-weight: 600; margin-bottom: 2px; }
+  .explore-card .card-info p { font-size: 11px; color: var(--text-muted); }
+
+  /* ==================== TEMPLATE DETAIL (321) ==================== */
+  #screen-template-detail { background: var(--bg-primary); }
+
+  .td-preview {
+    width: 100%;
+    height: 420px;
+    background: var(--bg-elevated);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 80px;
+    position: relative;
+  }
+
+  .td-preview .td-play {
+    position: absolute;
+    width: 64px; height: 64px;
+    background: rgba(255,255,255,0.2);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 28px;
+    backdrop-filter: blur(10px);
+  }
+
+  .td-info {
+    padding: 20px 24px;
+  }
+
+  .td-info h2 { font-size: 22px; font-weight: 800; margin-bottom: 8px; }
+  .td-info p { font-size: 14px; color: var(--text-secondary); line-height: 1.5; margin-bottom: 24px; }
+
+  .td-bottom {
+    padding: 0 24px 20px;
+    margin-top: auto;
+    flex-shrink: 0;
+  }
+
+  /* ==================== USER PROFILE (330) ==================== */
+  #screen-profile { background: var(--bg-primary); }
+
+  .profile-avatar-section {
+    display: flex; flex-direction: column;
+    align-items: center;
+    padding: 16px 24px 24px;
+  }
+
+  .profile-avatar {
+    width: 80px; height: 80px;
+    background: var(--accent-gradient);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 36px;
+    margin-bottom: 12px;
+  }
+
+  .profile-name { font-size: 20px; font-weight: 700; margin-bottom: 4px; }
+  .profile-email { font-size: 14px; color: var(--text-muted); }
+
+  .profile-pro-card {
+    margin: 0 24px 24px;
+    background: var(--accent-gradient);
+    border-radius: 16px;
+    padding: 16px 20px;
+    display: flex; justify-content: space-between; align-items: center;
+    cursor: pointer;
+  }
+
+  .profile-pro-card .pro-left h3 { font-size: 16px; font-weight: 700; margin-bottom: 2px; }
+  .profile-pro-card .pro-left p { font-size: 12px; opacity: 0.8; }
+  .profile-pro-card .pro-arrow { font-size: 20px; }
+
+  .profile-menu {
+    padding: 0 24px;
+  }
+
+  .profile-menu-item {
+    display: flex; align-items: center; gap: 14px;
+    padding: 16px 0;
+    border-bottom: 1px solid var(--border);
+    cursor: pointer;
+  }
+
+  .profile-menu-item:last-child { border-bottom: none; }
+
+  .profile-menu-item .menu-icon {
+    width: 40px; height: 40px;
+    background: var(--bg-card);
+    border-radius: 12px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px;
+    flex-shrink: 0;
+  }
+
+  .profile-menu-item .menu-label { flex: 1; font-size: 15px; font-weight: 500; }
+  .profile-menu-item .menu-arrow { color: var(--text-muted); font-size: 16px; }
+
+  .profile-logout {
+    margin: 24px 24px 0;
+  }
+
+  .btn-logout {
+    width: 100%;
+    padding: 14px;
+    background: rgba(239,68,68,0.1);
+    border: 1px solid rgba(239,68,68,0.3);
+    border-radius: 14px;
+    color: var(--danger);
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+  }
+
+  /* ==================== AI MOTION (410) ==================== */
+  #screen-ai-motion { background: var(--bg-primary); }
+
+  .am-upload-section {
+    padding: 0 24px;
+    display: flex; flex-direction: column; gap: 16px;
+  }
+
+  .am-upload-label {
+    font-size: 14px; font-weight: 600;
+    color: var(--text-secondary);
+    margin-bottom: 4px;
+  }
+
+  .am-upload-box {
+    background: var(--bg-card);
+    border: 2px dashed var(--border);
+    border-radius: 20px;
+    height: 180px;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    gap: 10px;
+    cursor: pointer;
+    transition: border-color 0.2s;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .am-upload-box:active { border-color: var(--accent); }
+
+  .am-upload-box .upload-icon {
+    width: 48px; height: 48px;
+    background: rgba(124,58,237,0.15);
+    border-radius: 14px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 24px;
+  }
+
+  .am-upload-box .upload-text {
+    font-size: 14px; color: var(--text-secondary); font-weight: 500;
+  }
+
+  .am-upload-box .upload-hint {
+    font-size: 12px; color: var(--text-muted);
+  }
+
+  .am-upload-box.has-file {
+    border-style: solid;
+    border-color: var(--accent);
+  }
+
+  .am-upload-box.has-file .upload-preview {
+    position: absolute; inset: 0;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 60px;
+    background: var(--bg-elevated);
+  }
+
+  .am-upload-box.has-file .remove-btn {
+    position: absolute;
+    top: 10px; right: 10px;
+    width: 28px; height: 28px;
+    background: rgba(0,0,0,0.7);
+    border: none; border-radius: 50%;
+    color: #fff; font-size: 14px;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    z-index: 2;
+  }
+
+  .am-prompt-section {
+    padding: 16px 24px 0;
+  }
+
+  .am-prompt-label {
+    font-size: 14px; font-weight: 600;
+    color: var(--text-secondary);
+    margin-bottom: 8px;
+    display: flex; align-items: center; gap: 6px;
+  }
+
+  .am-prompt-label .optional {
+    font-size: 11px; color: var(--text-muted);
+    font-weight: 400;
+  }
+
+  .am-prompt-input {
+    width: 100%;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 14px 16px;
+    color: var(--text-primary);
+    font-size: 15px;
+    font-family: inherit;
+    resize: none;
+    height: 80px;
+    outline: none;
+  }
+
+  .am-prompt-input::placeholder { color: var(--text-muted); }
+  .am-prompt-input:focus { border-color: var(--accent); }
+
+  .am-generate-section {
+    padding: 20px 24px;
+    margin-top: auto;
+    flex-shrink: 0;
+  }
+
+  /* ==================== UPLOAD IMAGE/VIDEO (430) ==================== */
+  #screen-upload-image, #screen-upload-video { background: var(--bg-primary); }
+
+  .upload-options {
+    flex: 1;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    gap: 20px;
+    padding: 0 24px;
+  }
+
+  .upload-option {
+    width: 100%;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 28px 24px;
+    display: flex; align-items: center; gap: 20px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .upload-option:active {
+    border-color: var(--accent);
+    background: rgba(124,58,237,0.05);
+  }
+
+  .upload-option .opt-icon {
+    width: 56px; height: 56px;
+    background: var(--accent-gradient);
+    border-radius: 16px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 28px;
+    flex-shrink: 0;
+  }
+
+  .upload-option .opt-info h3 { font-size: 18px; font-weight: 700; margin-bottom: 4px; }
+  .upload-option .opt-info p { font-size: 13px; color: var(--text-secondary); }
+
+  /* ==================== PROCESSING (460) ==================== */
+  #screen-processing {
+    background: var(--bg-primary);
+    justify-content: center;
+    align-items: center;
+  }
+
+  .proc-content {
+    display: flex; flex-direction: column;
+    align-items: center;
+    padding: 0 40px;
+    text-align: center;
+  }
+
+  .proc-spinner {
+    width: 100px; height: 100px;
+    border: 4px solid var(--bg-elevated);
+    border-radius: 50%;
+    position: relative;
+    margin-bottom: 32px;
+  }
+
+  .proc-spinner::before {
+    content: '';
+    position: absolute;
+    inset: -4px;
+    border: 4px solid transparent;
+    border-top-color: var(--accent);
+    border-right-color: var(--accent-light);
+    border-radius: 50%;
+    animation: spin 1.5s linear infinite;
+  }
+
+  .proc-spinner .proc-percent {
+    position: absolute;
+    inset: 0;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 22px; font-weight: 800;
+    background: var(--accent-gradient);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  }
+
+  .proc-title {
+    font-size: 22px; font-weight: 800;
+    margin-bottom: 8px;
+  }
+
+  .proc-desc {
+    font-size: 14px;
+    color: var(--text-secondary);
+    line-height: 1.5;
+  }
+
+  .proc-progress-bar {
+    width: 100%;
+    height: 4px;
+    background: var(--bg-elevated);
+    border-radius: 2px;
+    margin-top: 32px;
+    overflow: hidden;
+  }
+
+  .proc-progress-bar .bar-fill {
+    height: 100%;
+    background: var(--accent-gradient);
+    border-radius: 2px;
+    width: 0%;
+    animation: fillBar 8s ease-in-out forwards;
+  }
+
+  @keyframes fillBar {
+    0% { width: 0%; }
+    30% { width: 35%; }
+    60% { width: 60%; }
+    80% { width: 78%; }
+    100% { width: 95%; }
+  }
+
+  .proc-tip {
+    margin-top: 24px;
+    font-size: 13px;
+    color: var(--text-muted);
+    font-style: italic;
+  }
+
+  /* ==================== VIEW RESULT (470) ==================== */
+  #screen-result { background: var(--bg-primary); }
+
+  .result-preview {
+    width: 100%; height: 460px;
+    background: var(--bg-elevated);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 80px;
+    position: relative;
+  }
+
+  .result-preview .result-play {
+    position: absolute;
+    width: 72px; height: 72px;
+    background: rgba(255,255,255,0.15);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 32px;
+    backdrop-filter: blur(10px);
+    cursor: pointer;
+  }
+
+  .result-actions {
+    display: flex; gap: 12px;
+    padding: 20px 24px;
+  }
+
+  .result-action-btn {
+    flex: 1;
+    display: flex; align-items: center; justify-content: center; gap: 8px;
+    padding: 14px;
+    border-radius: 14px;
+    font-size: 16px; font-weight: 600;
+    cursor: pointer;
+    border: none;
+  }
+
+  .result-action-btn.save {
+    background: var(--accent-gradient);
+    color: #fff;
+  }
+
+  .result-action-btn.share {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    color: var(--text-primary);
+  }
+
+  .result-info {
+    padding: 0 24px;
+  }
+
+  .result-info h3 { font-size: 16px; font-weight: 700; margin-bottom: 6px; }
+  .result-info p { font-size: 13px; color: var(--text-secondary); }
+
+  .result-regen {
+    padding: 20px 24px;
+    margin-top: auto;
+    flex-shrink: 0;
+  }
+
+  /* ==================== POPUPS ==================== */
+  .popup-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0,0,0,0.6);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 100;
+    backdrop-filter: blur(4px);
+  }
+
+  .popup-overlay.show { display: flex; }
+
+  .popup-box {
+    background: var(--bg-card);
+    border-radius: 24px;
+    padding: 32px 24px;
+    width: 85%;
+    text-align: center;
+  }
+
+  .popup-icon {
+    width: 64px; height: 64px;
+    margin: 0 auto 16px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 32px;
+  }
+
+  .popup-icon.success { background: rgba(16,185,129,0.15); }
+  .popup-icon.warning { background: rgba(245,158,11,0.15); }
+  .popup-icon.error { background: rgba(239,68,68,0.15); }
+
+  .popup-title { font-size: 20px; font-weight: 700; margin-bottom: 8px; }
+  .popup-desc { font-size: 14px; color: var(--text-secondary); margin-bottom: 24px; line-height: 1.5; }
+
+  .popup-btn {
+    width: 100%;
+    padding: 14px;
+    border: none;
+    border-radius: 14px;
+    font-size: 16px; font-weight: 600;
+    cursor: pointer;
+  }
+
+  .popup-btn.primary {
+    background: var(--accent-gradient);
+    color: #fff;
+  }
+
+  .popup-btn.secondary {
+    background: var(--bg-elevated);
+    color: var(--text-primary);
+    margin-top: 10px;
+  }
+
+  /* ==================== LOGOUT POPUP ==================== */
+  .logout-popup { display: none; }
+  .logout-popup.show { display: flex; }
+
+  /* Nav indicator for screen name */
+  .screen-indicator {
+    position: absolute;
+    bottom: 80px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(124,58,237,0.8);
+    padding: 4px 14px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 600;
+    z-index: 50;
+    white-space: nowrap;
+    pointer-events: none;
+  }
+</style>
+</head>
+<body>
+
+<div class="phone-frame">
+
+  <!-- ========== 101 - SPLASH ========== -->
+  <div id="screen-splash" class="screen active">
+    <div class="status-bar">
+      <span class="time">9:41</span>
+      <span class="icons">&#9679;&#9679;&#9679;&#9679; &#9880;</span>
+    </div>
+    <div class="splash-logo">M</div>
+    <div class="splash-title">MoTyn</div>
+    <div class="splash-subtitle">AI Photo & Video</div>
+    <div class="splash-loader"></div>
+    <div class="screen-indicator">101 - Splash</div>
+  </div>
+
+  <!-- ========== 110-160 - ONBOARDING ========== -->
+  <div id="screen-onboarding" class="screen">
+    <div class="status-bar">
+      <span class="time">9:41</span>
+      <span class="icons">&#9679;&#9679;&#9679;&#9679; &#9880;</span>
+    </div>
+    <div class="ob-content">
+      <div class="ob-illustration">
+        <span class="ob-icon" id="ob-icon-display"></span>
+      </div>
+      <h2 class="ob-title" id="ob-title-display"></h2>
+      <p class="ob-desc" id="ob-desc-display"></p>
+      <div class="ob-dots" id="ob-dots"></div>
+    </div>
+    <div class="ob-bottom">
+      <button class="btn-primary" id="ob-next-btn">Continue</button>
+      <div class="ob-skip" id="ob-skip-btn">Skip</div>
+    </div>
+    <div class="bottom-safe"></div>
+    <div class="screen-indicator" id="ob-indicator">110 - ONB1</div>
+  </div>
+
+  <!-- ========== 201 - ONBOARDING PAYWALL ========== -->
+  <div id="screen-paywall" class="screen">
+    <div class="status-bar">
+      <span class="time">9:41</span>
+      <span class="icons">&#9679;&#9679;&#9679;&#9679; &#9880;</span>
+    </div>
+    <button class="pw-close" onclick="navigateTo('screen-paywall-last')">&#10005;</button>
+    <div class="scroll-content">
+      <div class="pw-header">
+        <div class="pw-pro-badge">&#9733; Pro</div>
+        <h1 class="pw-title">MoTyn</h1>
+      </div>
+      <div class="pw-benefits">
+        <div class="pw-benefit"><span class="check">&#10003;</span> Unlimited AI video generation</div>
+        <div class="pw-benefit"><span class="check">&#10003;</span> HD quality export</div>
+        <div class="pw-benefit"><span class="check">&#10003;</span> Access all motion templates</div>
+        <div class="pw-benefit"><span class="check">&#10003;</span> No watermark</div>
+        <div class="pw-benefit"><span class="check">&#10003;</span> Priority processing</div>
+      </div>
+      <div class="pw-packages">
+        <div class="pw-package" onclick="selectPackage(this)">
+          <div class="pkg-title">Weekly</div>
+          <div class="pkg-price">
+            <span class="original">$9.99</span>
+            <span class="sale">$4.99/week</span>
+          </div>
+        </div>
+        <div class="pw-package selected" onclick="selectPackage(this)">
+          <div class="pkg-badge">BEST VALUE</div>
+          <div class="pkg-title">Yearly</div>
+          <div class="pkg-price">
+            <span class="original">$199.99</span>
+            <span class="sale">$49.99/year</span>
+          </div>
+        </div>
+        <div class="pw-package" onclick="selectPackage(this)">
+          <div class="pkg-title">Lifetime</div>
+          <div class="pkg-price">
+            <span class="sale">$99.99</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="pw-bottom">
+      <button class="btn-primary" onclick="navigateTo('screen-home')">Continue</button>
+      <p class="pw-token-text">More tokens for more interesting AI video</p>
+      <p class="pw-restore">Restore Purchase</p>
+    </div>
+    <div class="bottom-safe"></div>
+    <div class="screen-indicator">201 - Onboarding Paywall</div>
+  </div>
+
+  <!-- ========== 202 - LAST CHANCE PAYWALL ========== -->
+  <div id="screen-paywall-last" class="screen">
+    <div class="status-bar">
+      <span class="time">9:41</span>
+      <span class="icons">&#9679;&#9679;&#9679;&#9679; &#9880;</span>
+    </div>
+    <button class="pw-close" onclick="navigateTo('screen-home')">&#10005;</button>
+    <div class="scroll-content" style="display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:0 32px;">
+      <div style="font-size:64px;margin-bottom:24px;">&#128293;</div>
+      <h1 style="font-size:26px;font-weight:800;margin-bottom:8px;">Wait! Special Offer</h1>
+      <p style="font-size:15px;color:var(--text-secondary);margin-bottom:32px;line-height:1.5;">Get 75% OFF your first week. Unlock all premium features now!</p>
+      <div class="pw-package selected" style="width:100%;margin-bottom:24px;" onclick="selectPackage(this)">
+        <div class="pkg-badge">75% OFF</div>
+        <div class="pkg-title">Weekly Trial</div>
+        <div class="pkg-price">
+          <span class="original">$9.99</span>
+          <span class="sale">$2.49/week</span>
+        </div>
+      </div>
+      <button class="btn-primary" onclick="navigateTo('screen-home')">Claim Offer</button>
+      <p class="pw-restore" style="margin-top:16px;">No thanks</p>
+    </div>
+    <div class="bottom-safe"></div>
+    <div class="screen-indicator">202 - Last Chance Paywall</div>
+  </div>
+
+  <!-- ========== 203 - PAYWALL FROM HOME ========== -->
+  <div id="screen-paywall-home" class="screen">
+    <div class="status-bar">
+      <span class="time">9:41</span>
+      <span class="icons">&#9679;&#9679;&#9679;&#9679; &#9880;</span>
+    </div>
+    <button class="pw-close" onclick="navigateTo('screen-home')">&#10005;</button>
+    <div class="scroll-content">
+      <div class="pw-header">
+        <div class="pw-pro-badge">&#9733; Pro</div>
+        <h1 class="pw-title">Upgrade to Pro</h1>
+      </div>
+      <div class="pw-benefits">
+        <div class="pw-benefit"><span class="check">&#10003;</span> Unlimited AI video generation</div>
+        <div class="pw-benefit"><span class="check">&#10003;</span> HD quality export</div>
+        <div class="pw-benefit"><span class="check">&#10003;</span> Access all motion templates</div>
+        <div class="pw-benefit"><span class="check">&#10003;</span> No watermark</div>
+        <div class="pw-benefit"><span class="check">&#10003;</span> Priority processing</div>
+      </div>
+      <div class="pw-packages">
+        <div class="pw-package" onclick="selectPackage(this)">
+          <div class="pkg-title">Weekly</div>
+          <div class="pkg-price">
+            <span class="original">$9.99</span>
+            <span class="sale">$4.99/week</span>
+          </div>
+        </div>
+        <div class="pw-package selected" onclick="selectPackage(this)">
+          <div class="pkg-badge">BEST VALUE</div>
+          <div class="pkg-title">Yearly</div>
+          <div class="pkg-price">
+            <span class="original">$199.99</span>
+            <span class="sale">$49.99/year</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="pw-bottom">
+      <button class="btn-primary" onclick="navigateTo('screen-home')">Continue</button>
+      <p class="pw-restore">Restore Purchase</p>
+    </div>
+    <div class="bottom-safe"></div>
+    <div class="screen-indicator">203 - Paywall (From Home)</div>
+  </div>
+
+  <!-- ========== 211 - PAYWALL AFTER GEN ========== -->
+  <div id="screen-paywall-aftergen" class="screen">
+    <div class="status-bar">
+      <span class="time">9:41</span>
+      <span class="icons">&#9679;&#9679;&#9679;&#9679; &#9880;</span>
+    </div>
+    <button class="pw-close" onclick="navigateTo('screen-ai-motion')">&#10005;</button>
+    <div class="scroll-content" style="display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:0 32px;">
+      <div style="font-size:64px;margin-bottom:24px;">&#127916;</div>
+      <h1 style="font-size:24px;font-weight:800;margin-bottom:8px;">Out of Credits</h1>
+      <p style="font-size:15px;color:var(--text-secondary);margin-bottom:32px;line-height:1.5;">Upgrade to Pro to continue generating amazing AI motion videos.</p>
+      <div class="pw-package selected" style="width:100%;margin-bottom:24px;" onclick="selectPackage(this)">
+        <div class="pkg-badge">MOST POPULAR</div>
+        <div class="pkg-title">Yearly</div>
+        <div class="pkg-price">
+          <span class="original">$199.99</span>
+          <span class="sale">$49.99/year</span>
+        </div>
+      </div>
+      <button class="btn-primary" onclick="navigateTo('screen-ai-motion')">Subscribe Now</button>
+      <p class="pw-restore" style="margin-top:16px;">Restore Purchase</p>
+    </div>
+    <div class="bottom-safe"></div>
+    <div class="screen-indicator">211 - Paywall (After Gen)</div>
+  </div>
+
+  <!-- ========== 301 - HOME ========== -->
+  <div id="screen-home" class="screen">
+    <div class="status-bar">
+      <span class="time">9:41</span>
+      <span class="icons">&#9679;&#9679;&#9679;&#9679; &#9880;</span>
+    </div>
+    <div class="home-top">
+      <div class="home-logo">MoTyn</div>
+      <button class="home-profile-btn" onclick="navigateTo('screen-profile')">&#128100;</button>
+    </div>
+    <div class="scroll-content">
+      <div class="home-banner" onclick="navigateTo('screen-paywall-home')">
+        <div class="banner-tag">PRO</div>
+        <h2>Unlock All Features</h2>
+        <p>Get unlimited AI motion generation</p>
+      </div>
+
+      <div class="home-section-title">Create</div>
+      <div class="home-feature-card" onclick="navigateTo('screen-ai-motion')">
+        <div class="home-feature-icon">&#9889;</div>
+        <div class="home-feature-info">
+          <h3>AI Motion</h3>
+          <p>Transform your photos into stunning motion videos</p>
+        </div>
+      </div>
+
+      <div class="home-section-title">Explore Templates</div>
+      <div class="home-templates-row">
+        <div class="home-template-thumb" onclick="navigateTo('screen-explore')">
+          <div class="thumb-bg">&#128131;</div>
+          <div class="thumb-gradient"></div>
+          <span class="thumb-label">Dance</span>
+        </div>
+        <div class="home-template-thumb" onclick="navigateTo('screen-explore')">
+          <div class="thumb-bg">&#127939;</div>
+          <div class="thumb-gradient"></div>
+          <span class="thumb-label">Action</span>
+        </div>
+        <div class="home-template-thumb" onclick="navigateTo('screen-explore')">
+          <div class="thumb-bg">&#128522;</div>
+          <div class="thumb-gradient"></div>
+          <span class="thumb-label">Expression</span>
+        </div>
+        <div class="home-template-thumb" onclick="navigateTo('screen-explore')">
+          <div class="thumb-bg">&#127754;</div>
+          <div class="thumb-gradient"></div>
+          <span class="thumb-label">Nature</span>
+        </div>
+        <div class="home-template-thumb" onclick="navigateTo('screen-explore')">
+          <div class="thumb-bg">&#127925;</div>
+          <div class="thumb-gradient"></div>
+          <span class="thumb-label">Music</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="tab-bar">
+      <button class="tab-item active" onclick="navigateTo('screen-home')">
+        <span class="tab-icon">&#127968;</span> Home
+      </button>
+      <button class="tab-item" onclick="navigateTo('screen-explore')">
+        <span class="tab-icon">&#128269;</span> Explore
+      </button>
+      <button class="tab-item-create" onclick="navigateTo('screen-ai-motion')">
+        <span class="tab-icon-create">&#43;</span>
+      </button>
+      <button class="tab-item" onclick="navigateTo('screen-profile')">
+        <span class="tab-icon">&#128100;</span> Profile
+      </button>
+    </div>
+    <div class="screen-indicator">301 - Home</div>
+  </div>
+
+  <!-- ========== 320 - EXPLORE ========== -->
+  <div id="screen-explore" class="screen">
+    <div class="status-bar">
+      <span class="time">9:41</span>
+      <span class="icons">&#9679;&#9679;&#9679;&#9679; &#9880;</span>
+    </div>
+    <div class="header">
+      <button class="back-btn" onclick="navigateTo('screen-home')">&#8249;</button>
+      <span class="title">Explore</span>
+    </div>
+    <div class="scroll-content">
+      <div class="explore-grid">
+        <div class="explore-card" onclick="navigateTo('screen-template-detail')">
+          <div class="card-thumb" style="background:linear-gradient(135deg,#4f46e5,#7c3aed);">&#128131;<span class="play-icon">&#9654;</span></div>
+          <div class="card-info"><h4>Groovy Dance</h4><p>12.5k uses</p></div>
+        </div>
+        <div class="explore-card" onclick="navigateTo('screen-template-detail')">
+          <div class="card-thumb" style="background:linear-gradient(135deg,#ec4899,#f43f5e);">&#127939;<span class="play-icon">&#9654;</span></div>
+          <div class="card-info"><h4>Action Hero</h4><p>8.3k uses</p></div>
+        </div>
+        <div class="explore-card" onclick="navigateTo('screen-template-detail')">
+          <div class="card-thumb" style="background:linear-gradient(135deg,#06b6d4,#3b82f6);">&#128522;<span class="play-icon">&#9654;</span></div>
+          <div class="card-info"><h4>Smile Wave</h4><p>15.1k uses</p></div>
+        </div>
+        <div class="explore-card" onclick="navigateTo('screen-template-detail')">
+          <div class="card-thumb" style="background:linear-gradient(135deg,#10b981,#059669);">&#127754;<span class="play-icon">&#9654;</span></div>
+          <div class="card-info"><h4>Nature Flow</h4><p>6.7k uses</p></div>
+        </div>
+        <div class="explore-card" onclick="navigateTo('screen-template-detail')">
+          <div class="card-thumb" style="background:linear-gradient(135deg,#f59e0b,#ef4444);">&#127925;<span class="play-icon">&#9654;</span></div>
+          <div class="card-info"><h4>Beat Drop</h4><p>9.2k uses</p></div>
+        </div>
+        <div class="explore-card" onclick="navigateTo('screen-template-detail')">
+          <div class="card-thumb" style="background:linear-gradient(135deg,#8b5cf6,#d946ef);">&#129302;<span class="play-icon">&#9654;</span></div>
+          <div class="card-info"><h4>Robot Move</h4><p>4.8k uses</p></div>
+        </div>
+      </div>
+    </div>
+    <div class="tab-bar">
+      <button class="tab-item" onclick="navigateTo('screen-home')">
+        <span class="tab-icon">&#127968;</span> Home
+      </button>
+      <button class="tab-item active" onclick="navigateTo('screen-explore')">
+        <span class="tab-icon">&#128269;</span> Explore
+      </button>
+      <button class="tab-item-create" onclick="navigateTo('screen-ai-motion')">
+        <span class="tab-icon-create">&#43;</span>
+      </button>
+      <button class="tab-item" onclick="navigateTo('screen-profile')">
+        <span class="tab-icon">&#128100;</span> Profile
+      </button>
+    </div>
+    <div class="screen-indicator">320 - Explore</div>
+  </div>
+
+  <!-- ========== 321 - TEMPLATE DETAIL ========== -->
+  <div id="screen-template-detail" class="screen">
+    <div class="status-bar" style="position:absolute;width:100%;z-index:10;">
+      <span class="time">9:41</span>
+      <span class="icons">&#9679;&#9679;&#9679;&#9679; &#9880;</span>
+    </div>
+    <div class="header" style="position:absolute;width:100%;z-index:10;top:44px;">
+      <button class="back-btn" onclick="navigateTo('screen-explore')" style="background:rgba(0,0,0,0.5);">&#8249;</button>
+    </div>
+    <div class="td-preview" style="background:linear-gradient(135deg,#4f46e5,#7c3aed);">
+      &#128131;
+      <div class="td-play">&#9654;</div>
+    </div>
+    <div class="scroll-content">
+      <div class="td-info">
+        <h2>Groovy Dance</h2>
+        <p>Make your photo dance with this trendy motion template. Works best with full-body portraits.</p>
+      </div>
+    </div>
+    <div class="td-bottom">
+      <button class="btn-primary" onclick="loadTemplateAndNavigate()">Try This Template</button>
+    </div>
+    <div class="bottom-safe"></div>
+    <div class="screen-indicator">321 - Template Detail</div>
+  </div>
+
+  <!-- ========== 330 - USER PROFILE ========== -->
+  <div id="screen-profile" class="screen">
+    <div class="status-bar">
+      <span class="time">9:41</span>
+      <span class="icons">&#9679;&#9679;&#9679;&#9679; &#9880;</span>
+    </div>
+    <div class="header">
+      <button class="back-btn" onclick="navigateTo('screen-home')">&#8249;</button>
+      <span class="title">Profile</span>
+    </div>
+    <div class="scroll-content">
+      <div class="profile-avatar-section">
+        <div class="profile-avatar">&#128100;</div>
+        <div class="profile-name">User</div>
+        <div class="profile-email">user@email.com</div>
+      </div>
+
+      <div class="profile-pro-card" onclick="navigateTo('screen-paywall-home')">
+        <div class="pro-left">
+          <h3>&#9733; Upgrade to Pro</h3>
+          <p>Unlock all premium features</p>
+        </div>
+        <div class="pro-arrow">&#8250;</div>
+      </div>
+
+      <div class="profile-menu">
+        <div class="profile-menu-item">
+          <div class="menu-icon">&#128100;</div>
+          <span class="menu-label">Account</span>
+          <span class="menu-arrow">&#8250;</span>
+        </div>
+        <div class="profile-menu-item">
+          <div class="menu-icon">&#128179;</div>
+          <span class="menu-label">Manage Subscriptions</span>
+          <span class="menu-arrow">&#8250;</span>
+        </div>
+        <div class="profile-menu-item">
+          <div class="menu-icon">&#128274;</div>
+          <span class="menu-label">Privacy Policy</span>
+          <span class="menu-arrow">&#8250;</span>
+        </div>
+        <div class="profile-menu-item">
+          <div class="menu-icon">&#128196;</div>
+          <span class="menu-label">Terms of Service</span>
+          <span class="menu-arrow">&#8250;</span>
+        </div>
+      </div>
+
+      <div class="profile-logout">
+        <button class="btn-logout" onclick="showPopup('logout-popup')">Log Out</button>
+      </div>
+    </div>
+    <div class="bottom-safe"></div>
+    <div class="screen-indicator">330 - User Profile</div>
+
+    <!-- Logout Popup -->
+    <div class="popup-overlay logout-popup" id="logout-popup">
+      <div class="popup-box">
+        <div class="popup-icon warning">&#9888;</div>
+        <h3 class="popup-title">Log Out</h3>
+        <p class="popup-desc">Are you sure you want to log out of your account?</p>
+        <button class="popup-btn primary" onclick="hidePopup('logout-popup')">Log Out</button>
+        <button class="popup-btn secondary" onclick="hidePopup('logout-popup')">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========== 410 - AI MOTION FEATURE ========== -->
+  <div id="screen-ai-motion" class="screen">
+    <div class="status-bar">
+      <span class="time">9:41</span>
+      <span class="icons">&#9679;&#9679;&#9679;&#9679; &#9880;</span>
+    </div>
+    <div class="header">
+      <button class="back-btn" onclick="navigateTo('screen-home')">&#8249;</button>
+      <span class="title">AI Motion</span>
+    </div>
+    <div class="scroll-content">
+      <div class="am-upload-section">
+        <div>
+          <div class="am-upload-label">Reference Image</div>
+          <div class="am-upload-box" id="upload-image-box" onclick="navigateTo('screen-upload-image')">
+            <div class="upload-icon">&#128247;</div>
+            <span class="upload-text">Upload Image</span>
+            <span class="upload-hint">JPG, PNG up to 10MB</span>
+          </div>
+        </div>
+        <div>
+          <div class="am-upload-label">Motion Video</div>
+          <div class="am-upload-box" id="upload-video-box" onclick="navigateTo('screen-upload-video')">
+            <div class="upload-icon">&#127909;</div>
+            <span class="upload-text">Upload Video</span>
+            <span class="upload-hint">MP4 up to 30s</span>
+          </div>
+        </div>
+      </div>
+      <div class="am-prompt-section">
+        <div class="am-prompt-label">Prompt <span class="optional">(Optional)</span></div>
+        <textarea class="am-prompt-input" placeholder="Describe the motion you want..."></textarea>
+      </div>
+    </div>
+    <div class="am-generate-section">
+      <button class="btn-primary" id="generate-btn" onclick="handleGenerate()">
+        &#9889; Generate
+      </button>
+    </div>
+    <div class="bottom-safe"></div>
+    <div class="screen-indicator" id="am-indicator">410 - AI Motion</div>
+
+    <!-- Popup 451 - Missing upload -->
+    <div class="popup-overlay" id="popup-missing-upload">
+      <div class="popup-box">
+        <div class="popup-icon warning">&#9888;</div>
+        <h3 class="popup-title">Upload Required</h3>
+        <p class="popup-desc">Please upload an image or video before generating.</p>
+        <button class="popup-btn primary" onclick="hidePopup('popup-missing-upload')">Got it</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========== 430.1 - UPLOAD IMAGE ========== -->
+  <div id="screen-upload-image" class="screen">
+    <div class="status-bar">
+      <span class="time">9:41</span>
+      <span class="icons">&#9679;&#9679;&#9679;&#9679; &#9880;</span>
+    </div>
+    <div class="header">
+      <button class="back-btn" onclick="navigateTo('screen-ai-motion')">&#8249;</button>
+      <span class="title">Upload Image</span>
+    </div>
+    <div class="upload-options">
+      <div class="upload-option" onclick="simulateUpload('image', 'camera')">
+        <div class="opt-icon">&#128247;</div>
+        <div class="opt-info">
+          <h3>Camera</h3>
+          <p>Take a photo with your camera</p>
+        </div>
+      </div>
+      <div class="upload-option" onclick="simulateUpload('image', 'library')">
+        <div class="opt-icon">&#128444;</div>
+        <div class="opt-info">
+          <h3>Library</h3>
+          <p>Choose from your photo library</p>
+        </div>
+      </div>
+    </div>
+    <div class="bottom-safe"></div>
+    <div class="screen-indicator">430.1 - Upload Image</div>
+  </div>
+
+  <!-- ========== 430.2 - UPLOAD VIDEO ========== -->
+  <div id="screen-upload-video" class="screen">
+    <div class="status-bar">
+      <span class="time">9:41</span>
+      <span class="icons">&#9679;&#9679;&#9679;&#9679; &#9880;</span>
+    </div>
+    <div class="header">
+      <button class="back-btn" onclick="navigateTo('screen-ai-motion')">&#8249;</button>
+      <span class="title">Upload Video</span>
+    </div>
+    <div class="upload-options">
+      <div class="upload-option" onclick="simulateUpload('video', 'camera')">
+        <div class="opt-icon">&#127909;</div>
+        <div class="opt-info">
+          <h3>Camera</h3>
+          <p>Record a video with your camera</p>
+        </div>
+      </div>
+      <div class="upload-option" onclick="simulateUpload('video', 'library')">
+        <div class="opt-icon">&#128193;</div>
+        <div class="opt-info">
+          <h3>Library</h3>
+          <p>Choose from your video library</p>
+        </div>
+      </div>
+    </div>
+    <div class="bottom-safe"></div>
+    <div class="screen-indicator">430.2 - Upload Video</div>
+  </div>
+
+  <!-- ========== 460 - PROCESSING ========== -->
+  <div id="screen-processing" class="screen">
+    <div class="status-bar">
+      <span class="time">9:41</span>
+      <span class="icons">&#9679;&#9679;&#9679;&#9679; &#9880;</span>
+    </div>
+    <div class="proc-content">
+      <div class="proc-spinner">
+        <span class="proc-percent" id="proc-percent">0%</span>
+      </div>
+      <h2 class="proc-title">Processing...</h2>
+      <p class="proc-desc">Your AI motion video is being generated. This may take a moment.</p>
+      <div class="proc-progress-bar">
+        <div class="bar-fill" id="proc-bar-fill"></div>
+      </div>
+      <p class="proc-tip">Tip: Better lighting in photos produces better results</p>
+    </div>
+    <div class="screen-indicator">460 - Processing</div>
+
+    <!-- Fail popup -->
+    <div class="popup-overlay" id="popup-fail">
+      <div class="popup-box">
+        <div class="popup-icon error">&#10007;</div>
+        <h3 class="popup-title">Generation Failed</h3>
+        <p class="popup-desc">Something went wrong while processing your video. Please try again.</p>
+        <button class="popup-btn primary" onclick="hidePopup('popup-fail'); navigateTo('screen-ai-motion');">Try Again</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========== 470 - VIEW RESULT ========== -->
+  <div id="screen-result" class="screen">
+    <div class="status-bar" style="position:absolute;width:100%;z-index:10;">
+      <span class="time">9:41</span>
+      <span class="icons">&#9679;&#9679;&#9679;&#9679; &#9880;</span>
+    </div>
+    <div class="header" style="position:absolute;width:100%;z-index:10;top:44px;">
+      <button class="back-btn" onclick="navigateTo('screen-ai-motion')" style="background:rgba(0,0,0,0.5);">&#8249;</button>
+      <span class="title">Result</span>
+    </div>
+    <div class="result-preview" style="background:linear-gradient(135deg,#1a1a2e,#16213e);">
+      &#127916;
+      <div class="result-play">&#9654;</div>
+    </div>
+    <div class="scroll-content">
+      <div class="result-actions">
+        <button class="result-action-btn save" onclick="showPopup('popup-save-success')">&#128190; Save</button>
+        <button class="result-action-btn share" onclick="showPopup('popup-share-success')">&#128279; Share</button>
+      </div>
+      <div class="result-info">
+        <h3>AI Motion Video</h3>
+        <p>Generated just now. Tap to play the result video.</p>
+      </div>
+    </div>
+    <div class="result-regen">
+      <button class="btn-secondary" onclick="navigateTo('screen-ai-motion')">&#8635; Generate Again</button>
+    </div>
+    <div class="bottom-safe"></div>
+    <div class="screen-indicator">470 - View Result</div>
+
+    <!-- 471 - Save Success -->
+    <div class="popup-overlay" id="popup-save-success">
+      <div class="popup-box">
+        <div class="popup-icon success">&#10003;</div>
+        <h3 class="popup-title">Saved!</h3>
+        <p class="popup-desc">Video has been saved to your gallery successfully.</p>
+        <button class="popup-btn primary" onclick="hidePopup('popup-save-success')">Done</button>
+      </div>
+    </div>
+
+    <!-- 472 - Share Success -->
+    <div class="popup-overlay" id="popup-share-success">
+      <div class="popup-box">
+        <div class="popup-icon success">&#10003;</div>
+        <h3 class="popup-title">Shared!</h3>
+        <p class="popup-desc">Video has been shared successfully.</p>
+        <button class="popup-btn primary" onclick="hidePopup('popup-share-success')">Done</button>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  // State
+  let hasImage = false;
+  let hasVideo = false;
+  let currentOBStep = 0;
+
+  const obSteps = [
+    { icon: '&#9889;', title: 'AI-Powered Motion', desc: 'Transform any photo into a stunning motion video with our advanced AI technology.' },
+    { icon: '&#127912;', title: 'Choose Your Style', desc: 'Pick from hundreds of motion templates or let AI create a unique animation for you.' },
+    { icon: '&#127909;', title: 'Upload & Generate', desc: 'Simply upload your photo, select a motion reference, and watch the magic happen.' },
+    { icon: '&#128640;', title: 'Share Everywhere', desc: 'Export in HD quality and share your creations on social media instantly.' },
+    { icon: '&#128142;', title: 'Premium Templates', desc: 'Access exclusive premium motion templates designed by professional creators.' },
+    { icon: '&#127775;', title: 'Ready to Start?', desc: 'Create your first AI motion video in just a few taps. Let\'s go!' },
+  ];
+
+  // Navigation
+  function navigateTo(screenId) {
+    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+    document.getElementById(screenId).classList.add('active');
+
+    if (screenId === 'screen-ai-motion') {
+      updateGenerateButton();
+      updateUploadBoxes();
+    }
+
+    if (screenId === 'screen-processing') {
+      startProcessing();
+    }
+  }
+
+  // Splash auto-navigate
+  setTimeout(() => {
+    navigateTo('screen-onboarding');
+    renderOBStep();
+  }, 3000);
+
+  // Onboarding
+  function renderOBStep() {
+    document.getElementById('ob-icon-display').innerHTML = obSteps[currentOBStep].icon;
+    document.getElementById('ob-title-display').textContent = obSteps[currentOBStep].title;
+    document.getElementById('ob-desc-display').textContent = obSteps[currentOBStep].desc;
+    document.getElementById('ob-indicator').textContent = `${110 + currentOBStep * 10} - ONB${currentOBStep + 1}`;
+
+    const dotsHtml = obSteps.map((_, i) =>
+      `<div class="dot ${i === currentOBStep ? 'active' : ''}"></div>`
+    ).join('');
+    document.getElementById('ob-dots').innerHTML = dotsHtml;
+
+    document.getElementById('ob-next-btn').textContent =
+      currentOBStep === obSteps.length - 1 ? 'Get Started' : 'Continue';
+  }
+
+  document.getElementById('ob-next-btn').addEventListener('click', () => {
+    if (currentOBStep < obSteps.length - 1) {
+      currentOBStep++;
+      renderOBStep();
+    } else {
+      navigateTo('screen-paywall');
+    }
+  });
+
+  document.getElementById('ob-skip-btn').addEventListener('click', () => {
+    navigateTo('screen-paywall');
+  });
+
+  // Paywall package selection
+  function selectPackage(el) {
+    el.parentElement.querySelectorAll('.pw-package').forEach(p => p.classList.remove('selected'));
+    el.classList.add('selected');
+  }
+
+  // Upload simulation
+  function simulateUpload(type, source) {
+    if (type === 'image') {
+      hasImage = true;
+    } else {
+      hasVideo = true;
+    }
+    navigateTo('screen-ai-motion');
+  }
+
+  function updateUploadBoxes() {
+    const imgBox = document.getElementById('upload-image-box');
+    const vidBox = document.getElementById('upload-video-box');
+
+    if (hasImage) {
+      imgBox.classList.add('has-file');
+      imgBox.innerHTML = `
+        <div class="upload-preview">&#128247;</div>
+        <button class="remove-btn" onclick="event.stopPropagation(); removeUpload('image');">&#10005;</button>
+      `;
+    } else {
+      imgBox.classList.remove('has-file');
+      imgBox.innerHTML = `
+        <div class="upload-icon">&#128247;</div>
+        <span class="upload-text">Upload Image</span>
+        <span class="upload-hint">JPG, PNG up to 10MB</span>
+      `;
+    }
+
+    if (hasVideo) {
+      vidBox.classList.add('has-file');
+      vidBox.innerHTML = `
+        <div class="upload-preview">&#127909;</div>
+        <button class="remove-btn" onclick="event.stopPropagation(); removeUpload('video');">&#10005;</button>
+      `;
+    } else {
+      vidBox.classList.remove('has-file');
+      vidBox.innerHTML = `
+        <div class="upload-icon">&#127909;</div>
+        <span class="upload-text">Upload Video</span>
+        <span class="upload-hint">MP4 up to 30s</span>
+      `;
+    }
+  }
+
+  function removeUpload(type) {
+    if (type === 'image') hasImage = false;
+    else hasVideo = false;
+    updateUploadBoxes();
+    updateGenerateButton();
+  }
+
+  function updateGenerateButton() {
+    const btn = document.getElementById('generate-btn');
+    if (hasImage || hasVideo) {
+      btn.classList.remove('inactive');
+      btn.innerHTML = '&#9889; Generate';
+    } else {
+      btn.classList.add('inactive');
+      btn.innerHTML = '&#9889; Generate';
+    }
+  }
+
+  function handleGenerate() {
+    if (!hasImage && !hasVideo) {
+      showPopup('popup-missing-upload');
+      return;
+    }
+    navigateTo('screen-processing');
+  }
+
+  // Load template and navigate to AI Motion with video pre-loaded
+  function loadTemplateAndNavigate() {
+    hasVideo = true;
+    document.getElementById('am-indicator').textContent = '410.2 - AI Motion (Template)';
+    navigateTo('screen-ai-motion');
+  }
+
+  // Processing simulation
+  function startProcessing() {
+    const percentEl = document.getElementById('proc-percent');
+    const barFill = document.getElementById('proc-bar-fill');
+    let progress = 0;
+
+    barFill.style.animation = 'none';
+    barFill.offsetHeight;
+    barFill.style.animation = 'fillBar 8s ease-in-out forwards';
+
+    const interval = setInterval(() => {
+      progress += Math.random() * 8 + 2;
+      if (progress >= 100) {
+        progress = 100;
+        percentEl.textContent = '100%';
+        clearInterval(interval);
+        setTimeout(() => navigateTo('screen-result'), 500);
+      } else {
+        percentEl.textContent = Math.round(progress) + '%';
+      }
+    }, 600);
+  }
+
+  // Popups
+  function showPopup(id) {
+    document.getElementById(id).classList.add('show');
+  }
+
+  function hidePopup(id) {
+    document.getElementById(id).classList.remove('show');
+  }
+</script>
+
+</body>
+</html>
