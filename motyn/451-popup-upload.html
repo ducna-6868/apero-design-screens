@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MoTyn - Upload Required</title>
+<style>
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  body {
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+    background: #0a0a0f;
+    color: #fff;
+    width: 390px;
+    height: 844px;
+    margin: 0 auto;
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* Status Bar */
+  .status-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 14px 24px 0;
+    height: 54px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .status-bar .time {
+    font-size: 15px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+  }
+
+  .status-bar .icons {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  /* Background - dimmed AI Motion screen simulation */
+  .bg-screen {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+  }
+
+  .bg-content {
+    position: absolute;
+    top: 80px;
+    left: 0;
+    width: 100%;
+    padding: 24px;
+  }
+
+  .bg-title-placeholder {
+    width: 160px;
+    height: 28px;
+    background: rgba(255,255,255,0.06);
+    border-radius: 8px;
+    margin-bottom: 16px;
+  }
+
+  .bg-subtitle-placeholder {
+    width: 220px;
+    height: 16px;
+    background: rgba(255,255,255,0.03);
+    border-radius: 6px;
+    margin-bottom: 32px;
+  }
+
+  .bg-upload-area {
+    width: 100%;
+    height: 280px;
+    border: 1.5px dashed rgba(124,58,237,0.2);
+    border-radius: 20px;
+    background: rgba(255,255,255,0.02);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .bg-upload-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: rgba(124,58,237,0.08);
+  }
+
+  .bg-bottom-bar {
+    position: absolute;
+    bottom: 40px;
+    left: 24px;
+    right: 24px;
+    height: 56px;
+    border-radius: 16px;
+    background: rgba(255,255,255,0.04);
+  }
+
+  /* Overlay */
+  .overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.7);
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* Popup Card */
+  .popup-card {
+    background: #1c1c2e;
+    border: 1px solid #2d2d44;
+    border-radius: 24px;
+    padding: 32px 24px;
+    width: 340px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .popup-icon-circle {
+    width: 72px;
+    height: 72px;
+    border-radius: 50%;
+    background: rgba(124,58,237,0.15);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 20px;
+  }
+
+  .popup-icon-circle span {
+    font-size: 56px;
+    line-height: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    /* Slight offset to visually center the emoji */
+    margin-top: -4px;
+  }
+
+  .popup-title {
+    font-size: 20px;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 10px;
+  }
+
+  .popup-description {
+    font-size: 14px;
+    color: #9ca3af;
+    line-height: 1.5;
+    margin-bottom: 28px;
+  }
+
+  .btn-upload {
+    width: 100%;
+    height: 48px;
+    border: none;
+    border-radius: 14px;
+    background: linear-gradient(135deg, #7c3aed, #ec4899);
+    color: #fff;
+    font-size: 15px;
+    font-weight: 600;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+    cursor: pointer;
+    margin-bottom: 16px;
+    transition: opacity 0.2s;
+  }
+
+  .btn-upload:active {
+    opacity: 0.85;
+  }
+
+  .btn-cancel {
+    background: none;
+    border: none;
+    color: #6b7280;
+    font-size: 15px;
+    font-weight: 500;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+    cursor: pointer;
+    padding: 8px 16px;
+    transition: color 0.2s;
+  }
+
+  .btn-cancel:active {
+    color: #9ca3af;
+  }
+
+  /* Home indicator */
+  .home-indicator {
+    position: absolute;
+    bottom: 8px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 134px;
+    height: 5px;
+    background: rgba(255,255,255,0.15);
+    border-radius: 100px;
+    z-index: 20;
+  }
+</style>
+</head>
+<body>
+
+<!-- Background - dimmed AI Motion screen -->
+<div class="bg-screen">
+  <div class="bg-content">
+    <div class="bg-title-placeholder"></div>
+    <div class="bg-subtitle-placeholder"></div>
+    <div class="bg-upload-area">
+      <div class="bg-upload-icon"></div>
+    </div>
+  </div>
+  <div class="bg-bottom-bar"></div>
+</div>
+
+<!-- Status Bar (above overlay for visibility) -->
+<div class="status-bar" style="z-index: 20;">
+  <div class="time">9:41</div>
+  <div class="icons">
+    <svg width="16" height="12" fill="#fff"><rect x="0" y="3" width="3" height="9" rx="0.5" opacity=".4"/><rect x="4" y="2" width="3" height="10" rx="0.5" opacity=".6"/><rect x="8" y="1" width="3" height="11" rx="0.5" opacity=".8"/><rect x="12" y="0" width="3" height="12" rx="0.5"/></svg>
+    <svg width="16" height="12" fill="#fff"><path d="M1 4.5c2.5-3 5-3.5 7-3.5s4.5.5 7 3.5" stroke="#fff" stroke-width="1.2" fill="none" opacity=".4"/><path d="M3.5 7c1.5-2 3-2.5 4.5-2.5s3 .5 4.5 2.5" stroke="#fff" stroke-width="1.2" fill="none" opacity=".7"/><circle cx="8" cy="10" r="1.5"/></svg>
+    <svg width="27" height="12" fill="#fff"><rect x="0" y="1" width="22" height="10" rx="2" stroke="#fff" stroke-width="1" fill="none"/><rect x="23" y="3.5" width="2.5" height="5" rx="1" opacity=".4"/><rect x="1.5" y="2.5" width="17" height="7" rx="1" fill="#32d74b"/></svg>
+  </div>
+</div>
+
+<!-- Overlay -->
+<div class="overlay">
+  <div class="popup-card">
+    <div class="popup-icon-circle">
+      <span>&#9888;</span>
+    </div>
+    <div class="popup-title">Upload Required</div>
+    <div class="popup-description">Please upload a photo first before generating your AI motion video.</div>
+    <button class="btn-upload">Upload Photo</button>
+    <button class="btn-cancel">Cancel</button>
+  </div>
+</div>
+
+<!-- Home Indicator -->
+<div class="home-indicator"></div>
+
+</body>
+</html>
