@@ -2,327 +2,183 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>SnapContent - Result</title>
+<meta name="viewport" content="width=390,height=844,initial-scale=1">
+<title>Result</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@600;700&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-  body {
-    background: #1a1a2e;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
-    font-family: system-ui, -apple-system, sans-serif;
-  }
-  .phone-frame {
-    width: 390px;
-    height: 844px;
-    background: #0A0A0C;
-    border-radius: 40px;
-    box-shadow: 0 0 0 2px #2A2A2E, 0 20px 60px rgba(0,0,0,0.5);
-    overflow: hidden;
-    position: relative;
-    display: flex;
-    flex-direction: column;
-  }
-  .status-bar {
-    height: 54px;
-    display: flex;
-    align-items: flex-end;
-    justify-content: space-between;
-    padding: 0 24px 8px;
-    flex-shrink: 0;
-  }
-  .status-bar .time { font-size: 15px; font-weight: 600; color: #FFFFFF; }
-  .status-bar .icons { display: flex; gap: 6px; align-items: center; }
-
-  .header {
-    display: flex;
-    align-items: center;
-    padding: 12px 20px;
-    gap: 16px;
-    flex-shrink: 0;
-  }
-  .back-arrow {
-    width: 32px;
-    height: 32px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-  }
-  .back-arrow svg { width: 20px; height: 20px; }
-  .header-title {
-    font-size: 18px;
-    font-weight: 600;
-    color: #FFFFFF;
-    flex: 1;
-  }
-  .share-icon {
-    width: 32px;
-    height: 32px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-  }
-
-  .content {
-    flex: 1;
-    overflow-y: auto;
-    padding: 0 20px;
-  }
-
-  .comparison-view {
-    width: 100%;
-    height: 340px;
-    border-radius: 16px;
-    position: relative;
-    overflow: hidden;
-    display: flex;
-  }
-  .before-side {
-    width: 50%;
-    height: 100%;
-    background: linear-gradient(135deg, #667eea, #764ba2);
-    position: relative;
-  }
-  .after-side {
-    width: 50%;
-    height: 100%;
-    background: linear-gradient(135deg, #00C9A7, #845EC2);
-    position: relative;
-  }
-  .before-label, .after-label {
-    position: absolute;
-    bottom: 12px;
-    font-size: 12px;
-    font-weight: 600;
-    color: #FFFFFF;
-    background: rgba(0,0,0,0.5);
-    padding: 4px 10px;
-    border-radius: 8px;
-  }
-  .before-label { left: 12px; }
-  .after-label { right: 12px; }
-  .slider-line {
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    left: 50%;
-    width: 3px;
-    background: #FFFFFF;
-    z-index: 2;
-  }
-  .slider-handle {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 32px;
-    height: 32px;
-    border-radius: 50%;
-    background: #FFFFFF;
-    z-index: 3;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.3);
-    cursor: pointer;
-  }
-  .slider-handle svg { width: 18px; height: 18px; }
-
-  .action-row {
-    display: flex;
-    gap: 10px;
-    margin-top: 20px;
-  }
-  .action-btn {
-    flex: 1;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    padding: 14px;
-    background: #1C1C1E;
-    border: 1px solid #2A2A2E;
-    border-radius: 14px;
-    color: #FFFFFF;
-    font-size: 13px;
-    font-weight: 500;
-    cursor: pointer;
-    font-family: inherit;
-  }
-  .action-btn svg { width: 18px; height: 18px; flex-shrink: 0; }
-
-  .enhance-section {
-    margin-top: 20px;
-  }
-  .enhance-label {
-    font-size: 14px;
-    font-weight: 600;
-    color: #8E8E93;
-    margin-bottom: 12px;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-  }
-  .enhance-row {
-    display: flex;
-    gap: 10px;
-  }
-  .enhance-chip {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    padding: 10px 16px;
-    background: #161618;
-    border: 1px solid #2A2A2E;
-    border-radius: 24px;
-    color: #FFFFFF;
-    font-size: 13px;
-    font-weight: 500;
-    cursor: pointer;
-    font-family: inherit;
-    white-space: nowrap;
-  }
-  .enhance-chip svg { width: 16px; height: 16px; flex-shrink: 0; }
-
-  .toast {
-    position: absolute;
-    bottom: 100px;
-    left: 50%;
-    transform: translateX(-50%);
-    background: #1C1C1E;
-    border: 1px solid #34C759;
-    border-radius: 12px;
-    padding: 12px 20px;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    z-index: 10;
-    box-shadow: 0 8px 24px rgba(0,0,0,0.4);
-  }
-  .toast-icon {
-    width: 20px;
-    height: 20px;
-    border-radius: 50%;
-    background: #34C759;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
-  }
-  .toast-icon svg { width: 12px; height: 12px; }
-  .toast-text {
-    font-size: 14px;
-    color: #FFFFFF;
-    font-weight: 500;
-    white-space: nowrap;
-  }
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  width: 390px; height: 844px; background: #F9FAFB;
+  font-family: 'DM Sans', sans-serif; color: #374151; overflow: hidden;
+  display: flex; flex-direction: column;
+}
+.status-bar {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 14px 24px 8px; flex-shrink: 0;
+}
+.status-bar .time {
+  font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 700;
+  font-size: 15px; color: #021A54;
+}
+.status-icons { display: flex; align-items: center; gap: 6px; }
+.header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 8px 24px 16px; flex-shrink: 0;
+}
+.header-left { display: flex; align-items: center; gap: 12px; }
+.back-btn, .share-btn {
+  width: 36px; height: 36px; border: none; background: none; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+}
+.header-title {
+  font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 700;
+  font-size: 20px; color: #021A54;
+}
+.content { flex: 1; overflow-y: auto; padding: 0 24px; }
+.comparison {
+  width: 340px; height: 240px; border-radius: 12px; margin: 0 auto 20px;
+  position: relative; overflow: hidden; display: flex;
+}
+.comp-left {
+  width: 50%; height: 100%; background: #F3F4F6;
+  display: flex; align-items: center; justify-content: center;
+}
+.comp-right {
+  width: 50%; height: 100%;
+  background: linear-gradient(135deg, #021A54 0%, #FF85BB 100%);
+  display: flex; align-items: center; justify-content: center;
+}
+.comp-label {
+  font-size: 12px; font-weight: 600; padding: 4px 10px; border-radius: 6px;
+  background: rgba(255,255,255,0.85); color: #021A54;
+}
+.divider-line {
+  position: absolute; left: 50%; top: 0; width: 3px; height: 100%;
+  background: #FFFFFF; transform: translateX(-50%);
+}
+.divider-handle {
+  position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%);
+  width: 28px; height: 28px; background: #FFFFFF; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  border: 0.5px solid rgba(0,0,0,0.08);
+}
+.action-row {
+  display: flex; gap: 10px; margin-bottom: 20px;
+}
+.action-card {
+  flex: 1; background: #FFFFFF; border: 0.5px solid rgba(0,0,0,0.08);
+  border-radius: 12px; padding: 14px 8px; display: flex; flex-direction: column;
+  align-items: center; gap: 6px; cursor: pointer;
+}
+.action-label {
+  font-size: 12px; font-weight: 500; color: #374151;
+}
+.enhance-section { margin-bottom: 20px; }
+.enhance-label {
+  font-size: 11px; font-weight: 600; color: #6B7280; text-transform: uppercase;
+  letter-spacing: 0.5px; margin-bottom: 10px;
+}
+.chips { display: flex; gap: 8px; flex-wrap: wrap; }
+.chip {
+  display: flex; align-items: center; gap: 6px; padding: 8px 14px;
+  background: #FFFFFF; border: 0.5px solid rgba(0,0,0,0.08); border-radius: 20px;
+  font-size: 13px; font-weight: 500; color: #374151; cursor: pointer;
+}
+.chip-icon {
+  width: 20px; height: 20px; border-radius: 4px; display: flex;
+  align-items: center; justify-content: center;
+}
+.toast {
+  position: fixed; bottom: 32px; left: 24px; right: 24px;
+  background: #FFFFFF; border: 1.5px solid #22C55E; border-radius: 12px;
+  padding: 14px 16px; display: flex; align-items: center; gap: 10px;
+}
+.toast-check {
+  width: 24px; height: 24px; background: #F0FDF4; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+}
+.toast-text { font-size: 14px; font-weight: 500; color: #166534; }
 </style>
 </head>
 <body>
-<div class="phone-frame">
-  <div class="status-bar">
-    <span class="time">9:41</span>
-    <div class="icons">
-      <svg width="16" height="12" fill="#fff"><rect x="0" y="3" width="3" height="9" rx="0.5" opacity="0.3"/><rect x="4" y="2" width="3" height="10" rx="0.5" opacity="0.5"/><rect x="8" y="1" width="3" height="11" rx="0.5" opacity="0.7"/><rect x="12" y="0" width="3" height="12" rx="0.5"/></svg>
-      <svg width="25" height="12" viewBox="0 0 25 12" fill="#fff"><rect x="0" y="0" width="22" height="12" rx="2" stroke="#fff" stroke-width="1" fill="none"/><rect x="2" y="2" width="15" height="8" rx="1" fill="#34C759"/><rect x="23" y="4" width="2" height="4" rx="0.5"/></svg>
-    </div>
-  </div>
 
-  <div class="header">
-    <div class="back-arrow">
-      <svg viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <polyline points="15 18 9 12 15 6"/>
-      </svg>
-    </div>
-    <span class="header-title">Result</span>
-    <div class="share-icon">
-      <svg viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M4 12v8a2 2 0 002 2h12a2 2 0 002-2v-8"/>
-        <polyline points="16 6 12 2 8 6"/>
-        <line x1="12" y1="2" x2="12" y2="15"/>
-      </svg>
-    </div>
-  </div>
-
-  <div class="content">
-    <div class="comparison-view">
-      <div class="before-side">
-        <span class="before-label">Before</span>
-      </div>
-      <div class="after-side">
-        <span class="after-label">After</span>
-      </div>
-      <div class="slider-line"></div>
-      <div class="slider-handle">
-        <svg viewBox="0 0 24 24" fill="none" stroke="#0A0A0C" stroke-width="2.5" stroke-linecap="round">
-          <polyline points="9 6 5 12 9 18"/>
-          <polyline points="15 6 19 12 15 18"/>
-        </svg>
-      </div>
-    </div>
-
-    <div class="action-row">
-      <button class="action-btn">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <polyline points="1 4 1 10 7 10"/>
-          <path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/>
-        </svg>
-        Regenerate
-      </button>
-      <button class="action-btn">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
-          <polyline points="7 10 12 15 17 10"/>
-          <line x1="12" y1="15" x2="12" y2="3"/>
-        </svg>
-        Download
-      </button>
-      <button class="action-btn">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M4 12v8a2 2 0 002 2h12a2 2 0 002-2v-8"/>
-          <polyline points="16 6 12 2 8 6"/>
-          <line x1="12" y1="2" x2="12" y2="15"/>
-        </svg>
-        Share
-      </button>
-    </div>
-
-    <div class="enhance-section">
-      <div class="enhance-label">Enhance</div>
-      <div class="enhance-row">
-        <button class="enhance-chip">
-          <svg viewBox="0 0 24 24" fill="none" stroke="#00C9A7" stroke-width="2" stroke-linecap="round">
-            <path d="M15 3h6v6"/><path d="M9 21H3v-6"/><path d="M21 3l-7 7"/><path d="M3 21l7-7"/>
-          </svg>
-          Upscale 2x
-        </button>
-        <button class="enhance-chip">
-          <svg viewBox="0 0 24 24" fill="none" stroke="#845EC2" stroke-width="2" stroke-linecap="round">
-            <rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="12" cy="12" r="4"/>
-          </svg>
-          Remove BG
-        </button>
-        <button class="enhance-chip">
-          <svg viewBox="0 0 24 24" fill="none" stroke="#FFB347" stroke-width="2" stroke-linecap="round">
-            <path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4L16.5 3.5z"/>
-          </svg>
-          Add Text
-        </button>
-      </div>
-    </div>
-  </div>
-
-  <div class="toast">
-    <div class="toast-icon">
-      <svg viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
-        <polyline points="20 6 9 17 4 12"/>
-      </svg>
-    </div>
-    <span class="toast-text">Download successful</span>
+<div class="status-bar">
+  <span class="time">9:41</span>
+  <div class="status-icons">
+    <svg width="16" height="12" fill="#021A54"><rect x="0" y="3" width="3" height="9" rx="0.5" opacity=".4"/><rect x="4" y="2" width="3" height="10" rx="0.5" opacity=".6"/><rect x="8" y="1" width="3" height="11" rx="0.5" opacity=".8"/><rect x="12" y="0" width="3" height="12" rx="0.5"/></svg>
+    <svg width="16" height="12" fill="#021A54"><path d="M1 4.5c2.5-3 5-3.5 7-3.5s4.5.5 7 3.5" stroke="#021A54" stroke-width="1.2" fill="none" opacity=".4"/><path d="M3.5 7c1.5-2 3-2.5 4.5-2.5s3 .5 4.5 2.5" stroke="#021A54" stroke-width="1.2" fill="none" opacity=".7"/><circle cx="8" cy="10" r="1.5"/></svg>
+    <svg width="27" height="12"><rect x="0" y="1" width="22" height="10" rx="2" stroke="#021A54" stroke-width="1" fill="none"/><rect x="23" y="3.5" width="2.5" height="5" rx="1" fill="#021A54" opacity=".4"/><rect x="1.5" y="2.5" width="17" height="7" rx="1" fill="#021A54"/></svg>
   </div>
 </div>
+
+<div class="header">
+  <div class="header-left">
+    <button class="back-btn">
+      <svg width="24" height="24" fill="none"><path d="M15 19l-7-7 7-7" stroke="#021A54" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </button>
+    <span class="header-title">Result</span>
+  </div>
+  <button class="share-btn">
+    <svg width="20" height="20" fill="none"><path d="M4 12v5a2 2 0 002 2h8a2 2 0 002-2v-5M13 5l-3-3-3 3M10 2v10" stroke="#021A54" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+  </button>
+</div>
+
+<div class="content">
+  <div class="comparison">
+    <div class="comp-left"><span class="comp-label">Before</span></div>
+    <div class="comp-right"><span class="comp-label">After</span></div>
+    <div class="divider-line"></div>
+    <div class="divider-handle">
+      <svg width="12" height="12" fill="none"><path d="M3 4l-2 2 2 2M9 4l2 2-2 2" stroke="#021A54" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </div>
+  </div>
+
+  <div class="action-row">
+    <div class="action-card">
+      <svg width="20" height="20" fill="none"><path d="M1 4v-1a2 2 0 012-2h1M13 1h1a2 2 0 012 2v1M16 13v1a2 2 0 01-2 2h-1M4 16H3a2 2 0 01-2-2v-1" stroke="#021A54" stroke-width="1.5" stroke-linecap="round"/><path d="M5.5 8.5l2-2 3 3 2.5-2.5" stroke="#FF85BB" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <span class="action-label">Regenerate</span>
+    </div>
+    <div class="action-card">
+      <svg width="20" height="20" fill="none"><path d="M3 14l-1 4 4-1L17.5 5.5a1.41 1.41 0 00-2-2L4 15z" stroke="#021A54" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M10 2v4a2 2 0 01-2 2H4" stroke="#021A54" stroke-width="1.5" stroke-linecap="round"/></svg>
+      <span class="action-label">Download</span>
+    </div>
+    <div class="action-card">
+      <svg width="20" height="20" fill="none"><path d="M4 12v5a2 2 0 002 2h8a2 2 0 002-2v-5M13 5l-3-3-3 3M10 2v10" stroke="#021A54" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <span class="action-label">Share</span>
+    </div>
+  </div>
+
+  <div class="enhance-section">
+    <div class="enhance-label">Enhance</div>
+    <div class="chips">
+      <div class="chip">
+        <div class="chip-icon" style="background: #EEF2FF;">
+          <svg width="12" height="12" fill="none"><path d="M2 10V6h8v4M6 2v4" stroke="#6366F1" stroke-width="1.2" stroke-linecap="round"/></svg>
+        </div>
+        Upscale 2x
+      </div>
+      <div class="chip">
+        <div class="chip-icon" style="background: #FEF2F2;">
+          <svg width="12" height="12" fill="none"><circle cx="6" cy="5" r="3" stroke="#EF4444" stroke-width="1.2"/><path d="M3 10c0-1.7 1.3-3 3-3s3 1.3 3 3" stroke="#EF4444" stroke-width="1.2" stroke-linecap="round"/></svg>
+        </div>
+        Remove BG
+      </div>
+      <div class="chip">
+        <div class="chip-icon" style="background: #F0FDF4;">
+          <svg width="12" height="12" fill="none"><path d="M2 9h8M4 6h4M5 3h2" stroke="#22C55E" stroke-width="1.2" stroke-linecap="round"/></svg>
+        </div>
+        Add Text
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="toast">
+  <div class="toast-check">
+    <svg width="14" height="14" fill="none"><path d="M3 7l3 3 5-5" stroke="#22C55E" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+  </div>
+  <span class="toast-text">Download successful</span>
+</div>
+
 </body>
 </html>

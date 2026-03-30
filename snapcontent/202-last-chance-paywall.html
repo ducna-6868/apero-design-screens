@@ -3,171 +3,191 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>SnapContent - Last Chance Paywall</title>
+<title>CreatorAI — Last Chance Paywall</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@600;700&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
 
   body {
-    background: #1a1a2e;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
-    font-family: system-ui, -apple-system, sans-serif;
-  }
-
-  .phone-frame {
     width: 390px;
     height: 844px;
-    background: #0A0A0C;
-    border-radius: 40px;
-    box-shadow: 0 0 0 2px #2A2A2E, 0 20px 60px rgba(0,0,0,0.5);
+    background: #F9FAFB;
+    font-family: 'DM Sans', sans-serif;
+    color: #374151;
     overflow: hidden;
-    position: relative;
+    display: flex;
+    flex-direction: column;
   }
 
-  /* Simulated home screen background */
-  .home-bg {
-    position: absolute;
-    inset: 0;
-    background: #0A0A0C;
-    z-index: 0;
-  }
-
-  .home-bg-content {
-    padding: 60px 24px 0;
-    opacity: 0.3;
-  }
-
-  .home-bg-content .fake-nav {
+  /* Status Bar */
+  .status-bar {
     display: flex;
     justify-content: space-between;
-    margin-bottom: 20px;
+    align-items: center;
+    padding: 14px 24px 8px;
+    flex-shrink: 0;
+  }
+  .status-bar .time {
+    font-size: 15px;
+    font-weight: 700;
+    color: #021A54;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+  }
+  .status-icons {
+    display: flex;
+    gap: 6px;
+    align-items: center;
   }
 
-  .home-bg-content .fake-bar {
-    height: 12px;
-    border-radius: 6px;
-    background: #1C1C1E;
-  }
-
-  .home-bg-content .fake-card {
-    height: 120px;
-    border-radius: 16px;
-    background: #1C1C1E;
-    margin-bottom: 12px;
-  }
-
-  /* Dark overlay */
-  .overlay {
+  /* Close button */
+  .close-btn {
     position: absolute;
-    inset: 0;
-    background: rgba(0,0,0,0.65);
-    backdrop-filter: blur(6px);
-    -webkit-backdrop-filter: blur(6px);
-    z-index: 1;
+    top: 50px;
+    right: 20px;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: #F3F4F6;
+    border: none;
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 24px;
+    cursor: pointer;
+    z-index: 10;
+  }
+  .close-btn svg {
+    width: 14px;
+    height: 14px;
+    stroke: #6B7280;
+    stroke-width: 2.5;
+    stroke-linecap: round;
   }
 
-  /* Modal card */
-  .modal-card {
-    width: 100%;
-    max-width: 342px;
-    background: #1C1C1E;
-    border-radius: 24px;
-    padding: 32px;
-    text-align: center;
+  /* Content */
+  .content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 16px 24px 34px;
+    overflow-y: auto;
     position: relative;
-    animation: slideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1);
   }
+  .content::-webkit-scrollbar { display: none; }
 
-  @keyframes slideUp {
-    0% { opacity: 0; transform: translateY(40px) scale(0.96); }
-    100% { opacity: 1; transform: translateY(0) scale(1); }
-  }
-
-  /* Glow effect behind modal */
-  .modal-card::before {
-    content: '';
-    position: absolute;
-    top: -40px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 200px;
-    height: 200px;
-    background: radial-gradient(circle, rgba(0,201,167,0.2) 0%, rgba(132,94,194,0.15) 50%, transparent 70%);
-    pointer-events: none;
-    z-index: -1;
-  }
-
-  /* Title */
-  .modal-title {
-    font-size: 24px;
-    font-weight: 800;
-    background: linear-gradient(135deg, #00C9A7, #845EC2);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    margin-bottom: 16px;
-  }
-
-  /* Limited badge */
-  .limited-badge {
-    display: inline-block;
-    padding: 6px 16px;
-    border-radius: 20px;
-    background: linear-gradient(135deg, rgba(255,179,71,0.15), rgba(255,215,0,0.15));
-    border: 1px solid rgba(255,179,71,0.3);
-    font-size: 14px;
-    font-weight: 700;
-    color: #FFB347;
+  /* Icon */
+  .offer-icon {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background: #FFCEE3;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 32px;
     margin-bottom: 24px;
-    position: relative;
-    overflow: hidden;
+    font-size: 36px;
   }
 
-  .limited-badge::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 60%;
-    height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255,215,0,0.2), transparent);
-    animation: shimmerBadge 3s ease-in-out infinite;
+  /* Header */
+  .header {
+    text-align: center;
+    margin-bottom: 8px;
   }
-
-  @keyframes shimmerBadge {
-    0% { left: -100%; }
-    100% { left: 200%; }
+  .header h1 {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 28px;
+    font-weight: 700;
+    color: #021A54;
   }
-
-  /* Price display */
-  .price-section {
+  .subtitle {
+    text-align: center;
+    font-size: 16px;
+    color: #6B7280;
     margin-bottom: 28px;
   }
 
-  .price-old {
+  /* Timer */
+  .timer {
+    text-align: center;
+    font-size: 15px;
+    font-weight: 600;
+    color: #FF85BB;
+    margin-bottom: 28px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    justify-content: center;
+  }
+  .timer svg {
+    width: 16px;
+    height: 16px;
+    stroke: #FF85BB;
+    fill: none;
+    stroke-width: 2;
+    stroke-linecap: round;
+  }
+
+  .spacer { flex: 1; }
+
+  /* Package Card */
+  .package-card {
+    width: 100%;
+    padding: 20px;
+    border-radius: 12px;
+    background: rgba(2,26,84,0.04);
+    border: 2px solid #021A54;
+    cursor: pointer;
+    margin-bottom: 24px;
+    display: flex;
+    align-items: center;
+  }
+  .radio {
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    border: 2px solid #021A54;
+    margin-right: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  .radio-inner {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: #021A54;
+  }
+  .package-info { flex: 1; }
+  .package-label {
+    font-family: 'Plus Jakarta Sans', sans-serif;
     font-size: 16px;
-    color: #636366;
+    font-weight: 600;
+    color: #021A54;
+  }
+  .package-price {
+    font-size: 14px;
+    color: #021A54;
+    font-weight: 600;
+    margin-top: 2px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .price-original {
+    font-size: 13px;
+    color: #9CA3AF;
     text-decoration: line-through;
-    margin-bottom: 4px;
+    font-weight: 400;
   }
-
-  .price-new {
-    font-size: 36px;
-    font-weight: 800;
-    color: #FFFFFF;
-    line-height: 1.1;
-  }
-
-  .price-period {
-    font-size: 16px;
-    font-weight: 500;
-    color: #8E8E93;
+  .discount-badge {
+    padding: 3px 8px;
+    border-radius: 6px;
+    background: #FF85BB;
+    font-size: 11px;
+    font-weight: 700;
+    color: #021A54;
   }
 
   /* CTA Button */
@@ -175,118 +195,90 @@
     width: 100%;
     height: 52px;
     border: none;
-    border-radius: 14px;
-    background: linear-gradient(135deg, #00C9A7, #845EC2);
-    color: #FFFFFF;
-    font-size: 17px;
-    font-weight: 700;
+    border-radius: 8px;
+    background: #FF85BB;
+    color: #021A54;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 16px;
+    font-weight: 600;
     cursor: pointer;
-    position: relative;
-    overflow: hidden;
     margin-bottom: 16px;
-    transition: transform 0.15s;
   }
 
-  .cta-btn:active { transform: scale(0.98); }
-
-  .cta-btn::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 50%;
-    height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
-    animation: shimmerBtn 3s ease-in-out infinite;
-  }
-
-  @keyframes shimmerBtn {
-    0% { left: -100%; }
-    100% { left: 200%; }
-  }
-
-  .cta-btn span { position: relative; z-index: 1; }
-
-  /* Pass link */
-  .pass-link {
+  /* Ghost link */
+  .ghost-link {
+    text-align: center;
     font-size: 14px;
-    color: #8E8E93;
+    color: #9CA3AF;
     cursor: pointer;
-    border: none;
     background: none;
-    margin-bottom: 20px;
-    transition: color 0.2s;
-    display: inline-block;
-  }
-
-  .pass-link:hover { color: #AEAEB2; }
-
-  /* Footer links */
-  .modal-footer {
-    display: flex;
-    justify-content: center;
-    gap: 16px;
-    padding-top: 16px;
-    border-top: 1px solid rgba(255,255,255,0.06);
-  }
-
-  .modal-footer a {
-    font-size: 11px;
-    color: #48484A;
-    text-decoration: none;
-    transition: color 0.2s;
-  }
-
-  .modal-footer a:hover { color: #636366; }
-
-  .modal-footer .sep {
-    color: #2C2C2E;
-    font-size: 11px;
+    border: none;
+    font-family: 'DM Sans', sans-serif;
   }
 </style>
 </head>
 <body>
 
-<div class="phone-frame">
-  <!-- Simulated home screen behind overlay -->
-  <div class="home-bg">
-    <div class="home-bg-content">
-      <div class="fake-nav">
-        <div class="fake-bar" style="width:100px;"></div>
-        <div class="fake-bar" style="width:32px; height:32px; border-radius:50%;"></div>
-      </div>
-      <div class="fake-bar" style="width:180px; height:20px; margin-bottom:16px;"></div>
-      <div class="fake-card"></div>
-      <div class="fake-card"></div>
-      <div class="fake-bar" style="width:140px; height:16px; margin-bottom:12px;"></div>
-      <div class="fake-card" style="height:80px;"></div>
-      <div class="fake-card" style="height:80px;"></div>
-    </div>
+<!-- Status Bar -->
+<div class="status-bar">
+  <span class="time">9:41</span>
+  <div class="status-icons">
+    <svg width="16" height="16" viewBox="0 0 16 16"><path d="M1 10.5h2v4H1zM5 8h2v6.5H5zM9 5.5h2v9H9zM13 2.5h2v12h-2z" fill="#021A54"/></svg>
+    <svg width="16" height="16" viewBox="0 0 16 16"><path d="M8 3C4.5 3 1.5 5 0 8c1.5 3 4.5 5 8 5s6.5-2 8-5c-1.5-3-4.5-5-8-5zm0 8.5a3.5 3.5 0 110-7 3.5 3.5 0 010 7z" fill="#021A54"/></svg>
+    <svg width="16" height="16" viewBox="0 0 16 16"><rect x="1" y="4" width="12" height="8" rx="1.5" stroke="#021A54" stroke-width="1.2" fill="none"/><rect x="13.5" y="6.5" width="1.5" height="3" rx="0.5" fill="#021A54"/><rect x="2.5" y="5.5" width="7" height="5" rx="0.5" fill="#021A54"/></svg>
+  </div>
+</div>
+
+<div class="content">
+  <!-- Close Button -->
+  <button class="close-btn">
+    <svg viewBox="0 0 14 14" fill="none">
+      <line x1="1" y1="1" x2="13" y2="13"/>
+      <line x1="13" y1="1" x2="1" y2="13"/>
+    </svg>
+  </button>
+
+  <!-- Gift Icon -->
+  <div class="offer-icon">
+    <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#021A54" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M12 8V2M12 8H7.5a2.5 2.5 0 110-5C11 3 12 8 12 8zM12 8h4.5a2.5 2.5 0 100-5C13 3 12 8 12 8z"/>
+      <rect x="3" y="8" width="18" height="4" rx="1"/>
+      <path d="M12 12v10M5 12v8a2 2 0 002 2h10a2 2 0 002-2v-8"/>
+    </svg>
   </div>
 
-  <!-- Dark overlay with modal -->
-  <div class="overlay">
-    <div class="modal-card">
-      <h2 class="modal-title">Wait! Special Offer</h2>
+  <!-- Header -->
+  <div class="header">
+    <h1>Wait! Special Offer</h1>
+  </div>
+  <p class="subtitle">Get 70% off your first year</p>
 
-      <div class="limited-badge">Limited time: 60% OFF</div>
+  <!-- Timer -->
+  <div class="timer">
+    <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+    Offer expires in 14:59
+  </div>
 
-      <div class="price-section">
-        <div class="price-old">$9.99</div>
-        <div class="price-new">$3.99<span class="price-period">/week</span></div>
-      </div>
+  <div class="spacer"></div>
 
-      <button class="cta-btn"><span>Grab the Deal</span></button>
-
-      <button class="pass-link">I'll pass for now</button>
-
-      <div class="modal-footer">
-        <a href="#">Terms of Service</a>
-        <span class="sep">|</span>
-        <a href="#">Privacy Policy</a>
+  <!-- Highlighted Package -->
+  <div class="package-card">
+    <div class="radio"><div class="radio-inner"></div></div>
+    <div class="package-info">
+      <div class="package-label">Yearly</div>
+      <div class="package-price">
+        $49.99/year
+        <span class="price-original">$199.99</span>
       </div>
     </div>
+    <span class="discount-badge">-70%</span>
   </div>
+
+  <!-- CTA -->
+  <button class="cta-btn">Claim Offer</button>
+
+  <!-- Ghost Link -->
+  <button class="ghost-link">No thanks</button>
 </div>
 
 </body>

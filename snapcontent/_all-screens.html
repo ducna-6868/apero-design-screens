@@ -3,34 +3,34 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>SnapContent — All Screens Gallery</title>
+<title>CreatorAI — All Screens Gallery</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@600;700&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
   :root {
-    --bg: #0a0a0c;
-    --surface: #141416;
-    --card: #1a1a1e;
-    --border: #2a2a2e;
-    --text: #ffffff;
-    --text2: #8e8e93;
-    --muted: #636366;
-    --teal: #00C9A7;
-    --purple: #845EC2;
-    --gold: #FFD700;
-    --orange: #FFB347;
+    --bg: #F9FAFB;
+    --surface: #FFFFFF;
+    --card: #FFFFFF;
+    --border: rgba(0,0,0,0.08);
+    --text: #021A54;
+    --text2: #6B7280;
+    --muted: #9CA3AF;
+    --navy: #021A54;
+    --pink: #FF85BB;
+    --blush: #FFCEE3;
   }
   * { margin: 0; padding: 0; box-sizing: border-box; }
   body {
     background: var(--bg);
     color: var(--text);
-    font-family: system-ui, -apple-system, sans-serif;
+    font-family: 'DM Sans', sans-serif;
     min-height: 100vh;
   }
 
   .header {
     position: sticky; top: 0; z-index: 100;
-    background: rgba(10,10,12,0.92);
+    background: rgba(255,255,255,0.92);
     backdrop-filter: blur(20px);
-    border-bottom: 1px solid var(--border);
+    border-bottom: 0.5px solid var(--border);
     padding: 16px 24px;
   }
   .header-top {
@@ -38,14 +38,15 @@
     margin-bottom: 12px;
   }
   .logo {
-    font-size: 24px; font-weight: 800;
-    background: linear-gradient(135deg, var(--teal), var(--purple));
-    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    font-size: 24px; font-weight: 700;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    color: var(--navy);
   }
-  .logo span { -webkit-text-fill-color: #fff; }
+  .logo span { color: var(--pink); }
   .screen-count {
     font-size: 13px; color: var(--text2);
-    background: var(--card); padding: 4px 12px; border-radius: 99px;
+    background: var(--blush); padding: 4px 12px; border-radius: 99px;
+    font-weight: 500;
   }
 
   .filters {
@@ -55,13 +56,14 @@
   .filters::-webkit-scrollbar { display: none; }
   .filter-btn {
     padding: 6px 16px; border-radius: 99px;
-    border: 1px solid var(--border); background: transparent;
+    border: 0.5px solid var(--border); background: var(--surface);
     color: var(--text2); font-size: 13px; font-weight: 500;
     cursor: pointer; white-space: nowrap; transition: all .2s;
+    font-family: 'DM Sans', sans-serif;
   }
-  .filter-btn:hover { border-color: var(--teal); color: var(--teal); }
+  .filter-btn:hover { border-color: var(--pink); color: var(--pink); }
   .filter-btn.active {
-    background: linear-gradient(135deg, var(--teal), var(--purple));
+    background: var(--navy);
     border-color: transparent; color: #fff;
   }
 
@@ -70,9 +72,9 @@
     padding: 12px 24px;
   }
   .controls label { font-size: 13px; color: var(--text2); }
-  .controls input[type=range] { flex: 1; accent-color: var(--teal); }
+  .controls input[type=range] { flex: 1; accent-color: var(--navy); }
   .controls .scale-val {
-    font-size: 13px; color: var(--teal); font-weight: 600; min-width: 40px;
+    font-size: 13px; color: var(--navy); font-weight: 600; min-width: 40px;
   }
 
   .grid {
@@ -89,7 +91,8 @@
   .iframe-wrap {
     width: 390px; height: 844px;
     border-radius: 40px; overflow: hidden;
-    box-shadow: 0 8px 32px rgba(0,0,0,0.6), 0 0 0 2px var(--border);
+    box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+    border: 0.5px solid var(--border);
     transform-origin: top center;
     transition: transform .3s;
   }
@@ -105,16 +108,15 @@
   }
   .screen-name { font-size: 14px; font-weight: 500; color: var(--text2); }
 
-  .g-1xx .screen-code { background: var(--teal); color: #000; }
-  .g-2xx .screen-code { background: var(--gold); color: #000; }
-  .g-3xx .screen-code { background: var(--purple); color: #fff; }
-  .g-5xx .screen-code { background: #4A90D9; color: #fff; }
-  .g-6xx .screen-code { background: #FF6B9D; color: #fff; }
-  .g-misc .screen-code { background: var(--orange); color: #000; }
+  .g-1xx .screen-code { background: var(--navy); color: #fff; }
+  .g-2xx .screen-code { background: var(--pink); color: var(--navy); }
+  .g-3xx .screen-code { background: var(--blush); color: var(--navy); }
+  .g-5xx .screen-code { background: rgba(2,26,84,0.08); color: var(--navy); }
+  .g-6xx .screen-code { background: rgba(255,133,187,0.15); color: #FF6BAA; }
 
   .lightbox {
     display: none; position: fixed; inset: 0; z-index: 200;
-    background: rgba(0,0,0,0.9); backdrop-filter: blur(8px);
+    background: rgba(2,26,84,0.85); backdrop-filter: blur(8px);
     align-items: center; justify-content: center;
   }
   .lightbox.open { display: flex; }
@@ -122,19 +124,19 @@
     position: relative;
     width: 390px; height: 844px;
     border-radius: 40px; overflow: hidden;
-    box-shadow: 0 0 60px rgba(0,201,167,0.2);
+    box-shadow: 0 0 60px rgba(255,133,187,0.15);
   }
   .lb-content iframe { width: 390px; height: 844px; border: none; }
   .lb-close {
     position: absolute; top: 20px; right: 20px; z-index: 10;
     width: 36px; height: 36px; border-radius: 50%;
-    background: rgba(0,0,0,0.6); border: none;
+    background: rgba(0,0,0,0.4); border: none;
     color: #fff; font-size: 20px; cursor: pointer;
   }
   .lb-nav {
     position: absolute; top: 50%; transform: translateY(-50%);
     width: 44px; height: 44px; border-radius: 50%;
-    background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2);
+    background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.25);
     color: #fff; font-size: 20px; cursor: pointer;
     display: flex; align-items: center; justify-content: center;
   }
@@ -142,7 +144,7 @@
   .lb-next { right: -60px; }
   .lb-info {
     position: absolute; bottom: -50px; left: 0; right: 0;
-    text-align: center; color: var(--text2); font-size: 14px;
+    text-align: center; color: rgba(255,255,255,0.7); font-size: 14px;
   }
 </style>
 </head>
@@ -150,8 +152,8 @@
 
 <div class="header">
   <div class="header-top">
-    <div class="logo">Snap<span>Content</span> — Screens</div>
-    <div class="screen-count" id="countBadge">32 screens</div>
+    <div class="logo">Creator<span>AI</span> — Screens</div>
+    <div class="screen-count" id="countBadge">31 screens</div>
   </div>
   <div class="filters" id="filters"></div>
 </div>
@@ -219,11 +221,11 @@ const SCREENS = [
 ];
 
 const GROUPS = {
-  '1xx': { label: '1xx — Onboarding', color: '#00C9A7' },
-  '2xx': { label: '2xx — Paywall', color: '#FFD700' },
-  '3xx': { label: '3xx — Home & Nav', color: '#845EC2' },
-  '5xx': { label: '5xx — AI Image', color: '#4A90D9' },
-  '6xx': { label: '6xx — AI Video', color: '#FF6B9D' },
+  '1xx': { label: '1xx — Onboarding', color: '#021A54' },
+  '2xx': { label: '2xx — Paywall', color: '#FF85BB' },
+  '3xx': { label: '3xx — Home & Nav', color: '#FFCEE3' },
+  '5xx': { label: '5xx — AI Image', color: '#021A54' },
+  '6xx': { label: '6xx — AI Video', color: '#FF85BB' },
 };
 
 let currentFilter = 'all';

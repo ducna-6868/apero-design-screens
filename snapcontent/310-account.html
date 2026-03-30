@@ -3,338 +3,187 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>SnapContent — Account</title>
+<title>SnapContent - Account</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@600;700&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
   body {
-    display: flex; justify-content: center; align-items: center;
-    min-height: 100vh; background: #1a1a2e; font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', sans-serif;
-  }
-  .phone {
-    width: 390px; height: 844px; background: #0A0A0C; border-radius: 40px;
-    overflow: hidden; position: relative; border: 3px solid #2C2C2E;
+    width: 390px; height: 844px; background: #F9FAFB;
+    font-family: 'DM Sans', sans-serif; color: #374151; overflow: hidden;
     display: flex; flex-direction: column;
   }
 
-  /* Status Bar */
   .status-bar {
     display: flex; justify-content: space-between; align-items: center;
-    padding: 14px 28px 8px; flex-shrink: 0;
+    padding: 14px 24px 0; height: 54px; flex-shrink: 0;
   }
-  .status-time { font-size: 15px; font-weight: 600; color: #FFF; }
-  .status-icons { display: flex; gap: 6px; align-items: center; }
-  .status-icons svg { width: 16px; height: 16px; fill: #FFF; }
+  .time { font-size: 15px; font-weight: 600; color: #021A54; font-family: 'Plus Jakarta Sans', sans-serif; }
+  .status-icons { display: flex; align-items: center; gap: 6px; }
 
-  /* Scrollable Content */
+  .header { padding: 16px 24px 12px; flex-shrink: 0; }
+  .header h1 {
+    font-family: 'Plus Jakarta Sans', sans-serif; font-size: 24px;
+    font-weight: 700; color: #021A54;
+  }
+
   .content {
-    flex: 1; overflow-y: auto; padding: 8px 20px 20px;
+    flex: 1; overflow-y: auto; padding: 0 24px 100px;
+    display: flex; flex-direction: column; gap: 20px;
   }
-  .content::-webkit-scrollbar { display: none; }
 
-  /* Profile Section */
-  .profile {
-    display: flex; align-items: center; gap: 14px; margin-bottom: 24px;
+  .profile-card {
+    background: #FFFFFF; border: 0.5px solid rgba(0,0,0,0.08);
+    border-radius: 12px; padding: 20px;
+    display: flex; align-items: center; gap: 16px;
   }
   .avatar {
-    width: 64px; height: 64px; border-radius: 50%; flex-shrink: 0;
-    background: linear-gradient(135deg, #00C9A7, #845EC2);
-    display: flex; align-items: center; justify-content: center;
-    font-size: 22px; font-weight: 800; color: #FFF;
+    width: 56px; height: 56px; border-radius: 50%; background: #021A54;
+    display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+  }
+  .avatar-initial {
+    font-family: 'Plus Jakarta Sans', sans-serif; font-size: 22px;
+    font-weight: 700; color: #FFFFFF;
   }
   .profile-info { flex: 1; }
-  .profile-name { font-size: 20px; font-weight: 700; color: #FFF; }
-  .profile-email { font-size: 13px; color: #8E8E93; margin-top: 2px; }
+  .profile-name {
+    font-family: 'Plus Jakarta Sans', sans-serif; font-size: 17px;
+    font-weight: 700; color: #021A54; margin-bottom: 2px;
+  }
+  .profile-email { font-size: 14px; color: #6B7280; margin-bottom: 6px; }
+  .edit-link { font-size: 14px; color: #FF85BB; font-weight: 600; cursor: pointer; text-decoration: none; }
 
-  /* Section */
-  .section-label {
-    font-size: 13px; font-weight: 600; color: #636366; letter-spacing: 0.5px;
-    text-transform: uppercase; margin-bottom: 12px;
+  .stats-row { display: flex; gap: 12px; }
+  .stat-card {
+    flex: 1; background: #FFFFFF; border: 0.5px solid rgba(0,0,0,0.08);
+    border-radius: 12px; padding: 16px; text-align: center;
   }
+  .stat-value {
+    font-family: 'Plus Jakarta Sans', sans-serif; font-size: 24px;
+    font-weight: 700; color: #021A54; margin-bottom: 4px;
+  }
+  .stat-label { font-size: 12px; color: #6B7280; font-weight: 500; }
 
-  /* Usage Dashboard */
-  .usage-card {
-    background: #1C1C1E; border-radius: 16px; padding: 18px; margin-bottom: 20px;
+  .menu-section {
+    background: #FFFFFF; border: 0.5px solid rgba(0,0,0,0.08);
+    border-radius: 12px; overflow: hidden;
   }
-  .usage-header {
-    display: flex; justify-content: space-between; align-items: center;
-    margin-bottom: 16px;
+  .menu-item {
+    display: flex; align-items: center; gap: 14px;
+    padding: 16px 20px; cursor: pointer;
   }
-  .plan-name { font-size: 16px; font-weight: 700; color: #FFF; }
-  .plan-badge {
-    font-size: 11px; font-weight: 700; color: #8E8E93;
-    background: #2C2C2E; padding: 4px 10px; border-radius: 8px;
+  .menu-item:not(:last-child) { border-bottom: 0.5px solid rgba(0,0,0,0.06); }
+  .menu-icon {
+    width: 36px; height: 36px; border-radius: 10px; background: #F3F4F6;
+    display: flex; align-items: center; justify-content: center; flex-shrink: 0;
   }
+  .menu-label { flex: 1; font-size: 15px; font-weight: 500; color: #021A54; }
 
-  .usage-item { margin-bottom: 14px; }
-  .usage-item:last-child { margin-bottom: 0; }
-  .usage-row {
-    display: flex; justify-content: space-between; align-items: center;
-    margin-bottom: 6px;
-  }
-  .usage-label { font-size: 13px; color: #8E8E93; }
-  .usage-value { font-size: 13px; font-weight: 600; color: #FFF; }
-  .progress-bar {
-    width: 100%; height: 6px; background: #2C2C2E; border-radius: 3px;
-    overflow: hidden;
-  }
-  .progress-fill {
-    height: 100%; border-radius: 3px;
-  }
-  .fill-teal { background: linear-gradient(135deg, #00C9A7, #0077B6); }
-  .fill-purple { background: linear-gradient(135deg, #845EC2, #D65DB1); }
-  .fill-green { background: #00C9A7; }
-  .usage-unlimited {
-    font-size: 11px; color: #00C9A7; font-weight: 600; margin-top: 4px;
-  }
-
-  /* Brand Section */
-  .brand-section { margin-bottom: 20px; }
-  .brand-header {
-    display: flex; justify-content: space-between; align-items: center;
-    margin-bottom: 12px;
-  }
-  .brand-count { font-size: 15px; font-weight: 600; color: #FFF; }
-  .brand-limit { font-size: 13px; color: #636366; }
-
-  .brand-card {
-    background: #1C1C1E; border-radius: 14px; padding: 14px; margin-bottom: 10px;
-    display: flex; align-items: center; gap: 12px;
-  }
-  .brand-logo {
-    width: 44px; height: 44px; border-radius: 10px;
-    background: linear-gradient(135deg, #FF6B35, #FFD700);
-    display: flex; align-items: center; justify-content: center;
-    font-size: 16px; font-weight: 800; color: #0A0A0C; flex-shrink: 0;
-  }
-  .brand-info { flex: 1; }
-  .brand-name { font-size: 14px; font-weight: 600; color: #FFF; }
-  .brand-url { font-size: 12px; color: #636366; margin-top: 2px; }
-  .brand-arrow {
-    width: 20px; height: 20px; fill: #636366;
-  }
-
-  .add-brand-btn {
-    width: 100%; padding: 14px; border: 2px dashed #2C2C2E; border-radius: 14px;
-    background: transparent; color: #8E8E93; font-size: 14px; font-weight: 600;
-    cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px;
-    margin-bottom: 20px;
-  }
-  .add-brand-btn svg { width: 18px; height: 18px; fill: #8E8E93; }
-
-  /* Upgrade Button */
-  .upgrade-btn {
-    width: 100%; height: 54px; border: none; border-radius: 16px;
-    background: linear-gradient(135deg, #00C9A7, #845EC2);
-    color: #FFF; font-size: 16px; font-weight: 700; cursor: pointer;
-    margin-bottom: 16px; letter-spacing: 0.3px;
-  }
-
-  /* Logout */
-  .logout-btn {
-    width: 100%; padding: 14px; background: transparent; border: none;
-    color: #FF453A; font-size: 15px; font-weight: 600; cursor: pointer;
-    text-align: center; margin-bottom: 8px;
-  }
-
-  /* Settings rows */
-  .settings-section { margin-bottom: 20px; }
-  .settings-row {
-    display: flex; align-items: center; justify-content: space-between;
-    padding: 14px 0; border-bottom: 1px solid #1C1C1E;
-  }
-  .settings-row:last-child { border-bottom: none; }
-  .settings-left { display: flex; align-items: center; gap: 12px; }
-  .settings-icon {
-    width: 32px; height: 32px; border-radius: 8px;
-    display: flex; align-items: center; justify-content: center;
-  }
-  .settings-icon svg { width: 18px; height: 18px; fill: #FFF; }
-  .si-blue { background: #0077B6; }
-  .si-purple { background: #845EC2; }
-  .si-gray { background: #636366; }
-  .settings-label { font-size: 15px; color: #FFF; }
-  .settings-arrow svg { width: 16px; height: 16px; fill: #636366; }
-
-  /* Bottom Tab Bar */
   .tab-bar {
-    display: flex; justify-content: space-around; align-items: center;
-    padding: 10px 0 30px; background: #161618; flex-shrink: 0;
-    border-top: 1px solid #2C2C2E;
+    position: fixed; bottom: 0; left: 0; width: 390px; height: 84px;
+    background: #FFFFFF; border-top: 0.5px solid rgba(0,0,0,0.08);
+    display: flex; align-items: flex-start; justify-content: space-around;
+    padding-top: 10px;
   }
-  .tab-item {
-    display: flex; flex-direction: column; align-items: center; gap: 4px; cursor: pointer;
-  }
-  .tab-item svg { width: 24px; height: 24px; }
-  .tab-item .tab-icon-default { fill: #636366; }
-  .tab-item.active .tab-icon-default { fill: url(#tabGrad); }
-  .tab-label { font-size: 10px; color: #636366; font-weight: 500; }
-  .tab-item.active .tab-label {
-    background: linear-gradient(135deg, #00C9A7, #845EC2);
-    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-    background-clip: text; font-weight: 600;
-  }
-
-  .home-indicator {
-    width: 134px; height: 5px; background: #636366; border-radius: 3px;
-    margin: 0 auto 8px;
-  }
+  .tab-item { display: flex; flex-direction: column; align-items: center; gap: 4px; cursor: pointer; background: none; border: none; }
+  .tab-label { font-size: 11px; color: #6B7280; font-weight: 500; font-family: 'DM Sans', sans-serif; }
+  .tab-item.active .tab-label { color: #021A54; font-weight: 600; }
 </style>
 </head>
 <body>
-
-<div class="phone">
-  <svg width="0" height="0" style="position:absolute">
-    <defs>
-      <linearGradient id="tabGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-        <stop offset="0%" stop-color="#00C9A7"/>
-        <stop offset="100%" stop-color="#845EC2"/>
-      </linearGradient>
-    </defs>
-  </svg>
-
-  <!-- Status Bar -->
   <div class="status-bar">
-    <span class="status-time">9:41</span>
+    <span class="time">9:41</span>
     <div class="status-icons">
-      <svg viewBox="0 0 24 24"><path d="M1 9l2 2c4.97-4.97 13.03-4.97 18 0l2-2C16.93 2.93 7.08 2.93 1 9zm8 8l3 3 3-3c-1.65-1.66-4.34-1.66-6 0zm-4-4l2 2c2.76-2.76 7.24-2.76 10 0l2-2C15.14 9.14 8.87 9.14 5 13z"/></svg>
-      <svg viewBox="0 0 24 24"><path d="M15.67 4H14V2h-4v2H8.33C7.6 4 7 4.6 7 5.33v15.34C7 21.4 7.6 22 8.33 22h7.34c.73 0 1.33-.6 1.33-1.33V5.33C17 4.6 16.4 4 15.67 4z"/></svg>
+      <svg width="16" height="12" fill="#021A54"><rect x="0" y="3" width="3" height="9" rx="0.5" opacity=".4"/><rect x="4" y="2" width="3" height="10" rx="0.5" opacity=".6"/><rect x="8" y="1" width="3" height="11" rx="0.5" opacity=".8"/><rect x="12" y="0" width="3" height="12" rx="0.5"/></svg>
+      <svg width="16" height="12" fill="#021A54"><path d="M1 4.5c2.5-3 5-3.5 7-3.5s4.5.5 7 3.5" stroke="#021A54" stroke-width="1.2" fill="none" opacity=".4"/><path d="M3.5 7c1.5-2 3-2.5 4.5-2.5s3 .5 4.5 2.5" stroke="#021A54" stroke-width="1.2" fill="none" opacity=".7"/><circle cx="8" cy="10" r="1.5"/></svg>
+      <svg width="27" height="12"><rect x="0" y="1" width="22" height="10" rx="2" stroke="#021A54" stroke-width="1" fill="none"/><rect x="23" y="3.5" width="2.5" height="5" rx="1" fill="#021A54" opacity=".4"/><rect x="1.5" y="2.5" width="17" height="7" rx="1" fill="#021A54"/></svg>
     </div>
   </div>
 
-  <!-- Scrollable Content -->
+  <div class="header">
+    <h1>Account</h1>
+  </div>
+
   <div class="content">
-    <!-- Profile -->
-    <div class="profile">
-      <div class="avatar">SC</div>
+    <div class="profile-card">
+      <div class="avatar"><span class="avatar-initial">U</span></div>
       <div class="profile-info">
-        <div class="profile-name">Sarah Chen</div>
-        <div class="profile-email">sarah.chen@email.com</div>
+        <div class="profile-name">User Name</div>
+        <div class="profile-email">user@email.com</div>
+        <a class="edit-link">Edit Profile</a>
       </div>
     </div>
 
-    <!-- Usage Dashboard -->
-    <div class="section-label">Usage</div>
-    <div class="usage-card">
-      <div class="usage-header">
-        <span class="plan-name">Free Plan</span>
-        <span class="plan-badge">CURRENT</span>
+    <div class="stats-row">
+      <div class="stat-card">
+        <div class="stat-value">42</div>
+        <div class="stat-label">Generations</div>
       </div>
-
-      <div class="usage-item">
-        <div class="usage-row">
-          <span class="usage-label">AI Image Generation</span>
-          <span class="usage-value">1 / 3</span>
-        </div>
-        <div class="progress-bar">
-          <div class="progress-fill fill-teal" style="width: 33%;"></div>
-        </div>
+      <div class="stat-card">
+        <div class="stat-value">18</div>
+        <div class="stat-label">Saved</div>
       </div>
-
-      <div class="usage-item">
-        <div class="usage-row">
-          <span class="usage-label">AI Video Generation</span>
-          <span class="usage-value">0 / 1</span>
-        </div>
-        <div class="progress-bar">
-          <div class="progress-fill fill-purple" style="width: 0%;"></div>
-        </div>
-      </div>
-
-      <div class="usage-item">
-        <div class="usage-row">
-          <span class="usage-label">AI Content Generation</span>
-          <span class="usage-value">Unlimited</span>
-        </div>
-        <div class="progress-bar">
-          <div class="progress-fill fill-green" style="width: 100%;"></div>
-        </div>
-        <div class="usage-unlimited">No limit on content generation</div>
+      <div class="stat-card">
+        <div class="stat-value">5</div>
+        <div class="stat-label">Projects</div>
       </div>
     </div>
 
-    <!-- Brand Section -->
-    <div class="section-label">Brands</div>
-    <div class="brand-section">
-      <div class="brand-header">
-        <span class="brand-count">Added Brands</span>
-        <span class="brand-limit">1 / 5</span>
-      </div>
-
-      <div class="brand-card">
-        <div class="brand-logo">AC</div>
-        <div class="brand-info">
-          <div class="brand-name">Artisan Coffee Co.</div>
-          <div class="brand-url">artisancoffee.com</div>
+    <div class="menu-section">
+      <div class="menu-item">
+        <div class="menu-icon">
+          <svg width="18" height="18" fill="none" stroke="#021A54" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M20 12V8H6a2 2 0 0 1-2-2c0-1.1.9-2 2-2h12v4"/><path d="M4 6v12c0 1.1.9 2 2 2h14v-4"/><path d="M18 12a2 2 0 0 0 0 4h4v-4h-4z"/></svg>
         </div>
-        <svg class="brand-arrow" viewBox="0 0 24 24"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/></svg>
+        <span class="menu-label">Subscription</span>
+        <svg width="16" height="16" fill="none" stroke="#9CA3AF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 3 6 6-6 6"/></svg>
       </div>
-
-      <button class="add-brand-btn">
-        <svg viewBox="0 0 24 24"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
-        Add New Brand
-      </button>
-    </div>
-
-    <!-- Settings -->
-    <div class="section-label">Settings</div>
-    <div class="settings-section">
-      <div class="settings-row">
-        <div class="settings-left">
-          <div class="settings-icon si-blue">
-            <svg viewBox="0 0 24 24"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zM12 17c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1s3.1 1.39 3.1 3.1v2z"/></svg>
-          </div>
-          <span class="settings-label">Privacy & Security</span>
+      <div class="menu-item">
+        <div class="menu-icon">
+          <svg width="18" height="18" fill="none" stroke="#021A54" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="m2 17 10 5 10-5"/><path d="m2 12 10 5 10-5"/></svg>
         </div>
-        <div class="settings-arrow"><svg viewBox="0 0 24 24"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/></svg></div>
+        <span class="menu-label">Brand Kit</span>
+        <svg width="16" height="16" fill="none" stroke="#9CA3AF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 3 6 6-6 6"/></svg>
       </div>
-      <div class="settings-row">
-        <div class="settings-left">
-          <div class="settings-icon si-purple">
-            <svg viewBox="0 0 24 24"><path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.9 2 2 2zm6-6v-5c0-3.07-1.63-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.64 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2zm-2 1H8v-6c0-2.48 1.51-4.5 4-4.5s4 2.02 4 4.5v6z"/></svg>
-          </div>
-          <span class="settings-label">Notifications</span>
+      <div class="menu-item">
+        <div class="menu-icon">
+          <svg width="18" height="18" fill="none" stroke="#021A54" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
         </div>
-        <div class="settings-arrow"><svg viewBox="0 0 24 24"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/></svg></div>
+        <span class="menu-label">Saved Items</span>
+        <svg width="16" height="16" fill="none" stroke="#9CA3AF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 3 6 6-6 6"/></svg>
       </div>
-      <div class="settings-row">
-        <div class="settings-left">
-          <div class="settings-icon si-gray">
-            <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
-          </div>
-          <span class="settings-label">Help & Support</span>
+      <div class="menu-item">
+        <div class="menu-icon">
+          <svg width="18" height="18" fill="none" stroke="#021A54" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><path d="M12 17h.01"/></svg>
         </div>
-        <div class="settings-arrow"><svg viewBox="0 0 24 24"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/></svg></div>
+        <span class="menu-label">Help Center</span>
+        <svg width="16" height="16" fill="none" stroke="#9CA3AF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 3 6 6-6 6"/></svg>
+      </div>
+      <div class="menu-item">
+        <div class="menu-icon">
+          <svg width="18" height="18" fill="none" stroke="#021A54" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+        </div>
+        <span class="menu-label">About</span>
+        <svg width="16" height="16" fill="none" stroke="#9CA3AF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 3 6 6-6 6"/></svg>
       </div>
     </div>
-
-    <!-- Upgrade -->
-    <button class="upgrade-btn">Upgrade to Pro</button>
-
-    <!-- Logout -->
-    <button class="logout-btn">Log Out</button>
   </div>
 
-  <!-- Bottom Tab Bar -->
   <div class="tab-bar">
-    <div class="tab-item">
-      <svg viewBox="0 0 24 24"><path class="tab-icon-default" d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+    <button class="tab-item">
+      <svg width="22" height="22" fill="none" stroke="#6B7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-4 0a1 1 0 01-1-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 01-1 1h-2z"/></svg>
       <span class="tab-label">Home</span>
-    </div>
-    <div class="tab-item">
-      <svg viewBox="0 0 24 24"><path class="tab-icon-default" d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/></svg>
+    </button>
+    <button class="tab-item">
+      <svg width="22" height="22" fill="none" stroke="#6B7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
       <span class="tab-label">Explore</span>
-    </div>
-    <div class="tab-item">
-      <svg viewBox="0 0 24 24"><path class="tab-icon-default" d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 14H5.17L4 17.17V4h16v12zM7 9h2v2H7zm4 0h2v2h-2zm4 0h2v2h-2z"/></svg>
+    </button>
+    <button class="tab-item">
+      <svg width="22" height="22" fill="none" stroke="#6B7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/></svg>
       <span class="tab-label">Library</span>
-    </div>
-    <div class="tab-item active">
-      <svg viewBox="0 0 24 24"><path class="tab-icon-default" d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+    </button>
+    <button class="tab-item active">
+      <svg width="22" height="22" fill="none" stroke="#021A54" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
       <span class="tab-label">Account</span>
-    </div>
+    </button>
   </div>
-  <div class="home-indicator"></div>
-</div>
-
 </body>
 </html>

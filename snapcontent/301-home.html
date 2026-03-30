@@ -3,218 +3,180 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>SnapContent — Home</title>
+<title>SnapContent - Home</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@600;700;800&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
   body {
-    display: flex; justify-content: center; align-items: center;
-    min-height: 100vh; background: #1a1a2e; font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', sans-serif;
-  }
-  .phone {
-    width: 390px; height: 844px; background: #0A0A0C; border-radius: 40px;
-    overflow: hidden; position: relative; border: 3px solid #2C2C2E;
+    width: 390px; height: 844px; background: #F9FAFB;
+    font-family: 'DM Sans', sans-serif; color: #374151; overflow: hidden;
     display: flex; flex-direction: column;
   }
 
-  /* Status Bar */
   .status-bar {
     display: flex; justify-content: space-between; align-items: center;
-    padding: 14px 28px 8px; flex-shrink: 0;
+    padding: 14px 24px 0; height: 54px; flex-shrink: 0;
   }
-  .status-time { font-size: 15px; font-weight: 600; color: #FFF; }
-  .status-icons { display: flex; gap: 6px; align-items: center; }
-  .status-icons svg { width: 16px; height: 16px; fill: #FFF; }
+  .time { font-size: 15px; font-weight: 600; color: #021A54; font-family: 'Plus Jakarta Sans', sans-serif; }
+  .status-icons { display: flex; align-items: center; gap: 6px; }
 
-  /* Header */
   .header {
     display: flex; align-items: center; justify-content: space-between;
-    padding: 8px 20px 16px; flex-shrink: 0;
+    padding: 16px 24px 12px; flex-shrink: 0;
   }
-  .header-left { display: flex; align-items: center; gap: 10px; }
-  .logo {
-    font-size: 24px; font-weight: 800; letter-spacing: -0.5px;
-    background: linear-gradient(135deg, #00C9A7, #845EC2);
-    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-    background-clip: text;
+  .logo-area { display: flex; align-items: center; gap: 8px; }
+  .logo-text {
+    font-family: 'Plus Jakarta Sans', sans-serif; font-size: 24px; font-weight: 800;
+    color: #021A54; letter-spacing: -0.5px;
   }
   .pro-badge {
-    background: linear-gradient(135deg, #FFD700, #FFAA00);
-    color: #0A0A0C; font-size: 10px; font-weight: 800;
-    padding: 3px 8px; border-radius: 6px; letter-spacing: 0.5px;
+    background: #021A54; color: #FFFFFF; font-size: 11px; font-weight: 600;
+    padding: 3px 8px; border-radius: 999px; font-family: 'DM Sans', sans-serif;
   }
-  .gear-icon {
-    width: 24px; height: 24px; color: #8E8E93; cursor: pointer;
-  }
+  .settings-icon { cursor: pointer; display: flex; align-items: center; }
 
-  /* Scrollable Content */
   .content {
-    flex: 1; overflow-y: auto; padding: 0 20px 20px;
+    flex: 1; overflow-y: auto; padding: 8px 24px 100px;
     display: flex; flex-direction: column; gap: 16px;
   }
-  .content::-webkit-scrollbar { display: none; }
 
-  /* Feature Cards */
-  .feature-card {
-    height: 140px; border-radius: 20px; padding: 20px;
-    display: flex; flex-direction: column; justify-content: space-between;
-    position: relative; overflow: hidden; flex-shrink: 0;
+  .module-card {
+    background: #FFFFFF; border: 0.5px solid rgba(0,0,0,0.08);
+    border-radius: 12px; padding: 20px; cursor: pointer;
+    display: flex; align-items: center; gap: 16px;
   }
-  .feature-card::before {
-    content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0;
-    opacity: 0.15; background: radial-gradient(circle at 80% 20%, rgba(255,255,255,0.4), transparent 60%);
-  }
-  .card-ai-image { background: linear-gradient(135deg, #00B4D8, #0077B6); }
-  .card-ai-content { background: linear-gradient(135deg, #845EC2, #D65DB1); }
-  .card-ai-video { background: linear-gradient(135deg, #FF6B35, #D62828); }
+  .module-card.navy { border-top: 3px solid #021A54; }
+  .module-card.pink { border-top: 3px solid #FF85BB; }
+  .module-card.blush { border-top: 3px solid #FFCEE3; }
 
-  .card-icon {
-    width: 40px; height: 40px; background: rgba(255,255,255,0.2);
-    border-radius: 12px; display: flex; align-items: center; justify-content: center;
+  .module-icon {
+    width: 48px; height: 48px; border-radius: 12px;
+    display: flex; align-items: center; justify-content: center; flex-shrink: 0;
   }
-  .card-icon svg { width: 22px; height: 22px; fill: #FFF; }
-  .card-text { position: relative; z-index: 1; }
-  .card-title { font-size: 18px; font-weight: 700; color: #FFF; margin-bottom: 4px; }
-  .card-subtitle { font-size: 13px; color: rgba(255,255,255,0.75); line-height: 1.4; }
+  .module-card.navy .module-icon { background: rgba(2,26,84,0.08); }
+  .module-card.pink .module-icon { background: rgba(255,133,187,0.15); }
+  .module-card.blush .module-icon { background: #FFCEE3; }
 
-  .card-arrow {
-    position: absolute; right: 20px; top: 20px; width: 32px; height: 32px;
-    background: rgba(255,255,255,0.15); border-radius: 50%;
-    display: flex; align-items: center; justify-content: center; z-index: 1;
+  .module-info { flex: 1; }
+  .module-title {
+    font-family: 'Plus Jakarta Sans', sans-serif; font-size: 17px;
+    font-weight: 700; color: #021A54; margin-bottom: 4px;
   }
-  .card-arrow svg { width: 14px; height: 14px; fill: #FFF; }
+  .module-desc { font-size: 14px; color: #6B7280; line-height: 1.4; }
+  .module-arrow { flex-shrink: 0; }
 
-  /* Bottom Tab Bar */
+  .section-title {
+    font-family: 'Plus Jakarta Sans', sans-serif; font-size: 18px;
+    font-weight: 700; color: #021A54; margin-top: 8px;
+  }
+
+  .quick-actions { display: flex; gap: 12px; }
+  .quick-card {
+    flex: 1; background: #FFFFFF; border: 0.5px solid rgba(0,0,0,0.08);
+    border-radius: 12px; padding: 16px; text-align: center; cursor: pointer;
+  }
+  .quick-emoji { font-size: 28px; margin-bottom: 8px; }
+  .quick-label { font-size: 13px; color: #021A54; font-weight: 600; }
+
   .tab-bar {
-    display: flex; justify-content: space-around; align-items: center;
-    padding: 10px 0 30px; background: #161618; flex-shrink: 0;
-    border-top: 1px solid #2C2C2E;
+    position: fixed; bottom: 0; left: 0; width: 390px; height: 84px;
+    background: #FFFFFF; border-top: 0.5px solid rgba(0,0,0,0.08);
+    display: flex; align-items: flex-start; justify-content: space-around;
+    padding-top: 10px;
   }
-  .tab-item {
-    display: flex; flex-direction: column; align-items: center; gap: 4px;
-    cursor: pointer;
-  }
-  .tab-item svg { width: 24px; height: 24px; }
-  .tab-item .tab-icon-default { fill: #636366; }
-  .tab-item.active .tab-icon-default { fill: url(#tabGrad); }
-  .tab-label { font-size: 10px; color: #636366; font-weight: 500; }
-  .tab-item.active .tab-label {
-    background: linear-gradient(135deg, #00C9A7, #845EC2);
-    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-    background-clip: text; font-weight: 600;
-  }
-
-  /* Home Indicator */
-  .home-indicator {
-    width: 134px; height: 5px; background: #636366; border-radius: 3px;
-    margin: 0 auto 8px;
-  }
+  .tab-item { display: flex; flex-direction: column; align-items: center; gap: 4px; cursor: pointer; background: none; border: none; }
+  .tab-label { font-size: 11px; color: #6B7280; font-weight: 500; font-family: 'DM Sans', sans-serif; }
+  .tab-item.active .tab-label { color: #021A54; font-weight: 600; }
 </style>
 </head>
 <body>
-
-<div class="phone">
-  <!-- Gradient defs for tab icons -->
-  <svg width="0" height="0" style="position:absolute">
-    <defs>
-      <linearGradient id="tabGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-        <stop offset="0%" stop-color="#00C9A7"/>
-        <stop offset="100%" stop-color="#845EC2"/>
-      </linearGradient>
-    </defs>
-  </svg>
-
-  <!-- Status Bar -->
   <div class="status-bar">
-    <span class="status-time">9:41</span>
+    <span class="time">9:41</span>
     <div class="status-icons">
-      <svg viewBox="0 0 24 24"><path d="M1 9l2 2c4.97-4.97 13.03-4.97 18 0l2-2C16.93 2.93 7.08 2.93 1 9zm8 8l3 3 3-3c-1.65-1.66-4.34-1.66-6 0zm-4-4l2 2c2.76-2.76 7.24-2.76 10 0l2-2C15.14 9.14 8.87 9.14 5 13z"/></svg>
-      <svg viewBox="0 0 24 24"><path d="M15.67 4H14V2h-4v2H8.33C7.6 4 7 4.6 7 5.33v15.34C7 21.4 7.6 22 8.33 22h7.34c.73 0 1.33-.6 1.33-1.33V5.33C17 4.6 16.4 4 15.67 4z"/></svg>
+      <svg width="16" height="12" fill="#021A54"><rect x="0" y="3" width="3" height="9" rx="0.5" opacity=".4"/><rect x="4" y="2" width="3" height="10" rx="0.5" opacity=".6"/><rect x="8" y="1" width="3" height="11" rx="0.5" opacity=".8"/><rect x="12" y="0" width="3" height="12" rx="0.5"/></svg>
+      <svg width="16" height="12" fill="#021A54"><path d="M1 4.5c2.5-3 5-3.5 7-3.5s4.5.5 7 3.5" stroke="#021A54" stroke-width="1.2" fill="none" opacity=".4"/><path d="M3.5 7c1.5-2 3-2.5 4.5-2.5s3 .5 4.5 2.5" stroke="#021A54" stroke-width="1.2" fill="none" opacity=".7"/><circle cx="8" cy="10" r="1.5"/></svg>
+      <svg width="27" height="12"><rect x="0" y="1" width="22" height="10" rx="2" stroke="#021A54" stroke-width="1" fill="none"/><rect x="23" y="3.5" width="2.5" height="5" rx="1" fill="#021A54" opacity=".4"/><rect x="1.5" y="2.5" width="17" height="7" rx="1" fill="#021A54"/></svg>
     </div>
   </div>
 
-  <!-- Header -->
   <div class="header">
-    <div class="header-left">
-      <span class="logo">SnapContent</span>
+    <div class="logo-area">
+      <span class="logo-text">CreatorAI</span>
       <span class="pro-badge">PRO</span>
     </div>
-    <svg class="gear-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-      <circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
-    </svg>
+    <div class="settings-icon">
+      <svg width="24" height="24" fill="none" stroke="#6B7280" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+    </div>
   </div>
 
-  <!-- Content -->
   <div class="content">
-    <!-- AI Image Card -->
-    <div class="feature-card card-ai-image">
-      <div style="display:flex; justify-content:space-between; align-items:flex-start;">
-        <div class="card-icon">
-          <svg viewBox="0 0 24 24"><path d="M12 15.2l-3.2-4L5 16h14l-3.8-5zM21 3H3C1.9 3 1 3.9 1 5v14c0 1.1.9 2 2 2h18c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H3V5h18v14z"/></svg>
-        </div>
-        <div class="card-arrow">
-          <svg viewBox="0 0 24 24"><path d="M5 12h14m-7-7l7 7-7 7"/></svg>
-        </div>
+    <div class="module-card navy">
+      <div class="module-icon">
+        <svg width="24" height="24" fill="none" stroke="#021A54" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/></svg>
       </div>
-      <div class="card-text">
-        <div class="card-title">AI Image</div>
-        <div class="card-subtitle">Transform photos into studio shots</div>
+      <div class="module-info">
+        <div class="module-title">AI Image</div>
+        <div class="module-desc">Transform photos into studio shots</div>
       </div>
+      <span class="module-arrow"><svg width="20" height="20" fill="none" stroke="#9CA3AF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m7 4 8 8-8 8"/></svg></span>
     </div>
 
-    <!-- AI Content Card -->
-    <div class="feature-card card-ai-content">
-      <div style="display:flex; justify-content:space-between; align-items:flex-start;">
-        <div class="card-icon">
-          <svg viewBox="0 0 24 24"><path d="M14 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6zm4 18H6V4h7v5h5v11zM8 15.01V17h1.99l5.88-5.88-1.99-1.99L8 15.01z"/></svg>
-        </div>
-        <div class="card-arrow">
-          <svg viewBox="0 0 24 24"><path d="M5 12h14m-7-7l7 7-7 7"/></svg>
-        </div>
+    <div class="module-card pink">
+      <div class="module-icon">
+        <svg width="24" height="24" fill="none" stroke="#FF85BB" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
       </div>
-      <div class="card-text">
-        <div class="card-title">AI Content</div>
-        <div class="card-subtitle">Generate marketing copy instantly</div>
+      <div class="module-info">
+        <div class="module-title">AI Content</div>
+        <div class="module-desc">Generate marketing copy instantly</div>
       </div>
+      <span class="module-arrow"><svg width="20" height="20" fill="none" stroke="#9CA3AF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m7 4 8 8-8 8"/></svg></span>
     </div>
 
-    <!-- AI Video Card -->
-    <div class="feature-card card-ai-video">
-      <div style="display:flex; justify-content:space-between; align-items:flex-start;">
-        <div class="card-icon">
-          <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
-        </div>
-        <div class="card-arrow">
-          <svg viewBox="0 0 24 24"><path d="M5 12h14m-7-7l7 7-7 7"/></svg>
-        </div>
+    <div class="module-card blush">
+      <div class="module-icon">
+        <svg width="24" height="24" fill="none" stroke="#FF85BB" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"/></svg>
       </div>
-      <div class="card-text">
-        <div class="card-title">AI Video</div>
-        <div class="card-subtitle">Create cinematic product videos</div>
+      <div class="module-info">
+        <div class="module-title">AI Video</div>
+        <div class="module-desc">Create cinematic product videos</div>
+      </div>
+      <span class="module-arrow"><svg width="20" height="20" fill="none" stroke="#9CA3AF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m7 4 8 8-8 8"/></svg></span>
+    </div>
+
+    <div class="section-title">Quick Actions</div>
+    <div class="quick-actions">
+      <div class="quick-card">
+        <div class="quick-emoji">&#x1F4F8;</div>
+        <div class="quick-label">New Photo</div>
+      </div>
+      <div class="quick-card">
+        <div class="quick-emoji">&#x270F;&#xFE0F;</div>
+        <div class="quick-label">Write Copy</div>
+      </div>
+      <div class="quick-card">
+        <div class="quick-emoji">&#x1F3AC;</div>
+        <div class="quick-label">Make Video</div>
       </div>
     </div>
   </div>
 
-  <!-- Bottom Tab Bar -->
   <div class="tab-bar">
-    <div class="tab-item active">
-      <svg viewBox="0 0 24 24"><path class="tab-icon-default" d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+    <button class="tab-item active">
+      <svg width="22" height="22" fill="none" stroke="#021A54" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-4 0a1 1 0 01-1-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 01-1 1h-2z"/></svg>
       <span class="tab-label">Home</span>
-    </div>
-    <div class="tab-item">
-      <svg viewBox="0 0 24 24"><path class="tab-icon-default" d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/></svg>
+    </button>
+    <button class="tab-item">
+      <svg width="22" height="22" fill="none" stroke="#6B7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
       <span class="tab-label">Explore</span>
-    </div>
-    <div class="tab-item">
-      <svg viewBox="0 0 24 24"><path class="tab-icon-default" d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 14H5.17L4 17.17V4h16v12zM7 9h2v2H7zm4 0h2v2h-2zm4 0h2v2h-2z"/></svg>
+    </button>
+    <button class="tab-item">
+      <svg width="22" height="22" fill="none" stroke="#6B7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/></svg>
       <span class="tab-label">Library</span>
-    </div>
-    <div class="tab-item">
-      <svg viewBox="0 0 24 24"><path class="tab-icon-default" d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+    </button>
+    <button class="tab-item">
+      <svg width="22" height="22" fill="none" stroke="#6B7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
       <span class="tab-label">Account</span>
-    </div>
+    </button>
   </div>
-  <div class="home-indicator"></div>
-</div>
-
 </body>
 </html>

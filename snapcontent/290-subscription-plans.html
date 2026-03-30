@@ -3,25 +3,18 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>290 — Subscription Plans</title>
+<title>CreatorAI — Subscription Plans</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@600;700&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
+
   body {
-    background: #1a1a2e;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
-    font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
-  }
-  .phone-frame {
     width: 390px;
     height: 844px;
-    background: #0A0A0C;
-    border-radius: 40px;
-    box-shadow: 0 0 0 2px #2A2A2E, 0 20px 60px rgba(0,0,0,0.5);
+    background: #F9FAFB;
+    font-family: 'DM Sans', sans-serif;
+    color: #374151;
     overflow: hidden;
-    position: relative;
     display: flex;
     flex-direction: column;
   }
@@ -32,388 +25,361 @@
     justify-content: space-between;
     align-items: center;
     padding: 14px 24px 8px;
-    font-size: 14px;
-    font-weight: 600;
-    color: #FFFFFF;
+    flex-shrink: 0;
   }
-  .status-bar-right {
+  .status-bar .time {
+    font-size: 15px;
+    font-weight: 700;
+    color: #021A54;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+  }
+  .status-icons {
     display: flex;
     gap: 6px;
     align-items: center;
   }
-  .status-bar-right svg { width: 16px; height: 16px; fill: #FFFFFF; }
 
-  /* Header */
-  .header {
+  /* Navigation Header */
+  .nav-header {
     display: flex;
     align-items: center;
-    padding: 8px 16px 16px;
+    padding: 8px 20px 12px;
     gap: 12px;
+    flex-shrink: 0;
   }
   .back-btn {
-    width: 40px;
-    height: 40px;
+    width: 36px;
+    height: 36px;
     display: flex;
     align-items: center;
     justify-content: center;
     cursor: pointer;
+    background: none;
+    border: none;
+    padding: 0;
   }
   .back-btn svg {
-    width: 24px;
-    height: 24px;
+    width: 22px;
+    height: 22px;
     fill: none;
-    stroke: #FFFFFF;
+    stroke: #021A54;
     stroke-width: 2;
     stroke-linecap: round;
     stroke-linejoin: round;
   }
-  .header-title {
-    font-size: 20px;
+  .nav-title {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 18px;
     font-weight: 700;
-    color: #FFFFFF;
+    color: #021A54;
   }
 
   /* Content */
   .content {
     flex: 1;
-    padding: 0 16px;
-    overflow-y: auto;
     display: flex;
     flex-direction: column;
+    padding: 0 20px 28px;
+    overflow-y: auto;
+  }
+  .content::-webkit-scrollbar { display: none; }
+
+  /* Title */
+  .page-title {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 24px;
+    font-weight: 700;
+    color: #021A54;
+    text-align: center;
+    margin-bottom: 16px;
   }
 
   /* Plan Cards */
+  .plan-cards {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    margin-bottom: 20px;
+  }
   .plan-card {
-    border-radius: 16px;
-    padding: 20px;
-    margin-bottom: 12px;
+    background: #FFFFFF;
+    border: 0.5px solid rgba(0,0,0,0.08);
+    border-radius: 12px;
+    padding: 18px;
     position: relative;
   }
-
-  /* Free Plan */
-  .plan-free {
-    background: #1C1C1E;
-    border: 1.5px solid #2A2A2E;
+  .plan-card.active {
+    border: 2px solid #021A54;
   }
-  .plan-header {
+  .plan-card-header {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    margin-bottom: 4px;
+    margin-bottom: 12px;
   }
   .plan-name {
-    font-size: 20px;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 17px;
     font-weight: 700;
-    color: #FFFFFF;
+    color: #021A54;
   }
-  .plan-badge {
-    font-size: 11px;
-    font-weight: 700;
-    padding: 4px 10px;
-    border-radius: 20px;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-  }
-  .badge-current {
-    background: rgba(142, 142, 147, 0.2);
-    color: #8E8E93;
-  }
-  .badge-weekly {
-    background: linear-gradient(135deg, #00C9A7, #845EC2);
-    color: #FFFFFF;
-  }
-  .badge-best {
-    background: linear-gradient(135deg, #FFD700, #FFAA00);
-    color: #0A0A0C;
-    font-weight: 800;
+  .plan-price-row {
+    text-align: right;
   }
   .plan-price {
-    font-size: 14px;
-    color: #8E8E93;
-    margin-bottom: 16px;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 18px;
+    font-weight: 700;
+    color: #021A54;
   }
-  .plan-price-amount {
-    font-size: 28px;
+  .plan-period {
+    font-size: 12px;
+    color: #6B7280;
+  }
+  .best-value-badge {
+    display: inline-block;
+    padding: 4px 10px;
+    border-radius: 8px;
+    background: #021A54;
+    font-size: 10px;
     font-weight: 800;
     color: #FFFFFF;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    margin-bottom: 10px;
   }
-  .plan-price-period {
-    font-size: 15px;
-    color: #8E8E93;
-    font-weight: 400;
-  }
-  .plan-save {
+  .active-badge {
     display: inline-block;
-    font-size: 12px;
-    font-weight: 700;
-    color: #34C759;
-    background: rgba(52, 199, 89, 0.12);
-    padding: 3px 8px;
-    border-radius: 6px;
+    padding: 4px 10px;
+    border-radius: 8px;
+    background: #021A54;
+    font-size: 10px;
+    font-weight: 800;
+    color: #FFFFFF;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
     margin-left: 8px;
   }
 
   /* Feature List */
-  .feature-list {
+  .plan-features {
     list-style: none;
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: 8px;
+    margin-bottom: 14px;
   }
-  .feature-item {
+  .plan-features li {
     display: flex;
     align-items: center;
     gap: 10px;
-    font-size: 14px;
-    color: #FFFFFF;
+    font-size: 13px;
+    color: #374151;
   }
-  .feature-bullet {
-    width: 6px;
-    height: 6px;
-    border-radius: 50%;
-    background: #636366;
-    flex-shrink: 0;
+  .plan-features li.bonus {
+    color: #FF85BB;
+    font-weight: 500;
   }
   .feature-check {
     width: 20px;
     height: 20px;
     border-radius: 50%;
-    background: rgba(52, 199, 89, 0.15);
+    background: #FFCEE3;
     display: flex;
     align-items: center;
     justify-content: center;
     flex-shrink: 0;
   }
   .feature-check svg {
-    width: 12px;
-    height: 12px;
-    fill: none;
-    stroke: #34C759;
+    width: 10px;
+    height: 10px;
+    stroke: #021A54;
     stroke-width: 2.5;
+    fill: none;
     stroke-linecap: round;
     stroke-linejoin: round;
   }
 
-  /* Pro Weekly (selected) */
-  .plan-pro-weekly {
-    background: #1C1C1E;
-    border: 2px solid transparent;
-    background-clip: padding-box;
-    position: relative;
-  }
-  .plan-pro-weekly::before {
-    content: '';
-    position: absolute;
-    top: -2px;
-    left: -2px;
-    right: -2px;
-    bottom: -2px;
-    border-radius: 18px;
-    background: linear-gradient(135deg, #00C9A7, #845EC2);
-    z-index: -1;
-  }
-
-  /* Pro Yearly */
-  .plan-pro-yearly {
-    background: #1C1C1E;
-    border: 1.5px solid #2A2A2E;
-    overflow: visible;
-  }
-  .best-value-tag {
-    position: absolute;
-    top: -10px;
-    right: 16px;
-    background: linear-gradient(135deg, #FFD700, #FFAA00);
-    color: #0A0A0C;
-    font-size: 10px;
-    font-weight: 800;
-    padding: 4px 12px;
-    border-radius: 8px;
-    text-transform: uppercase;
-    letter-spacing: 0.8px;
-  }
-
-  /* Spacer */
-  .spacer { flex: 1; min-height: 8px; }
-
-  /* CTA Button */
-  .btn-container {
-    padding: 8px 0;
-  }
-  .btn-subscribe {
+  /* Plan CTA */
+  .plan-cta {
     width: 100%;
-    height: 52px;
-    border-radius: 14px;
+    height: 42px;
     border: none;
-    background: linear-gradient(135deg, #00C9A7, #845EC2);
-    color: #FFFFFF;
-    font-size: 17px;
-    font-weight: 700;
-    font-family: inherit;
+    border-radius: 8px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
     cursor: pointer;
-    transition: opacity 0.15s;
   }
-  .btn-subscribe:hover {
-    opacity: 0.9;
+  .plan-cta.primary {
+    background: #021A54;
+    color: #FFFFFF;
+  }
+  .plan-cta.soft {
+    background: #FFCEE3;
+    color: #021A54;
+  }
+  .plan-cta.active-plan {
+    background: #F3F4F6;
+    color: #6B7280;
+    cursor: default;
   }
 
   /* Footer */
-  .footer {
+  .footer-links {
     display: flex;
     justify-content: center;
+    gap: 12px;
     align-items: center;
-    gap: 16px;
-    padding: 12px 0 36px;
+    padding-top: 4px;
   }
-  .footer a {
+  .footer-links a {
     font-size: 12px;
-    color: #636366;
+    color: #9CA3AF;
     text-decoration: none;
-    transition: color 0.15s;
   }
-  .footer a:hover {
-    color: #8E8E93;
-  }
-  .footer-divider {
-    width: 1px;
-    height: 12px;
-    background: #2A2A2E;
+  .footer-links .sep {
+    color: #D1D5DB;
+    font-size: 12px;
   }
 </style>
 </head>
 <body>
-<div class="phone-frame">
-  <!-- Status Bar -->
-  <div class="status-bar">
-    <span>9:41</span>
-    <div class="status-bar-right">
-      <svg viewBox="0 0 16 16"><path d="M1 10c0-.6.4-1 1-1h1c.6 0 1 .4 1 1v4c0 .6-.4 1-1 1H2c-.6 0-1-.4-1-1v-4zm4-3c0-.6.4-1 1-1h1c.6 0 1 .4 1 1v7c0 .6-.4 1-1 1H6c-.6 0-1-.4-1-1V7zm4-3c0-.6.4-1 1-1h1c.6 0 1 .4 1 1v10c0 .6-.4 1-1 1h-1c-.6 0-1-.4-1-1V4zm4-3c0-.6.4-1 1-1h1c.6 0 1 .4 1 1v13c0 .6-.4 1-1 1h-1c-.6 0-1-.4-1-1V1z"/></svg>
-      <svg viewBox="0 0 16 16"><path d="M8 3c3 0 5.5 1.5 7 4-1.5 2.5-4 4-7 4s-5.5-1.5-7-4c1.5-2.5 4-4 7-4z" fill="none" stroke="#fff" stroke-width="1.2"/><circle cx="8" cy="7" r="2" fill="#fff"/></svg>
-      <svg viewBox="0 0 24 12"><rect x="0" y="0" width="22" height="12" rx="2" fill="none" stroke="#fff" stroke-width="1.2"/><rect x="2" y="2" width="14" height="8" rx="1" fill="#34C759"/><rect x="23" y="3.5" width="1.5" height="5" rx="0.5" fill="#fff"/></svg>
-    </div>
-  </div>
 
-  <!-- Header -->
-  <div class="header">
-    <div class="back-btn">
-      <svg viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg>
-    </div>
-    <span class="header-title">Choose Your Plan</span>
-  </div>
-
-  <!-- Content -->
-  <div class="content">
-    <!-- Free Plan -->
-    <div class="plan-card plan-free">
-      <div class="plan-header">
-        <span class="plan-name">Free</span>
-        <span class="plan-badge badge-current">Current Plan</span>
-      </div>
-      <div class="plan-price" style="margin-bottom:14px; color:#636366; font-size:13px;">Basic access</div>
-      <ul class="feature-list">
-        <li class="feature-item">
-          <div class="feature-bullet"></div>
-          3 images/day
-        </li>
-        <li class="feature-item">
-          <div class="feature-bullet"></div>
-          1 video/day
-        </li>
-        <li class="feature-item">
-          <div class="feature-bullet"></div>
-          Basic styles
-        </li>
-        <li class="feature-item">
-          <div class="feature-bullet"></div>
-          Watermarked exports
-        </li>
-      </ul>
-    </div>
-
-    <!-- Pro Weekly (Selected) -->
-    <div class="plan-card plan-pro-weekly">
-      <div class="plan-header">
-        <span class="plan-name">Pro</span>
-        <span class="plan-badge badge-weekly">Weekly</span>
-      </div>
-      <div class="plan-price">
-        <span class="plan-price-amount">$9.99</span><span class="plan-price-period">/week</span>
-      </div>
-      <ul class="feature-list">
-        <li class="feature-item">
-          <div class="feature-check"><svg viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"/></svg></div>
-          Unlimited images
-        </li>
-        <li class="feature-item">
-          <div class="feature-check"><svg viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"/></svg></div>
-          Unlimited videos
-        </li>
-        <li class="feature-item">
-          <div class="feature-check"><svg viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"/></svg></div>
-          All premium styles
-        </li>
-        <li class="feature-item">
-          <div class="feature-check"><svg viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"/></svg></div>
-          HD no watermark
-        </li>
-        <li class="feature-item">
-          <div class="feature-check"><svg viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"/></svg></div>
-          Priority speed
-        </li>
-      </ul>
-    </div>
-
-    <!-- Pro Yearly -->
-    <div class="plan-card plan-pro-yearly">
-      <div class="best-value-tag">BEST VALUE</div>
-      <div class="plan-header">
-        <span class="plan-name">Pro</span>
-        <span class="plan-badge badge-best">Yearly</span>
-      </div>
-      <div class="plan-price">
-        <span class="plan-price-amount">$49.99</span><span class="plan-price-period">/year</span>
-        <span class="plan-save">Save 90%</span>
-      </div>
-      <ul class="feature-list">
-        <li class="feature-item">
-          <div class="feature-check"><svg viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"/></svg></div>
-          Unlimited images
-        </li>
-        <li class="feature-item">
-          <div class="feature-check"><svg viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"/></svg></div>
-          Unlimited videos
-        </li>
-        <li class="feature-item">
-          <div class="feature-check"><svg viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"/></svg></div>
-          All premium styles
-        </li>
-        <li class="feature-item">
-          <div class="feature-check"><svg viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"/></svg></div>
-          HD no watermark
-        </li>
-        <li class="feature-item">
-          <div class="feature-check"><svg viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"/></svg></div>
-          Priority speed
-        </li>
-      </ul>
-    </div>
-
-    <div class="spacer"></div>
-
-    <!-- Subscribe Button -->
-    <div class="btn-container">
-      <button class="btn-subscribe">Subscribe Now</button>
-    </div>
-
-    <!-- Footer -->
-    <div class="footer">
-      <a href="#">Restore</a>
-      <div class="footer-divider"></div>
-      <a href="#">Terms of Service</a>
-      <div class="footer-divider"></div>
-      <a href="#">Privacy</a>
-    </div>
+<!-- Status Bar -->
+<div class="status-bar">
+  <span class="time">9:41</span>
+  <div class="status-icons">
+    <svg width="16" height="16" viewBox="0 0 16 16"><path d="M1 10.5h2v4H1zM5 8h2v6.5H5zM9 5.5h2v9H9zM13 2.5h2v12h-2z" fill="#021A54"/></svg>
+    <svg width="16" height="16" viewBox="0 0 16 16"><path d="M8 3C4.5 3 1.5 5 0 8c1.5 3 4.5 5 8 5s6.5-2 8-5c-1.5-3-4.5-5-8-5zm0 8.5a3.5 3.5 0 110-7 3.5 3.5 0 010 7z" fill="#021A54"/></svg>
+    <svg width="16" height="16" viewBox="0 0 16 16"><rect x="1" y="4" width="12" height="8" rx="1.5" stroke="#021A54" stroke-width="1.2" fill="none"/><rect x="13.5" y="6.5" width="1.5" height="3" rx="0.5" fill="#021A54"/><rect x="2.5" y="5.5" width="7" height="5" rx="0.5" fill="#021A54"/></svg>
   </div>
 </div>
+
+<!-- Navigation Header -->
+<div class="nav-header">
+  <button class="back-btn">
+    <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>
+  </button>
+  <span class="nav-title">Subscription</span>
+</div>
+
+<div class="content">
+  <h1 class="page-title">Choose Your Plan</h1>
+
+  <div class="plan-cards">
+    <!-- Weekly -->
+    <div class="plan-card">
+      <div class="plan-card-header">
+        <span class="plan-name">Weekly</span>
+        <div class="plan-price-row">
+          <div class="plan-price">$9.99</div>
+          <div class="plan-period">per week</div>
+        </div>
+      </div>
+      <ul class="plan-features">
+        <li>
+          <span class="feature-check"><svg viewBox="0 0 14 14"><polyline points="2.5 7 5.5 10.5 11.5 3.5"/></svg></span>
+          Unlimited AI image generations
+        </li>
+        <li>
+          <span class="feature-check"><svg viewBox="0 0 14 14"><polyline points="2.5 7 5.5 10.5 11.5 3.5"/></svg></span>
+          AI video creation
+        </li>
+        <li>
+          <span class="feature-check"><svg viewBox="0 0 14 14"><polyline points="2.5 7 5.5 10.5 11.5 3.5"/></svg></span>
+          HD exports without watermark
+        </li>
+      </ul>
+      <button class="plan-cta soft">Select Weekly</button>
+    </div>
+
+    <!-- Yearly (BEST VALUE, Active) -->
+    <div class="plan-card active">
+      <div style="display:flex; gap:8px; margin-bottom:4px;">
+        <span class="best-value-badge">BEST VALUE</span>
+        <span class="active-badge">CURRENT PLAN</span>
+      </div>
+      <div class="plan-card-header">
+        <span class="plan-name">Yearly</span>
+        <div class="plan-price-row">
+          <div class="plan-price">$49.99</div>
+          <div class="plan-period">per year</div>
+        </div>
+      </div>
+      <ul class="plan-features">
+        <li>
+          <span class="feature-check"><svg viewBox="0 0 14 14"><polyline points="2.5 7 5.5 10.5 11.5 3.5"/></svg></span>
+          Unlimited AI image generations
+        </li>
+        <li>
+          <span class="feature-check"><svg viewBox="0 0 14 14"><polyline points="2.5 7 5.5 10.5 11.5 3.5"/></svg></span>
+          Professional AI video creation
+        </li>
+        <li>
+          <span class="feature-check"><svg viewBox="0 0 14 14"><polyline points="2.5 7 5.5 10.5 11.5 3.5"/></svg></span>
+          AI-powered marketing copy
+        </li>
+        <li>
+          <span class="feature-check"><svg viewBox="0 0 14 14"><polyline points="2.5 7 5.5 10.5 11.5 3.5"/></svg></span>
+          HD exports without watermark
+        </li>
+        <li class="bonus">
+          <span class="feature-check"><svg viewBox="0 0 14 14"><polyline points="2.5 7 5.5 10.5 11.5 3.5"/></svg></span>
+          Priority processing speed
+        </li>
+        <li class="bonus">
+          <span class="feature-check"><svg viewBox="0 0 14 14"><polyline points="2.5 7 5.5 10.5 11.5 3.5"/></svg></span>
+          Early access to new features
+        </li>
+      </ul>
+      <button class="plan-cta active-plan">Current Plan</button>
+    </div>
+
+    <!-- Lifetime -->
+    <div class="plan-card">
+      <div class="plan-card-header">
+        <span class="plan-name">Lifetime</span>
+        <div class="plan-price-row">
+          <div class="plan-price">$99.99</div>
+          <div class="plan-period">one-time</div>
+        </div>
+      </div>
+      <ul class="plan-features">
+        <li>
+          <span class="feature-check"><svg viewBox="0 0 14 14"><polyline points="2.5 7 5.5 10.5 11.5 3.5"/></svg></span>
+          All Pro features forever
+        </li>
+        <li>
+          <span class="feature-check"><svg viewBox="0 0 14 14"><polyline points="2.5 7 5.5 10.5 11.5 3.5"/></svg></span>
+          Unlimited AI generations
+        </li>
+        <li>
+          <span class="feature-check"><svg viewBox="0 0 14 14"><polyline points="2.5 7 5.5 10.5 11.5 3.5"/></svg></span>
+          HD exports without watermark
+        </li>
+        <li>
+          <span class="feature-check"><svg viewBox="0 0 14 14"><polyline points="2.5 7 5.5 10.5 11.5 3.5"/></svg></span>
+          Priority processing speed
+        </li>
+        <li>
+          <span class="feature-check"><svg viewBox="0 0 14 14"><polyline points="2.5 7 5.5 10.5 11.5 3.5"/></svg></span>
+          No recurring payments
+        </li>
+      </ul>
+      <button class="plan-cta primary">Select Lifetime</button>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <div class="footer-links">
+    <a href="#">Restore</a>
+    <span class="sep">|</span>
+    <a href="#">Terms</a>
+    <span class="sep">|</span>
+    <a href="#">Privacy</a>
+  </div>
+</div>
+
 </body>
 </html>
