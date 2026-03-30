@@ -3,47 +3,74 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>561 — Loading: Facial Feature</title>
+<title>561 — Loading: Facial Feature (Overlay)</title>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
   body { background: #000; display: flex; justify-content: center; align-items: center; min-height: 100vh; font-family: 'Inter', sans-serif; }
   .phone-frame { width: 390px; height: 844px; border-radius: 44px; background: #1A1118; position: relative; overflow: hidden; display: flex; flex-direction: column; }
 
-  /* Status Bar */
   .status-bar { height: 47px; display: flex; align-items: center; justify-content: space-between; padding: 14px 24px 0; flex-shrink: 0; }
   .status-time { font-family: 'DM Sans', sans-serif; font-weight: 700; font-size: 15px; color: #F5EDE8; }
   .status-icons { display: flex; gap: 6px; align-items: center; }
   .status-icons svg { width: 18px; height: 18px; }
 
-  /* Loading Content */
-  .loading-content { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 20px; }
+  .nav-bar { height: 44px; display: flex; align-items: center; justify-content: center; padding: 0 20px; position: relative; flex-shrink: 0; }
+  .nav-back { width: 20px; height: 20px; cursor: pointer; position: absolute; left: 20px; }
+  .nav-title { font-family: 'DM Sans', sans-serif; font-weight: 700; font-size: 17px; color: #F5EDE8; }
 
-  /* Pulsing Ring */
+  /* Background content (541 Facial Features) */
+  .bg-content { flex: 1; overflow-y: auto; padding: 0 20px; }
+  .user-photo { width: 350px; height: 240px; border-radius: 16px; background: linear-gradient(160deg, #2A1F26 0%, #352A30 50%, #2A1F26 100%); margin-bottom: 16px; }
+  .segmented { display: flex; width: 350px; background: #2A1F26; border-radius: 9999px; padding: 4px; margin-bottom: 20px; }
+  .seg-tab { flex: 1; height: 36px; border-radius: 9999px; display: flex; align-items: center; justify-content: center; font-size: 15px; border: none; background: transparent; }
+  .seg-tab.active { background: rgba(212, 165, 116, 0.15); color: #D4A574; font-family: 'DM Sans', sans-serif; font-weight: 600; }
+  .seg-tab.inactive { color: #9A8E94; font-family: 'Inter', sans-serif; font-weight: 400; }
+  .feature-tabs { display: flex; gap: 16px; justify-content: center; margin-bottom: 24px; }
+  .feature-tab { display: flex; flex-direction: column; align-items: center; gap: 6px; width: 60px; }
+  .feature-icon { width: 44px; height: 44px; border-radius: 50%; display: flex; align-items: center; justify-content: center; }
+  .feature-icon.active { background: rgba(212, 165, 116, 0.15); }
+  .feature-icon.inactive { background: transparent; }
+  .feature-icon svg { width: 28px; height: 28px; }
+  .feature-label { font-family: 'Inter', sans-serif; font-size: 12px; font-weight: 500; }
+  .feature-label.active { color: #D4A574; }
+  .feature-label.inactive { color: #6A5E64; }
+  .carousel { display: flex; gap: 12px; overflow-x: auto; padding-bottom: 8px; }
+  .carousel::-webkit-scrollbar { display: none; }
+  .template-card { width: 120px; height: 160px; border-radius: 12px; flex-shrink: 0; display: flex; flex-direction: column; justify-content: flex-end; padding: 10px; }
+  .template-card:nth-child(1) { background: linear-gradient(160deg, #352A30, #40343A); }
+  .template-card:nth-child(2) { background: linear-gradient(200deg, #40343A, #352A30); }
+  .template-card:nth-child(3) { background: linear-gradient(135deg, #2A1F26, #352A30); }
+  .template-name { font-family: 'DM Sans', sans-serif; font-weight: 600; font-size: 13px; color: #F5EDE8; }
+
+  /* ── Loading Overlay ── */
+  .loading-overlay {
+    position: absolute; inset: 0; z-index: 100;
+    background: rgba(26, 17, 24, 0.85);
+    backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+    display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 20px;
+    border-radius: 44px;
+  }
+
   .ring-container { position: relative; width: 80px; height: 80px; }
   .pulsing-ring { width: 80px; height: 80px; border-radius: 50%; background: conic-gradient(from 0deg, #D4A574, #C9828E, #D4A574); padding: 4px; animation: pulse-ring 1.5s ease-in-out infinite; }
   .pulsing-ring-inner { width: 100%; height: 100%; border-radius: 50%; background: #1A1118; }
-
   @keyframes pulse-ring {
     0%, 100% { transform: scale(1); opacity: 0.8; }
     50% { transform: scale(1.05); opacity: 1; }
   }
 
-  /* Progress Text */
-  .progress-text { font-family: 'DM Sans', sans-serif; font-weight: 700; font-size: 20px; color: #F5EDE8; text-align: center; }
-  .progress-subtitle { font-family: 'Inter', sans-serif; font-weight: 400; font-size: 15px; color: #9A8E94; text-align: center; }
-
-  /* Cancel Button */
+  .progress-text { font-family: 'DM Sans', sans-serif; font-weight: 700; font-size: 20px; color: #F5EDE8; }
+  .progress-subtitle { font-family: 'Inter', sans-serif; font-weight: 400; font-size: 15px; color: #9A8E94; }
   .cancel-btn { background: none; border: none; font-family: 'Inter', sans-serif; font-weight: 600; font-size: 15px; color: #9A8E94; cursor: pointer; margin-top: 24px; }
 
-  /* Home Indicator */
-  .home-indicator { position: absolute; bottom: 8px; left: 50%; transform: translateX(-50%); width: 134px; height: 5px; background: #F5EDE8; border-radius: 100px; }
+  .home-indicator { position: absolute; bottom: 8px; left: 50%; transform: translateX(-50%); width: 134px; height: 5px; background: #F5EDE8; border-radius: 100px; z-index: 110; }
 </style>
 </head>
 <body>
 <div class="phone-frame">
 
-  <!-- Status Bar -->
+  <!-- Background: 541 Facial Features screen -->
   <div class="status-bar">
     <span class="status-time">9:41</span>
     <div class="status-icons">
@@ -52,22 +79,48 @@
       <svg viewBox="0 0 18 18" fill="none"><rect x="1" y="4" width="14" height="10" rx="2" stroke="#F5EDE8" stroke-width="1.5"/><rect x="16" y="7" width="2" height="4" rx="0.5" fill="#F5EDE8"/><rect x="2.5" y="5.5" width="8" height="7" rx="1" fill="#F5EDE8"/></svg>
     </div>
   </div>
-
-  <!-- Loading Content -->
-  <div class="loading-content">
-    <div class="ring-container">
-      <div class="pulsing-ring">
-        <div class="pulsing-ring-inner"></div>
+  <div class="nav-bar">
+    <svg class="nav-back" viewBox="0 0 20 20" fill="none"><path d="M12.5 15L7.5 10L12.5 5" stroke="#D4A574" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    <span class="nav-title">Facial Features</span>
+  </div>
+  <div class="bg-content">
+    <div class="user-photo"></div>
+    <div class="segmented">
+      <div class="seg-tab inactive">Looks</div>
+      <div class="seg-tab active">Features</div>
+    </div>
+    <div class="feature-tabs">
+      <div class="feature-tab">
+        <div class="feature-icon active"><svg viewBox="0 0 28 28" fill="none"><path d="M14 4c-5 0-8 3-8 8 0 3 1 5 2 7 1.5 2.5 2 4 2 6h8c0-2 .5-3.5 2-6 1-2 2-4 2-7 0-5-3-8-8-8z" stroke="#D4A574" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M10 25h8" stroke="#D4A574" stroke-width="2" stroke-linecap="round"/></svg></div>
+        <span class="feature-label active">Hair</span>
       </div>
+      <div class="feature-tab">
+        <div class="feature-icon inactive"><svg viewBox="0 0 28 28" fill="none"><path d="M4 14c3-4 7-5 10-3" stroke="#6A5E64" stroke-width="2" stroke-linecap="round"/><path d="M24 14c-3-4-7-5-10-3" stroke="#6A5E64" stroke-width="2" stroke-linecap="round"/></svg></div>
+        <span class="feature-label inactive">Brows</span>
+      </div>
+      <div class="feature-tab">
+        <div class="feature-icon inactive"><svg viewBox="0 0 28 28" fill="none"><path d="M14 8C8.5 8 4.5 12 3 14c1.5 2 5.5 6 11 6s9.5-4 11-6c-1.5-2-5.5-6-11-6z" stroke="#6A5E64" stroke-width="2"/><circle cx="14" cy="14" r="3" stroke="#6A5E64" stroke-width="2"/></svg></div>
+        <span class="feature-label inactive">Eyes</span>
+      </div>
+    </div>
+    <div class="carousel">
+      <div class="template-card"><span class="template-name">Red Hair</span></div>
+      <div class="template-card"><span class="template-name">Blonde</span></div>
+      <div class="template-card"><span class="template-name">Brunette</span></div>
+    </div>
+  </div>
+
+  <!-- Loading Overlay -->
+  <div class="loading-overlay">
+    <div class="ring-container">
+      <div class="pulsing-ring"><div class="pulsing-ring-inner"></div></div>
     </div>
     <div class="progress-text">42%</div>
     <div class="progress-subtitle">Editing your hair...</div>
     <button class="cancel-btn">Cancel</button>
   </div>
 
-  <!-- Home Indicator -->
   <div class="home-indicator"></div>
-
 </div>
 </body>
 </html>

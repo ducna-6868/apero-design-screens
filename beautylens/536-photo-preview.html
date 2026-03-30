@@ -31,9 +31,10 @@
   .face-status svg { width: 18px; height: 18px; }
   .face-status span { font-family: 'Inter', sans-serif; font-weight: 400; font-size: 15px; color: #6BCB77; }
 
-  /* Bottom CTA */
-  .bottom-cta { padding: 0 20px 34px; flex-shrink: 0; margin-top: auto; padding-top: 20px; }
-  .btn-primary { height: 52px; width: 350px; border-radius: 9999px; background: linear-gradient(135deg, #D4A574 0%, #C9828E 100%); color: #1A1118; font-family: 'DM Sans', sans-serif; font-weight: 700; font-size: 16px; border: none; cursor: pointer; box-shadow: 0 4px 24px rgba(212, 165, 116, 0.2); display: block; }
+  /* Bottom CTA — Two Buttons */
+  .bottom-cta { padding: 0 20px 34px; flex-shrink: 0; margin-top: auto; padding-top: 20px; display: flex; flex-direction: column; gap: 12px; }
+  .btn-primary { height: 52px; width: 350px; border-radius: 9999px; background: linear-gradient(135deg, #D4A574 0%, #C9828E 100%); color: #1A1118; font-family: 'DM Sans', sans-serif; font-weight: 700; font-size: 16px; border: none; cursor: pointer; box-shadow: 0 4px 24px rgba(212, 165, 116, 0.2); display: flex; align-items: center; justify-content: center; gap: 8px; }
+  .btn-secondary { height: 52px; width: 350px; border-radius: 9999px; background: transparent; color: #D4A574; font-family: 'DM Sans', sans-serif; font-weight: 700; font-size: 16px; border: 1.5px solid #D4A574; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; }
 
   .home-indicator { position: absolute; bottom: 8px; left: 50%; transform: translateX(-50%); width: 134px; height: 5px; background: #F5EDE8; border-radius: 100px; }
 </style>
@@ -73,9 +74,16 @@
     </div>
   </div>
 
-  <!-- Bottom CTA -->
+  <!-- Bottom CTA — Two Buttons -->
   <div class="bottom-cta">
-    <button class="btn-primary">Continue</button>
+    <button class="btn-primary">
+      <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><circle cx="9" cy="9" r="7" stroke="#1A1118" stroke-width="1.5"/><path d="M6 9.5c1-1.5 2-2 3-2s2 .5 3 2" stroke="#1A1118" stroke-width="1.3" stroke-linecap="round"/><circle cx="7" cy="7.5" r="1" fill="#1A1118"/><circle cx="11" cy="7.5" r="1" fill="#1A1118"/></svg>
+      Makeup Looks
+    </button>
+    <button class="btn-secondary">
+      <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><circle cx="9" cy="7" r="3.5" stroke="#D4A574" stroke-width="1.5"/><path d="M3 16c0-3.3 2.7-6 6-6s6 2.7 6 6" stroke="#D4A574" stroke-width="1.5" stroke-linecap="round"/></svg>
+      Facial Features
+    </button>
   </div>
 
   <!-- Home Indicator -->

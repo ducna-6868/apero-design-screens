@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=390, initial-scale=1.0">
-<title>BeautyLens — 301 Home</title>
+<title>FaceMagic — 301 Home</title>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; -webkit-font-smoothing: antialiased; }
@@ -82,11 +82,29 @@
   .badge-new { background: rgba(212,165,116,0.85); color: #1A1118; }
   .badge-hot { background: rgba(201,130,142,0.85); color: #fff; }
 
-  /* Card gradient placeholders */
+  /* Card thumbnail backgrounds */
   .card-bg-1 { background: linear-gradient(145deg, #D4A574, #C9828E); }
   .card-bg-2 { background: linear-gradient(145deg, #4A3040, #C9828E); }
   .card-bg-3 { background: linear-gradient(145deg, #B8A0D2, #6A4060); }
   .card-bg-4 { background: linear-gradient(145deg, #8B6E5A, #D4A574); }
+  .template-card .thumb {
+    position: absolute; inset: 0; width: 100%; height: 100%;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .template-card .thumb svg { opacity: 0.3; }
+
+  /* ── Edit Now CTA ── */
+  .edit-now-bar {
+    flex-shrink: 0; padding: 12px 20px 0;
+  }
+  .btn-edit-now {
+    width: 100%; height: 52px; border-radius: 9999px;
+    background: linear-gradient(135deg, #D4A574 0%, #C9828E 100%);
+    border: none; cursor: pointer;
+    font-family: 'DM Sans', sans-serif; font-weight: 700; font-size: 16px;
+    color: #1A1118; box-shadow: 0 4px 24px rgba(212,165,116,0.2);
+    display: flex; align-items: center; justify-content: center; gap: 8px;
+  }
 
   /* ── Horizontal Scroll Row ── */
   .h-scroll-row {
@@ -200,20 +218,32 @@
     <div class="section-heading">Trending Now</div>
     <div class="card-grid">
       <div class="template-card card-bg-1">
+        <div class="thumb">
+          <svg width="64" height="80" viewBox="0 0 64 80" fill="none"><ellipse cx="32" cy="26" rx="14" ry="16" stroke="rgba(255,255,255,0.5)" stroke-width="1.5"/><path d="M22 24c0-6 4-12 10-12s10 6 10 12" stroke="rgba(255,255,255,0.4)" stroke-width="1.2"/><circle cx="27" cy="28" r="2" fill="rgba(255,255,255,0.4)"/><circle cx="37" cy="28" r="2" fill="rgba(255,255,255,0.4)"/><path d="M28 35c2 2 6 2 8 0" stroke="rgba(255,255,255,0.4)" stroke-width="1.2" stroke-linecap="round"/><path d="M8 70c0-13.3 10.7-24 24-24s24 10.7 24 70" stroke="rgba(255,255,255,0.3)" stroke-width="1.5"/></svg>
+        </div>
         <div class="overlay"></div>
         <div class="badge badge-new">NEW</div>
         <div class="label">Glass Skin Glow</div>
       </div>
       <div class="template-card card-bg-2">
+        <div class="thumb">
+          <svg width="64" height="80" viewBox="0 0 64 80" fill="none"><ellipse cx="32" cy="26" rx="14" ry="16" stroke="rgba(255,255,255,0.5)" stroke-width="1.5"/><path d="M22 24c0-6 4-12 10-12s10 6 10 12" stroke="rgba(255,255,255,0.4)" stroke-width="1.2"/><circle cx="27" cy="28" r="2" fill="rgba(255,255,255,0.4)"/><circle cx="37" cy="28" r="2" fill="rgba(255,255,255,0.4)"/><path d="M28 35c2 2 6 2 8 0" stroke="rgba(255,255,255,0.4)" stroke-width="1.2" stroke-linecap="round"/><path d="M8 70c0-13.3 10.7-24 24-24s24 10.7 24 70" stroke="rgba(255,255,255,0.3)" stroke-width="1.5"/></svg>
+        </div>
         <div class="overlay"></div>
         <div class="badge badge-hot">HOT</div>
         <div class="label">Smokey Evening</div>
       </div>
       <div class="template-card card-bg-3">
+        <div class="thumb">
+          <svg width="64" height="80" viewBox="0 0 64 80" fill="none"><ellipse cx="32" cy="26" rx="14" ry="16" stroke="rgba(255,255,255,0.5)" stroke-width="1.5"/><path d="M22 24c0-6 4-12 10-12s10 6 10 12" stroke="rgba(255,255,255,0.4)" stroke-width="1.2"/><circle cx="27" cy="28" r="2" fill="rgba(255,255,255,0.4)"/><circle cx="37" cy="28" r="2" fill="rgba(255,255,255,0.4)"/><path d="M28 35c2 2 6 2 8 0" stroke="rgba(255,255,255,0.4)" stroke-width="1.2" stroke-linecap="round"/><path d="M8 70c0-13.3 10.7-24 24-24s24 10.7 24 70" stroke="rgba(255,255,255,0.3)" stroke-width="1.5"/></svg>
+        </div>
         <div class="overlay"></div>
         <div class="label">Bold Lip Pop</div>
       </div>
       <div class="template-card card-bg-4">
+        <div class="thumb">
+          <svg width="64" height="80" viewBox="0 0 64 80" fill="none"><ellipse cx="32" cy="26" rx="14" ry="16" stroke="rgba(255,255,255,0.5)" stroke-width="1.5"/><path d="M22 24c0-6 4-12 10-12s10 6 10 12" stroke="rgba(255,255,255,0.4)" stroke-width="1.2"/><circle cx="27" cy="28" r="2" fill="rgba(255,255,255,0.4)"/><circle cx="37" cy="28" r="2" fill="rgba(255,255,255,0.4)"/><path d="M28 35c2 2 6 2 8 0" stroke="rgba(255,255,255,0.4)" stroke-width="1.2" stroke-linecap="round"/><path d="M8 70c0-13.3 10.7-24 24-24s24 10.7 24 70" stroke="rgba(255,255,255,0.3)" stroke-width="1.5"/></svg>
+        </div>
         <div class="overlay"></div>
         <div class="label">Natural Everyday</div>
       </div>
@@ -290,6 +320,14 @@
     <!-- Bottom spacer -->
     <div style="height: 16px;"></div>
 
+  </div>
+
+  <!-- Edit Now CTA -->
+  <div class="edit-now-bar">
+    <button class="btn-edit-now">
+      <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M10 2a8 8 0 100 16 8 8 0 000-16z" stroke="#1A1118" stroke-width="1.5"/><path d="M10 6v8M6 10h8" stroke="#1A1118" stroke-width="1.5" stroke-linecap="round"/></svg>
+      Edit Now
+    </button>
   </div>
 
   <!-- Tab Bar -->
