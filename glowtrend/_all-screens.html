@@ -119,6 +119,7 @@
   .g-2xx .screen-code { background: var(--gold); color: #000; }
   .g-3xx .screen-code { background: #00CEC9; color: #000; }
   .g-4xx .screen-code { background: var(--purple); color: #fff; }
+  .g-5xx .screen-code { background: #4ECDC4; color: #000; }
 
   /* Lightbox */
   .lightbox {
@@ -162,7 +163,7 @@
 <div class="header">
   <div class="header-top">
     <div class="logo">Glow<span>trend</span> — Screens</div>
-    <div class="screen-count" id="countBadge">20 screens</div>
+    <div class="screen-count" id="countBadge">27 screens</div>
   </div>
   <div class="filters" id="filters"></div>
 </div>
@@ -196,17 +197,24 @@ const SCREENS = [
   { code: '107', name: 'Showcase 6', file: '107-showcase6.html', group: '1xx' },
   { code: '201', name: 'ONB Paywall', file: '201-paywall.html', group: '2xx' },
   { code: '202', name: 'Last Chance', file: '202-last-chance.html', group: '2xx' },
+  { code: '203', name: 'Gen Subscription', file: '203-gen-subscription.html', group: '2xx' },
+  { code: '204', name: 'Regen Subscription', file: '204-regen-subscription.html', group: '2xx' },
   { code: '205', name: 'Home Paywall', file: '205-home-paywall.html', group: '2xx' },
   { code: '206', name: 'Returned Paywall', file: '206-returned-paywall.html', group: '2xx' },
   { code: '301', name: 'Home', file: '301-home.html', group: '3xx' },
   { code: '310', name: 'Profile', file: '310-profile.html', group: '3xx' },
+  { code: '412', name: 'Pack Preview', file: '412-pack-preview.html', group: '4xx' },
   { code: '420', name: 'Settings', file: '420-settings.html', group: '4xx' },
+  { code: '441', name: 'Photo Source', file: '441-photo-source.html', group: '4xx' },
   { code: '450', name: 'Select Photo', file: '450-select-photo.html', group: '4xx' },
+  { code: '451', name: 'Error Popup', file: '451-error-popup.html', group: '4xx' },
   { code: '455', name: 'Analyzing', file: '455-analyzing.html', group: '4xx' },
   { code: '460', name: 'Loading', file: '460-loading.html', group: '4xx' },
   { code: '470', name: 'Result', file: '470-result.html', group: '4xx' },
   { code: '472', name: 'Save Success', file: '472-save-success.html', group: '4xx' },
   { code: '473', name: 'Share', file: '473-share.html', group: '4xx' },
+  { code: '480', name: 'AI Chat', file: '480-ai-chat.html', group: '4xx' },
+  { code: '530', name: 'Result AI Edit', file: '530-result-ai-edit.html', group: '5xx' },
 ];
 
 const GROUPS = {
@@ -214,6 +222,7 @@ const GROUPS = {
   '2xx': { label: '2xx — Paywall', color: '#FFD700' },
   '3xx': { label: '3xx — Main', color: '#00CEC9' },
   '4xx': { label: '4xx — Features', color: '#C850C0' },
+  '5xx': { label: '5xx — AI Edit', color: '#4ECDC4' },
 };
 
 let currentFilter = 'all';

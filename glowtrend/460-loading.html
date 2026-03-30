@@ -3,218 +3,90 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=390, initial-scale=1.0">
-<title>Glowtrend — Result Loading</title>
+<title>GlowTrend - Loading</title>
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
   body {
-    font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
-    background: #0D0D0F;
-    display: flex;
-    justify-content: center;
-    align-items: flex-start;
-    min-height: 100vh;
-    padding: 20px 0;
+    width: 390px; height: 844px; background: #0a0a0c;
+    font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', sans-serif;
+    overflow: hidden; position: relative;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
   }
-  .screen {
-    width: 390px;
-    height: 844px;
-    background: #0D0D0F;
-    border-radius: 40px;
-    border: 2px solid #242428;
-    overflow: hidden;
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-  }
-
-  /* Particle / sparkle background */
-  .particles {
-    position: absolute;
-    inset: 0;
-    overflow: hidden;
-    pointer-events: none;
-  }
-  .particle {
-    position: absolute;
-    width: 3px;
-    height: 3px;
-    border-radius: 50%;
-    background: #FF6B9D;
-    opacity: 0;
-    animation: sparkle var(--dur) var(--delay) infinite;
-  }
-  .particle:nth-child(even) { background: #C850C0; }
-  .particle:nth-child(3n) { background: rgba(255,255,255,0.5); width: 2px; height: 2px; }
-
-  @keyframes sparkle {
-    0% { opacity: 0; transform: translateY(0) scale(0); }
-    20% { opacity: 1; transform: translateY(-20px) scale(1); }
-    80% { opacity: 0.5; }
-    100% { opacity: 0; transform: translateY(-100px) scale(0); }
-  }
-
-  /* Progress ring */
-  .progress-container {
-    position: relative;
-    width: 120px;
-    height: 120px;
-    margin-bottom: 32px;
-  }
-
-  .progress-ring {
-    width: 120px;
-    height: 120px;
-    transform: rotate(-90deg);
-  }
-  .progress-ring-bg {
-    fill: none;
-    stroke: #242428;
-    stroke-width: 6;
-  }
-  .progress-ring-fill {
-    fill: none;
-    stroke: url(#gradient);
-    stroke-width: 6;
-    stroke-linecap: round;
-    stroke-dasharray: 339.292;
-    stroke-dashoffset: 112;
-    animation: progress-fill 3s ease-in-out infinite alternate;
-  }
-  @keyframes progress-fill {
-    0% { stroke-dashoffset: 270; }
-    100% { stroke-dashoffset: 50; }
-  }
-
-  .progress-text {
-    position: absolute;
-    inset: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: #FFFFFF;
-    font-size: 32px;
-    font-weight: 700;
-  }
-
-  /* Loading text */
-  .loading-text {
-    color: #FFFFFF;
-    font-size: 17px;
-    font-weight: 500;
-    margin-bottom: 8px;
-  }
-
-  .dots {
-    display: inline;
-  }
-  .dots span {
-    animation: dot-cycle 1.4s infinite;
-    opacity: 0;
-  }
-  .dots span:nth-child(1) { animation-delay: 0s; }
-  .dots span:nth-child(2) { animation-delay: 0.2s; }
-  .dots span:nth-child(3) { animation-delay: 0.4s; }
-  @keyframes dot-cycle {
-    0%, 60%, 100% { opacity: 0; }
-    30% { opacity: 1; }
-  }
-
-  /* Tip */
-  .tip {
-    position: absolute;
-    bottom: 60px;
-    left: 40px;
-    right: 40px;
-    text-align: center;
-    color: #636366;
-    font-size: 13px;
-    line-height: 1.5;
-  }
-
-  /* Status bar */
   .status-bar {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 14px 24px 8px;
-    color: #FFFFFF;
-    font-size: 14px;
-    font-weight: 600;
+    position: absolute; top: 0; left: 0; right: 0;
+    display: flex; justify-content: space-between; align-items: center; padding: 14px 24px 0;
   }
-  .status-bar .time { font-size: 15px; font-weight: 700; }
-  .status-bar .icons { display: flex; gap: 6px; font-size: 13px; }
-
-  /* Home indicator */
-  .home-indicator {
-    position: absolute;
-    bottom: 8px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 134px;
-    height: 5px;
-    background: #636366;
+  .status-bar .time { color: #fff; font-size: 15px; font-weight: 600; }
+  .status-icons { display: flex; align-items: center; gap: 6px; }
+  .loader-container { margin-bottom: 40px; position: relative; }
+  .loader-ring {
+    width: 100px; height: 100px; border-radius: 50%;
+    border: 4px solid #2a2a2e; position: relative;
+  }
+  .loader-ring::before {
+    content: ''; position: absolute; inset: -4px;
+    border-radius: 50%; border: 4px solid transparent;
+    border-top-color: #FF6B9D; border-right-color: #C850C0;
+    animation: spin 1.2s linear infinite;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .loader-ring::after {
+    content: ''; position: absolute; inset: 8px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, rgba(255,107,157,0.1), rgba(200,80,192,0.1));
+  }
+  .loader-percent {
+    position: absolute; inset: 0;
+    display: flex; align-items: center; justify-content: center;
+    color: #fff; font-size: 20px; font-weight: 700; z-index: 1;
+  }
+  .loading-title {
+    color: #fff; font-size: 22px; font-weight: 600; text-align: center;
+    margin-bottom: 24px;
+  }
+  .progress-bar-container {
+    width: 280px; height: 6px; background: #2a2a2e;
+    border-radius: 3px; margin-bottom: 16px; overflow: hidden;
+  }
+  .progress-bar-fill {
+    height: 100%; width: 72%;
+    background: linear-gradient(90deg, #FF6B9D, #C850C0, #FFD700);
     border-radius: 3px;
+    animation: progressPulse 2s ease infinite;
   }
+  @keyframes progressPulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.7; }
+  }
+  .progress-text { color: #636366; font-size: 13px; }
+  .tip-text {
+    position: absolute; bottom: 60px;
+    color: #636366; font-size: 13px; text-align: center;
+    padding: 0 40px; line-height: 1.5;
+  }
+  .tip-label { color: #FF6B9D; font-weight: 600; }
 </style>
 </head>
 <body>
-<div class="screen">
   <div class="status-bar">
     <span class="time">9:41</span>
-    <div class="icons">
-      <span>&#9679;&#9679;&#9679;&#9679;</span>
-      <span>&#8226;</span>
-      <span>&#128267;</span>
+    <div class="status-icons">
+      <svg width="16" height="12" fill="#fff"><rect x="0" y="3" width="3" height="9" rx="0.5" opacity=".4"/><rect x="4" y="2" width="3" height="10" rx="0.5" opacity=".6"/><rect x="8" y="1" width="3" height="11" rx="0.5" opacity=".8"/><rect x="12" y="0" width="3" height="12" rx="0.5"/></svg>
+      <svg width="16" height="12" fill="#fff"><path d="M1 4.5c2.5-3 5-3.5 7-3.5s4.5.5 7 3.5" stroke="#fff" stroke-width="1.2" fill="none" opacity=".4"/><path d="M3.5 7c1.5-2 3-2.5 4.5-2.5s3 .5 4.5 2.5" stroke="#fff" stroke-width="1.2" fill="none" opacity=".7"/><circle cx="8" cy="10" r="1.5"/></svg>
+      <svg width="27" height="12" fill="#fff"><rect x="0" y="1" width="22" height="10" rx="2" stroke="#fff" stroke-width="1" fill="none"/><rect x="23" y="3.5" width="2.5" height="5" rx="1" opacity=".4"/><rect x="1.5" y="2.5" width="17" height="7" rx="1" fill="#32d74b"/></svg>
     </div>
   </div>
-
-  <!-- Particles -->
-  <div class="particles">
-    <div class="particle" style="left:15%;top:70%;--dur:2.5s;--delay:0s;"></div>
-    <div class="particle" style="left:30%;top:80%;--dur:3s;--delay:0.5s;"></div>
-    <div class="particle" style="left:50%;top:75%;--dur:2.8s;--delay:0.2s;"></div>
-    <div class="particle" style="left:70%;top:85%;--dur:2.2s;--delay:0.8s;"></div>
-    <div class="particle" style="left:85%;top:70%;--dur:3.2s;--delay:0.3s;"></div>
-    <div class="particle" style="left:10%;top:60%;--dur:2.6s;--delay:1s;"></div>
-    <div class="particle" style="left:40%;top:90%;--dur:2.4s;--delay:0.7s;"></div>
-    <div class="particle" style="left:60%;top:65%;--dur:3.1s;--delay:0.1s;"></div>
-    <div class="particle" style="left:20%;top:50%;--dur:2.9s;--delay:1.2s;"></div>
-    <div class="particle" style="left:75%;top:55%;--dur:2.3s;--delay:0.6s;"></div>
-    <div class="particle" style="left:45%;top:45%;--dur:3.3s;--delay:0.4s;"></div>
-    <div class="particle" style="left:90%;top:40%;--dur:2.7s;--delay:0.9s;"></div>
-    <div class="particle" style="left:5%;top:35%;--dur:2.1s;--delay:1.5s;"></div>
-    <div class="particle" style="left:55%;top:30%;--dur:3.5s;--delay:0.15s;"></div>
-    <div class="particle" style="left:35%;top:55%;--dur:2.0s;--delay:1.3s;"></div>
+  <div class="loader-container">
+    <div class="loader-ring"></div>
+    <div class="loader-percent">72%</div>
   </div>
-
-  <!-- Progress ring -->
-  <div class="progress-container">
-    <svg class="progress-ring" viewBox="0 0 120 120">
-      <defs>
-        <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="0%" stop-color="#FF6B9D"/>
-          <stop offset="100%" stop-color="#C850C0"/>
-        </linearGradient>
-      </defs>
-      <circle class="progress-ring-bg" cx="60" cy="60" r="54"/>
-      <circle class="progress-ring-fill" cx="60" cy="60" r="54"/>
-    </svg>
-    <div class="progress-text">67%</div>
+  <div class="loading-title">Creating your masterpiece...</div>
+  <div class="progress-bar-container">
+    <div class="progress-bar-fill"></div>
   </div>
-
-  <div class="loading-text">
-    Creating your masterpiece<span class="dots"><span>.</span><span>.</span><span>.</span></span>
+  <div class="progress-text">Generating image with AI</div>
+  <div class="tip-text">
+    <span class="tip-label">Tip:</span> Use high-quality photos for the best AI transformation results.
   </div>
-
-  <div class="tip">&#128161; Tip: Higher quality photos give better results!</div>
-
-  <div class="home-indicator"></div>
-</div>
 </body>
 </html>

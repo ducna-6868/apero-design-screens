@@ -2,195 +2,99 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>GlowTrend — Splash</title>
+<meta name="viewport" content="width=390, initial-scale=1.0">
+<title>GlowTrend - Splash</title>
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
-
   body {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
-    background: #1a1a1a;
-    font-family: system-ui, -apple-system, sans-serif;
+    width: 390px; height: 844px; background: #0a0a0c;
+    font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', sans-serif;
+    overflow: hidden; position: relative;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
   }
-
-  .phone {
-    width: 390px;
-    height: 844px;
-    background: #0D0D0F;
-    border-radius: 40px;
-    position: relative;
-    overflow: hidden;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    box-shadow: 0 0 0 2px #333, 0 20px 60px rgba(0,0,0,0.5);
-  }
-
-  /* Radial glow behind logo */
-  .glow-bg {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -60%);
-    width: 320px;
-    height: 320px;
-    background: radial-gradient(circle, rgba(200,80,192,0.18) 0%, rgba(255,107,157,0.08) 40%, transparent 70%);
-    border-radius: 50%;
-    pointer-events: none;
-    animation: glowPulse 3s ease-in-out infinite;
-  }
-
-  @keyframes glowPulse {
-    0%, 100% { opacity: 0.7; transform: translate(-50%, -60%) scale(1); }
-    50% { opacity: 1; transform: translate(-50%, -60%) scale(1.08); }
-  }
-
-  .logo {
-    position: relative;
-    z-index: 1;
-    font-size: 48px;
-    font-weight: 800;
-    letter-spacing: -1px;
-    line-height: 1;
-  }
-
-  .logo-glow {
-    background: linear-gradient(135deg, #FF6B9D, #C850C0);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-  }
-
-  .logo-trend {
-    color: #FFFFFF;
-  }
-
-  .subtitle {
-    position: relative;
-    z-index: 1;
-    margin-top: 16px;
-    font-size: 16px;
-    color: #8E8E93;
-    font-weight: 400;
-    animation: fadeInUp 1.2s ease-out 0.5s both;
-  }
-
-  @keyframes fadeInUp {
-    from { opacity: 0; transform: translateY(12px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-
-  /* Loading dots */
-  .loading-dots {
-    position: relative;
-    z-index: 1;
-    display: flex;
-    gap: 10px;
-    margin-top: 48px;
-    animation: fadeInUp 1s ease-out 1s both;
-  }
-
-  .dot {
-    width: 10px;
-    height: 10px;
-    border-radius: 50%;
-    background: #636366;
-    animation: dotPulse 1.4s ease-in-out infinite;
-  }
-
-  .dot:nth-child(1) {
-    background: linear-gradient(135deg, #FF6B9D, #C850C0);
-    animation: dotActive 1.4s ease-in-out infinite;
-  }
-
-  .dot:nth-child(2) { animation-delay: 0.2s; }
-  .dot:nth-child(3) { animation-delay: 0.4s; }
-
-  @keyframes dotPulse {
-    0%, 100% { opacity: 0.3; transform: scale(1); }
-    50% { opacity: 0.6; transform: scale(1.1); }
-  }
-
-  @keyframes dotActive {
-    0%, 100% { opacity: 0.8; transform: scale(1); }
-    50% { opacity: 1; transform: scale(1.25); }
-  }
-
-  .footer {
-    position: absolute;
-    bottom: 48px;
-    left: 0;
-    right: 0;
-    text-align: center;
-    font-size: 13px;
-    color: #636366;
-    opacity: 0.5;
-    font-weight: 400;
-    animation: fadeInUp 1s ease-out 1.5s both;
-  }
-
-  /* Status bar */
   .status-bar {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 54px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 12px 28px 0;
-    z-index: 10;
+    position: absolute; top: 0; left: 0; right: 0;
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 14px 24px 0; z-index: 10;
   }
-
-  .status-time {
-    font-size: 15px;
-    font-weight: 600;
-    color: #fff;
+  .status-bar .time { color: #fff; font-size: 15px; font-weight: 600; }
+  .status-icons { display: flex; align-items: center; gap: 6px; }
+  .logo-container {
+    display: flex; flex-direction: column; align-items: center; gap: 16px;
+    animation: scaleIn 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+    opacity: 0;
   }
-
-  .status-icons {
-    display: flex;
-    gap: 5px;
-    align-items: center;
+  @keyframes scaleIn {
+    0% { transform: scale(0.5); opacity: 0; }
+    100% { transform: scale(1); opacity: 1; }
   }
-
-  .status-icons span {
-    font-size: 13px;
-    color: #fff;
+  .logo-icon {
+    width: 88px; height: 88px; border-radius: 24px;
+    background: linear-gradient(135deg, #FF6B9D, #C850C0);
+    display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 8px 32px rgba(255, 107, 157, 0.3);
+  }
+  .logo-icon svg { width: 48px; height: 48px; }
+  .logo-text {
+    font-size: 36px; font-weight: 700; letter-spacing: -0.5px;
+    background: linear-gradient(135deg, #FF6B9D, #C850C0);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  }
+  .subtitle {
+    color: #8e8e93; font-size: 16px; margin-top: 4px;
+    opacity: 0; animation: fadeUp 0.6s ease forwards 0.6s;
+  }
+  @keyframes fadeUp {
+    0% { opacity: 0; transform: translateY(12px); }
+    100% { opacity: 1; transform: translateY(0); }
+  }
+  .dots {
+    display: flex; gap: 8px; margin-top: 48px;
+    opacity: 0; animation: fadeUp 0.6s ease forwards 1s;
+  }
+  .dot {
+    width: 8px; height: 8px; border-radius: 50%;
+    background: rgba(255, 107, 157, 0.3);
+  }
+  .dot.active {
+    background: #FF6B9D;
+    animation: pulse 1.4s ease-in-out infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.5; transform: scale(1.3); }
+  }
+  .made-by {
+    position: absolute; bottom: 40px;
+    color: #636366; font-size: 13px; opacity: 0.5;
   }
 </style>
 </head>
 <body>
-  <div class="phone">
-    <div class="status-bar">
-      <span class="status-time">9:41</span>
-      <div class="status-icons">
-        <span>&#9679;&#9679;&#9679;&#9679;</span>
-        <span>&#8226;</span>
-        <span>&#128267;</span>
-      </div>
+  <div class="status-bar">
+    <span class="time">9:41</span>
+    <div class="status-icons">
+      <svg width="16" height="12" fill="#fff"><rect x="0" y="3" width="3" height="9" rx="0.5" opacity=".4"/><rect x="4" y="2" width="3" height="10" rx="0.5" opacity=".6"/><rect x="8" y="1" width="3" height="11" rx="0.5" opacity=".8"/><rect x="12" y="0" width="3" height="12" rx="0.5"/></svg>
+      <svg width="16" height="12" fill="#fff"><path d="M1 4.5c2.5-3 5-3.5 7-3.5s4.5.5 7 3.5" stroke="#fff" stroke-width="1.2" fill="none" opacity=".4"/><path d="M3.5 7c1.5-2 3-2.5 4.5-2.5s3 .5 4.5 2.5" stroke="#fff" stroke-width="1.2" fill="none" opacity=".7"/><circle cx="8" cy="10" r="1.5"/></svg>
+      <svg width="27" height="12" fill="#fff"><rect x="0" y="1" width="22" height="10" rx="2" stroke="#fff" stroke-width="1" fill="none"/><rect x="23" y="3.5" width="2.5" height="5" rx="1" opacity=".4"/><rect x="1.5" y="2.5" width="17" height="7" rx="1" fill="#32d74b"/></svg>
     </div>
-
-    <div class="glow-bg"></div>
-
-    <div class="logo">
-      <span class="logo-glow">Glow</span><span class="logo-trend">Trend</span>
-    </div>
-
-    <div class="subtitle">Transform your photos with AI</div>
-
-    <div class="loading-dots">
-      <div class="dot"></div>
-      <div class="dot"></div>
-      <div class="dot"></div>
-    </div>
-
-    <div class="footer">Made by Apero</div>
   </div>
+  <div class="logo-container">
+    <div class="logo-icon">
+      <svg viewBox="0 0 48 48" fill="none">
+        <path d="M24 4l4 8 8 2-6 6 1 9-7-4-7 4 1-9-6-6 8-2z" fill="#fff"/>
+        <circle cx="24" cy="30" r="8" stroke="#fff" stroke-width="2" fill="none"/>
+        <path d="M20 28l3 3 5-5" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </div>
+    <div class="logo-text">GlowTrend</div>
+    <div class="subtitle">Transform your photos with AI</div>
+  </div>
+  <div class="dots">
+    <div class="dot active"></div>
+    <div class="dot"></div>
+    <div class="dot"></div>
+  </div>
+  <div class="made-by">Made by Apero</div>
 </body>
 </html>
