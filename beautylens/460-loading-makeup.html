@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>564 — Loading Fail: Makeup (Popup Overlay)</title>
+<title>460 — Loading: Makeup (Overlay)</title>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -41,38 +41,26 @@
   .badge-new { background: rgba(107, 203, 119, 0.2); color: #6BCB77; }
   .badge-hot { background: rgba(255, 123, 123, 0.2); color: #FF7B7B; }
 
-  /* ── Fail Popup Overlay ── */
-  .popup-backdrop {
+  /* ── Loading Overlay ── */
+  .loading-overlay {
     position: absolute; inset: 0; z-index: 100;
-    background: rgba(26, 17, 24, 0.75);
-    backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px);
-    display: flex; align-items: center; justify-content: center;
+    background: rgba(26, 17, 24, 0.85);
+    backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+    display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 20px;
     border-radius: 44px;
   }
-  .popup-card {
-    width: 310px; background: #2A1F26; border-radius: 24px;
-    padding: 32px 24px 24px; display: flex; flex-direction: column; align-items: center; gap: 12px;
-    box-shadow: 0 16px 48px rgba(0,0,0,0.5);
+
+  .ring-container { position: relative; width: 80px; height: 80px; }
+  .pulsing-ring { width: 80px; height: 80px; border-radius: 50%; background: conic-gradient(from 0deg, #D4A574, #C9828E, #D4A574); padding: 4px; animation: pulse-ring 1.5s ease-in-out infinite; }
+  .pulsing-ring-inner { width: 100%; height: 100%; border-radius: 50%; background: #1A1118; }
+  @keyframes pulse-ring {
+    0%, 100% { transform: scale(1); opacity: 0.8; }
+    50% { transform: scale(1.05); opacity: 1; }
   }
-  .popup-icon {
-    width: 56px; height: 56px; border-radius: 50%;
-    background: rgba(255, 123, 123, 0.15);
-    display: flex; align-items: center; justify-content: center;
-  }
-  .popup-icon svg { width: 28px; height: 28px; }
-  .popup-headline { font-family: 'DM Sans', sans-serif; font-weight: 700; font-size: 20px; color: #F5EDE8; text-align: center; }
-  .popup-body { font-family: 'Inter', sans-serif; font-weight: 400; font-size: 14px; color: #9A8E94; text-align: center; line-height: 1.5; }
-  .popup-btn-primary {
-    width: 100%; height: 48px; border-radius: 9999px;
-    background: linear-gradient(135deg, #D4A574 0%, #C9828E 100%);
-    border: none; font-family: 'DM Sans', sans-serif; font-weight: 700; font-size: 15px;
-    color: #1A1118; cursor: pointer; margin-top: 8px;
-    box-shadow: 0 4px 24px rgba(212, 165, 116, 0.2);
-  }
-  .popup-btn-ghost {
-    background: none; border: none; font-family: 'Inter', sans-serif; font-weight: 600;
-    font-size: 14px; color: #9A8E94; cursor: pointer; margin-top: 4px;
-  }
+
+  .progress-text { font-family: 'DM Sans', sans-serif; font-weight: 700; font-size: 20px; color: #F5EDE8; }
+  .progress-subtitle { font-family: 'Inter', sans-serif; font-weight: 400; font-size: 15px; color: #9A8E94; }
+  .cancel-btn { background: none; border: none; font-family: 'Inter', sans-serif; font-weight: 600; font-size: 15px; color: #9A8E94; cursor: pointer; margin-top: 24px; }
 
   .home-indicator { position: absolute; bottom: 8px; left: 50%; transform: translateX(-50%); width: 134px; height: 5px; background: #F5EDE8; border-radius: 100px; z-index: 110; }
 </style>
@@ -111,21 +99,14 @@
     </div>
   </div>
 
-  <!-- Fail Popup Overlay -->
-  <div class="popup-backdrop">
-    <div class="popup-card">
-      <div class="popup-icon">
-        <svg viewBox="0 0 28 28" fill="none">
-          <circle cx="14" cy="14" r="12" stroke="#FF7B7B" stroke-width="2"/>
-          <line x1="14" y1="9" x2="14" y2="15" stroke="#FF7B7B" stroke-width="2" stroke-linecap="round"/>
-          <circle cx="14" cy="19" r="1.5" fill="#FF7B7B"/>
-        </svg>
-      </div>
-      <div class="popup-headline">Something Went Wrong</div>
-      <div class="popup-body">We couldn't create your look right now. Please try again.</div>
-      <button class="popup-btn-primary">Try Again</button>
-      <button class="popup-btn-ghost">Go Home</button>
+  <!-- Loading Overlay -->
+  <div class="loading-overlay">
+    <div class="ring-container">
+      <div class="pulsing-ring"><div class="pulsing-ring-inner"></div></div>
     </div>
+    <div class="progress-text">42%</div>
+    <div class="progress-subtitle">Creating your look...</div>
+    <button class="cancel-btn">Cancel</button>
   </div>
 
   <div class="home-indicator"></div>

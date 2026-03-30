@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>541 — Facial Features: Hair</title>
+<title>445 — Facial Features: Nose</title>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -28,7 +28,6 @@
   .seg-tab.active { background: rgba(212, 165, 116, 0.15); color: #D4A574; font-family: 'DM Sans', sans-serif; font-weight: 600; }
   .seg-tab.inactive { color: #9A8E94; font-family: 'Inter', sans-serif; font-weight: 400; }
 
-  /* Feature Tab Row */
   .feature-tabs { display: flex; gap: 16px; justify-content: center; margin-bottom: 24px; overflow-x: auto; padding: 0 4px; }
   .feature-tabs::-webkit-scrollbar { display: none; }
   .feature-tab { display: flex; flex-direction: column; align-items: center; gap: 6px; width: 60px; flex-shrink: 0; cursor: pointer; }
@@ -78,25 +77,22 @@
   <div class="content">
     <div class="user-photo"></div>
 
-    <!-- Segmented Control — Features active -->
     <div class="segmented">
       <div class="seg-tab inactive">Looks</div>
       <div class="seg-tab active">Features</div>
     </div>
 
-    <!-- Feature Tab Row -->
+    <!-- Feature Tab Row — Nose Active -->
     <div class="feature-tabs">
-      <!-- Hair — Active -->
       <div class="feature-tab">
-        <div class="feature-icon active">
+        <div class="feature-icon inactive">
           <svg viewBox="0 0 28 28" fill="none">
-            <path d="M14 4c-5 0-8 3-8 8 0 3 1 5 2 7 1.5 2.5 2 4 2 6h8c0-2 .5-3.5 2-6 1-2 2-4 2-7 0-5-3-8-8-8z" stroke="#D4A574" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-            <path d="M10 25h8" stroke="#D4A574" stroke-width="2" stroke-linecap="round"/>
+            <path d="M14 4c-5 0-8 3-8 8 0 3 1 5 2 7 1.5 2.5 2 4 2 6h8c0-2 .5-3.5 2-6 1-2 2-4 2-7 0-5-3-8-8-8z" stroke="#6A5E64" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M10 25h8" stroke="#6A5E64" stroke-width="2" stroke-linecap="round"/>
           </svg>
         </div>
-        <span class="feature-label active">Hair</span>
+        <span class="feature-label inactive">Hair</span>
       </div>
-      <!-- Eyebrows -->
       <div class="feature-tab">
         <div class="feature-icon inactive">
           <svg viewBox="0 0 28 28" fill="none">
@@ -106,7 +102,6 @@
         </div>
         <span class="feature-label inactive">Eyebrows</span>
       </div>
-      <!-- Eyes -->
       <div class="feature-tab">
         <div class="feature-icon inactive">
           <svg viewBox="0 0 28 28" fill="none">
@@ -116,16 +111,15 @@
         </div>
         <span class="feature-label inactive">Eyes</span>
       </div>
-      <!-- Nose -->
+      <!-- Nose — Active -->
       <div class="feature-tab">
-        <div class="feature-icon inactive">
+        <div class="feature-icon active">
           <svg viewBox="0 0 28 28" fill="none">
-            <path d="M14 4v14M10 22c0-2-3-3-3-5s3-2 3-2M18 22c0-2 3-3 3-5s-3-2-3-2" stroke="#6A5E64" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M14 4v14M10 22c0-2-3-3-3-5s3-2 3-2M18 22c0-2 3-3 3-5s-3-2-3-2" stroke="#D4A574" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
           </svg>
         </div>
-        <span class="feature-label inactive">Nose</span>
+        <span class="feature-label active">Nose</span>
       </div>
-      <!-- Lips -->
       <div class="feature-tab">
         <div class="feature-icon inactive">
           <svg viewBox="0 0 28 28" fill="none">
@@ -137,14 +131,14 @@
       </div>
     </div>
 
-    <!-- Hair Templates -->
+    <!-- Nose Templates -->
     <div class="carousel">
-      <div class="template-card"><span class="template-name">Red Hair</span></div>
-      <div class="template-card"><span class="template-name">Blonde</span></div>
-      <div class="template-card"><span class="template-name">Brunette</span></div>
+      <div class="template-card"><span class="template-name">Refined</span></div>
+      <div class="template-card"><span class="template-name">Soft</span></div>
+      <div class="template-card"><span class="template-name">Natural</span></div>
     </div>
 
-    <div class="hint">Tap to change just your hair</div>
+    <div class="hint">Tap to refine your nose</div>
   </div>
 
   <!-- Home Indicator -->

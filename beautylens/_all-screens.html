@@ -184,7 +184,7 @@
   .badge-1xx { background: rgba(212,165,116,0.15); color: var(--primary); }
   .badge-2xx { background: rgba(201,130,142,0.15); color: var(--accent); }
   .badge-3xx { background: rgba(107,203,119,0.15); color: var(--success); }
-  .badge-5xx { background: rgba(184,160,210,0.15); color: var(--accent2); }
+  .badge-4xx { background: rgba(184,160,210,0.15); color: var(--accent2); }
 
   @media (max-width: 600px) {
     .gallery { grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 12px; padding: 12px; }
@@ -200,7 +200,7 @@
     </div>
     <div>
       <h1>FaceMagic</h1>
-      <div class="meta">IIP071 | i2i Beauty Editor | 40 screens | beauty-warm-dark</div>
+      <div class="meta">IIP071 | i2i Beauty Editor | 37 screens | beauty-warm-dark</div>
     </div>
   </div>
   <div class="header-right">
@@ -216,7 +216,7 @@ const GROUPS = [
   { id: '1xx', label: '1xx Onboarding', badge: 'badge-1xx' },
   { id: '2xx', label: '2xx Paywall', badge: 'badge-2xx' },
   { id: '3xx', label: '3xx Home', badge: 'badge-3xx' },
-  { id: '5xx', label: '5xx i2i Flow', badge: 'badge-5xx' },
+  { id: '4xx', label: '4xx i2i Flow', badge: 'badge-4xx' },
 ];
 
 const SCREENS = [
@@ -232,38 +232,35 @@ const SCREENS = [
   { code: '201', name: 'Onboarding Paywall', file: '201-paywall.html', group: '2xx' },
   { code: '202', name: 'Last Chance Paywall', file: '202-paywall.html', group: '2xx' },
   { code: '203', name: 'Home Paywall', file: '203-paywall.html', group: '2xx' },
-  { code: '204', name: 'Return Paywall', file: '204-paywall.html', group: '2xx' },
+  { code: '206', name: 'Return Paywall', file: '206-paywall.html', group: '2xx' },
   { code: '222', name: 'Generate Paywall', file: '222-paywall.html', group: '2xx' },
   { code: '223', name: 'During Generate PW', file: '223-paywall.html', group: '2xx' },
-  { code: '291', name: 'Purchase Success', file: '291-success.html', group: '2xx' },
-  { code: '292', name: 'Restore Purchase', file: '292-restore.html', group: '2xx' },
   // 3xx
   { code: '301', name: 'Home', file: '301-home.html', group: '3xx' },
   { code: '311', name: 'Settings', file: '311-settings.html', group: '3xx' },
-  // 5xx
-  { code: '530', name: 'Upload Photo', file: '530-upload.html', group: '5xx' },
-  { code: '531', name: 'Permission Photos', file: '531-permission-photos.html', group: '5xx' },
-  { code: '532', name: 'Permission Camera', file: '532-permission-camera.html', group: '5xx' },
-  { code: '535', name: 'Camera', file: '535-camera.html', group: '5xx' },
-  { code: '536', name: 'Photo Preview', file: '536-photo-preview.html', group: '5xx' },
-  { code: '537', name: 'No Face Detected', file: '537-no-face.html', group: '5xx' },
-  { code: '540', name: 'Makeup Looks', file: '540-makeup-looks.html', group: '5xx' },
-  { code: '541', name: 'Hair', file: '541-hair.html', group: '5xx' },
-  { code: '542', name: 'Eyebrows', file: '542-eyebrows.html', group: '5xx' },
-  { code: '543', name: 'Eyes', file: '543-eyes.html', group: '5xx' },
-  { code: '544', name: 'Nose', file: '544-nose.html', group: '5xx' },
-  { code: '545', name: 'Lips', file: '545-lips.html', group: '5xx' },
-  { code: '550', name: 'Analyze / Preview', file: '550-preview.html', group: '5xx' },
-  { code: '560', name: 'Loading Makeup', file: '560-loading-makeup.html', group: '5xx' },
-  { code: '561', name: 'Loading Facial', file: '561-loading-facial.html', group: '5xx' },
-  { code: '562', name: 'Fake Loading', file: '562-fake-loading.html', group: '5xx' },
-  { code: '564', name: 'Fail Makeup', file: '564-fail-makeup.html', group: '5xx' },
-  { code: '565', name: 'Fail Facial', file: '565-fail-facial.html', group: '5xx' },
-  { code: '570', name: 'Result', file: '570-result.html', group: '5xx' },
-  { code: '571', name: 'Exit Popup', file: '571-exit-popup.html', group: '5xx' },
-  { code: '572', name: 'Save Success', file: '572-save-success.html', group: '5xx' },
-  { code: '573', name: 'Share Sheet', file: '573-share-sheet.html', group: '5xx' },
-  { code: '574', name: 'Share Success', file: '574-share-success.html', group: '5xx' },
+  // 4xx
+  { code: '430', name: 'Upload Photo', file: '430-upload.html', group: '4xx' },
+  { code: '432', name: 'Permission Photos', file: '432-permission-photos.html', group: '4xx' },
+  { code: '433', name: 'Permission Camera', file: '433-permission-camera.html', group: '4xx' },
+  { code: '437', name: 'Camera', file: '437-camera.html', group: '4xx' },
+  { code: '438', name: 'Photo Preview', file: '438-photo-preview.html', group: '4xx' },
+  { code: '439', name: 'No Face Detected', file: '439-no-face.html', group: '4xx' },
+  { code: '440', name: 'Makeup Looks', file: '440-makeup-looks.html', group: '4xx' },
+  { code: '442', name: 'Hair', file: '442-hair.html', group: '4xx' },
+  { code: '443', name: 'Eyebrows', file: '443-eyebrows.html', group: '4xx' },
+  { code: '444', name: 'Eyes', file: '444-eyes.html', group: '4xx' },
+  { code: '445', name: 'Nose', file: '445-nose.html', group: '4xx' },
+  { code: '446', name: 'Lips', file: '446-lips.html', group: '4xx' },
+  { code: '460', name: 'Loading Makeup', file: '460-loading-makeup.html', group: '4xx' },
+  { code: '461', name: 'Loading Facial', file: '461-loading-facial.html', group: '4xx' },
+  { code: '462', name: 'Fake Loading', file: '462-fake-loading.html', group: '4xx' },
+  { code: '464', name: 'Fail Makeup', file: '464-fail-makeup.html', group: '4xx' },
+  { code: '465', name: 'Fail Facial', file: '465-fail-facial.html', group: '4xx' },
+  { code: '470', name: 'Result', file: '470-result.html', group: '4xx' },
+  { code: '471', name: 'Exit Popup', file: '471-exit-popup.html', group: '4xx' },
+  { code: '472', name: 'Save Success', file: '472-save-success.html', group: '4xx' },
+  { code: '473', name: 'Share Sheet', file: '473-share-sheet.html', group: '4xx' },
+  { code: '474', name: 'Share Success', file: '474-share-success.html', group: '4xx' },
 ];
 
 let activeGroup = null;

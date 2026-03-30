@@ -33,7 +33,7 @@ body {
 <body>
 <div id="header">
   <h1>FaceMagic — Screen Flow Graph</h1>
-  <span>IIP071 | i2i (x=2) | 40 screens | 6 paywalls</span>
+  <span>IIP071 | i2i (x=1) | 37 screens | 6 paywalls</span>
 </div>
 <div id="graph-container">
   <pre class="mermaid">
@@ -49,7 +49,7 @@ graph TD
   101["101 Splash"]:::screen
   101 -->|"first launch"| 110
   101 -->|"returning valid sub"| 301
-  101 -->|"returning invalid sub"| 204
+  101 -->|"returning invalid sub"| 206
 
   %% ===== ONBOARDING (1xx) =====
   110["110 ONB 1 - Before/After Hero"]:::screen
@@ -68,20 +68,15 @@ graph TD
   201["201 Onboarding PW - Weekly $6.99"]:::paywall
   202["202 Last Chance PW - Annual $49.99"]:::paywall
   203["203 Home PW - Go Pro"]:::paywall
-  204["204 Return PW - Resubscribe"]:::paywall
+  206["206 Return PW - Resubscribe"]:::paywall
 
   160 -->|"CTA"| 201
-  201 -->|"subscribe"| 291
+  201 -->|"subscribe"| 301
   201 -->|"dismiss"| 202
-  202 -->|"subscribe"| 291
+  202 -->|"subscribe"| 301
   202 -->|"dismiss"| 301
-  204 -->|"subscribe"| 291
-  204 -->|"dismiss"| 301
-
-  %% ===== UTILITY (29x) =====
-  291["291 Purchase Success"]:::success
-  292["292 Restore Purchase"]:::utility
-  291 -->|"continue"| 301
+  206 -->|"subscribe"| 301
+  206 -->|"dismiss"| 301
 
   %% ===== HOME & ENTRY (3xx) =====
   301["301 Home - Template Feed"]:::screen
@@ -89,102 +84,95 @@ graph TD
   301 -->|"settings"| 311
   311 -.->|"back"| 301
   301 -.->|"Go Pro"| 203
-  203 -->|"subscribe"| 291
+  203 -->|"subscribe"| 301
   203 -.->|"dismiss"| 301
-  311 -->|"restore"| 292
 
-  %% ===== UPLOAD FLOW (530-537) =====
-  301 -->|"tap template / Create"| 530
-  530["530 Upload Photo"]:::screen
-  531["531 Permission Photos"]:::screen
-  532["532 Permission Camera"]:::screen
-  535["535 Camera"]:::screen
-  536["536 Photo Preview"]:::screen
-  537["537 No Face Detected"]:::error
+  %% ===== UPLOAD FLOW (430-439) =====
+  301 -->|"tap template / Create"| 430
+  430["430 Upload Photo"]:::screen
+  432["432 Permission Photos"]:::screen
+  433["433 Permission Camera"]:::screen
+  437["437 Camera"]:::screen
+  438["438 Photo Preview"]:::screen
+  439["439 No Face Detected"]:::error
 
-  530 -.->|"first time"| 531
-  531 -.->|"granted"| 530
-  530 -.->|"camera"| 532
-  532 -.->|"granted"| 535
-  535 -->|"capture"| 536
-  530 -->|"select photo"| 536
-  536 -->|"face OK"| 550
-  536 -->|"no face"| 537
-  537 -.->|"retry"| 530
+  430 -.->|"first time"| 432
+  432 -.->|"granted"| 430
+  430 -.->|"camera"| 433
+  433 -.->|"granted"| 437
+  437 -->|"capture"| 438
+  430 -->|"select photo"| 438
+  438 -->|"Makeup Looks"| 440
+  438 -->|"Facial Features"| 442
+  438 -->|"no face"| 439
+  439 -.->|"retry"| 430
 
-  %% ===== PREVIEW (550) =====
-  550["550 Analyze / Preview"]:::screen
+  %% ===== MAKEUP LOOKS (440) =====
+  440["440 Makeup Looks - Templates"]:::screen
 
-  %% ===== MAKEUP LOOKS (540) =====
-  540["540 Makeup Looks - Templates"]:::screen
-  550 -->|"Looks tab"| 540
-
-  %% ===== FACIAL FEATURES (541-545) =====
-  541["541 Hair"]:::screen
-  542["542 Eyebrows"]:::screen
-  543["543 Eyes"]:::screen
-  544["544 Nose"]:::screen
-  545["545 Lips"]:::screen
-  550 -->|"Features tab"| 541
-  541 -.->|"switch"| 542
-  542 -.->|"switch"| 543
-  543 -.->|"switch"| 544
-  544 -.->|"switch"| 545
+  %% ===== FACIAL FEATURES (442-446) =====
+  442["442 Hair"]:::screen
+  443["443 Eyebrows"]:::screen
+  444["444 Eyes"]:::screen
+  445["445 Nose"]:::screen
+  446["446 Lips"]:::screen
+  442 -.->|"switch"| 443
+  443 -.->|"switch"| 444
+  444 -.->|"switch"| 445
+  445 -.->|"switch"| 446
 
   %% ===== PER-FEATURE PAYWALLS (22x) =====
   222["222 Generate PW - Weekly $6.99"]:::paywall
   223["223 During Generate PW - Unlock Now"]:::paywall
 
-  540 -->|"sub: generate"| 560
-  540 -.->|"non-sub"| 222
-  541 -->|"sub: generate"| 561
-  541 -.->|"non-sub"| 222
-  542 -.->|"non-sub"| 222
-  543 -.->|"non-sub"| 222
-  544 -.->|"non-sub"| 222
-  545 -.->|"non-sub"| 222
+  440 -->|"sub: generate"| 460
+  440 -.->|"non-sub"| 222
+  442 -->|"sub: generate"| 461
+  442 -.->|"non-sub"| 222
+  443 -.->|"non-sub"| 222
+  444 -.->|"non-sub"| 222
+  445 -.->|"non-sub"| 222
+  446 -.->|"non-sub"| 222
 
-  222 -->|"subscribe"| 291B["291 Purchase OK"]:::success
-  291B --> 560
-  222 -->|"dismiss"| 562
+  222 -->|"subscribe"| 460
+  222 -->|"dismiss"| 462
 
-  %% ===== LOADING (560-565) =====
-  560["560 Loading - Makeup"]:::screen
-  561["561 Loading - Facial"]:::screen
-  562["562 Fake Loading"]:::screen
-  564["564 Fail - Makeup"]:::error
-  565["565 Fail - Facial"]:::error
+  %% ===== LOADING (460-465) =====
+  460["460 Loading - Makeup"]:::screen
+  461["461 Loading - Facial"]:::screen
+  462["462 Fake Loading"]:::screen
+  464["464 Fail - Makeup"]:::error
+  465["465 Fail - Facial"]:::error
 
-  560 -->|"success"| 570
-  560 -->|"fail"| 564
-  561 -->|"success"| 570
-  561 -->|"fail"| 565
-  564 -.->|"retry"| 560
-  565 -.->|"retry"| 561
-  564 -.->|"give up"| 301
-  565 -.->|"give up"| 301
+  460 -->|"success"| 470
+  460 -->|"fail"| 464
+  461 -->|"success"| 470
+  461 -->|"fail"| 465
+  464 -.->|"retry"| 460
+  465 -.->|"retry"| 461
+  464 -.->|"give up"| 301
+  465 -.->|"give up"| 301
 
-  562 -->|"complete"| 223
-  223 -->|"subscribe"| 291C["291 Purchase OK"]:::success
-  291C --> 301
+  462 -->|"complete"| 223
+  223 -->|"subscribe"| 301
   223 -->|"dismiss"| 301
 
-  %% ===== RESULT (570-574) =====
-  570["570 Result - Dual Mode"]:::screen
-  571["571 Exit Popup"]:::screen
-  572["572 Save Success"]:::success
-  573["573 Share Sheet"]:::screen
-  574["574 Share Success"]:::success
+  %% ===== RESULT (470-474) =====
+  470["470 Result - Dual Mode"]:::screen
+  471["471 Exit Popup"]:::screen
+  472["472 Save Success"]:::success
+  473["473 Share Sheet"]:::screen
+  474["474 Share Success"]:::success
 
-  570 -->|"save"| 572
-  570 -->|"share"| 573
-  573 -->|"shared"| 574
-  570 -.->|"try another look"| 540
-  570 -.->|"switch to features"| 541
-  570 -->|"exit"| 571
-  571 -->|"save and exit"| 572
-  571 -->|"discard"| 301
-  572 -.->|"done"| 301
+  470 -->|"save"| 472
+  470 -->|"share"| 473
+  473 -->|"shared"| 474
+  470 -.->|"try another look"| 440
+  470 -.->|"switch to features"| 442
+  470 -->|"exit"| 471
+  471 -->|"save and exit"| 472
+  471 -->|"discard"| 301
+  472 -.->|"done"| 301
   </pre>
 </div>
 <script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
